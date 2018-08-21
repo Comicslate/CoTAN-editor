@@ -1,7 +1,7 @@
 # CoTAN
 Comic Translator by Applicated Notes
 
-Тестовая страница https://comicslate.org/ru/playground/place03S?do=edit<br />
+Тестовая страница https://comicslate.org/ru/playground/place03?do=edit<br />
 Иного онлайн-механизма тестирования нет, кроме консоли браузера<br />
 **_Проблемные места подчёркнуты_**
 
