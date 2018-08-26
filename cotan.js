@@ -1,4 +1,4 @@
-// ver. 18-08-16 01:20
+// ver. 23-08-16 02:10
 var $lang = NS.split(':', 2)[0]; // для языковых вставок
 var $wiki_text, // будущая ссылка на доку-редактор #wiki__text
 $ctnote, // все наклейки
@@ -1159,6 +1159,7 @@ function renderText($text) { // обработка шрифтотегов
  $result = $result.replace(/(__)(.+?)(__)/g, '<em class = "u">$2</em>');
  $result = $result.replace(/(\/\/)(.+?)(\/\/)/g, '<em>$2</em>');
  $result = $result.replace(/\\\\/g, '<br \>');
+ $result = $result.replace(/<fc ([#\w\d]+)>(.+?)<\/fc>/g, '<span style="color: $1">$2</span>');
  // спецназ
  $result = $result.replace(/\.\.\./g, '…');
  $result = $result.replace(/\(pipe\)/g, '&#124;');
