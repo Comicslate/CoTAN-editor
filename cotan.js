@@ -1,4 +1,4 @@
-// ver. 5:23 16.09.2018
+// ver. 19:17 27.09.2018
 var $lang = NS.split(':', 2)[0]; // для языковых вставок
 var $wiki_text, // будущая ссылка на доку-редактор #wiki__text
 $ctnote, // все наклейки
@@ -892,12 +892,12 @@ function Bubbles( $id, $x, $y, $width, $height, $text, $cotanarea, $new, $rotate
    this.place ($x, $y);
   } else if ($handle == this.size_handle) { // если двигали ручку размера
    $x = $x - this.element.offsetLeft;
-   if ($x < 20) {
-    $x = 20; // минимальные длина и высота
+   if ($x < 1) {
+    $x = 1; // минимальные длина и высота
    }
    $y = $y - this.element.offsetTop;
-   if ($y < 20) {
-    $y = 20;
+   if ($y < 1) {
+    $y = 1;
    }
    this.width = $x;
    this.height = $y;
