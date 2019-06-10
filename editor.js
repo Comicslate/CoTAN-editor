@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.10 13:06 GMT
+// ver. 2019.06.10 23:12 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -81,6 +81,10 @@ function cotanedit ( ) { // эта функция действует после 
 	cotan.className = 'cotan';
 	cotan.style.display = 'none'; // сначала скрыта
 
+	var cotan_toolbar = document.createElement ( 'div' ); // создаём область котан-тулбара
+	cotan_toolbar.className = 'cotan-toolbar';
+	cotan.appendChild ( cotan_toolbar );
+
 	button = document.createElement ( 'button' ); // создаём кнопку сохранения для котан-редактора
 	button.type = 'button';
 	button.className = 'button green toolbutton';
@@ -93,7 +97,7 @@ function cotanedit ( ) { // эта функция действует после 
 	temp = document.createElement ( 'span' );
 	temp.appendChild ( document.createTextNode ( line[0] ) );
 	button.appendChild ( temp );
-	cotan.appendChild ( button );
+	cotan_toolbar.appendChild ( button );
 
 	button = document.createElement ( 'button' ); // создаём кнопку отката для котан-редактора
 	button.type = 'button';
@@ -107,26 +111,31 @@ function cotanedit ( ) { // эта функция действует после 
 	temp = document.createElement ( 'span' );
 	temp.appendChild ( document.createTextNode ( line[1] ) );
 	button.appendChild ( temp );
-	cotan.appendChild ( button );
+	cotan_toolbar.appendChild ( button );
 	
 	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
 	temp.href = '/' + lang + '/wiki/12balloons';
 	temp.target = '_blank';
 	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>' + line[2] + '</span></button>';
-	cotan.appendChild ( temp );
+	cotan_toolbar.appendChild ( temp );
 
 	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
 }
 
-if ( window.addEventListener ) { // запуск функции cotanedit ( ) при загрузке страницы
-	window.addEventListener ( 'load', cotanedit, false ); // W3C стандарт NB **not** 'onload'
-} else if ( window.attachEvent ) {
-	window.attachEvent ( 'onload', cotanedit ); // Microsoft стандарт
+// запуск функции cotanedit ( ) при загрузке страницы
+if ( window.addEventListener ) { // W3C стандарт NB **not** 'onload'
+	window.addEventListener (
+		'load', cotanedit, false
+	);
+} else if ( window.attachEvent ) { // Microsoft стандарт
+	window.attachEvent (
+		'onload', cotanedit
+	);
 }
 
 function cotan_toggle ( ) { // функция показа/скрытия котан-редактора
 	var temp;
-	if ( cotan_on ) { // если включён, то выключаем...
+	if ( cotan_on ) { // если есть котан-редактор, то выключаем...
 		var save = true,
 			area;
 		if ( typeof ( arguments[0] ) != 'undefined' ) save = arguments[0]; // может быть передан код отмены изменений
@@ -135,15 +144,17 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 			if ( cotan_areas[i] ) {
 				area = cotan_areas[i];
 				if ( save ) area.saveBubbles ( );
-				area.scrape ( );
+				area.scrape ( )
 			}
 		}
 		cotan_areas = new Array ( );
 
 		cotan.style.display = 'none';
-		wiki_text.disabled = false;
-		wiki_text.style.background = '';
-		//разблокируем кнопки редактора wiki и кнопку вызова cotanedit
+
+		wiki_text.style.display = '';
+		document.querySelector ( '.level1' ).style.display = '';
+		document.querySelector ( '.toolbar' ).style.display = '';
+
 		temp = document.getElementById ( 'edbtn__save' );
 		temp.disabled = false;
 		temp.style.background = '';
@@ -154,23 +165,28 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp.disabled = false;
 		enclass ( temp, 'green' );
 		temp.style.background = '';
-		cotan_on = false;
-	} else { // если визуального интерфейса нет, включаем его
-		wiki_text.disabled = true; // блокировка доку-редактора
-		wiki_text.style.background = 'lightgray'; // 
-		temp = document.getElementById ( 'edbtn__save' ); // блокировка кнопки сохранения
+
+		cotan_on = false
+	} else { // если нет котан-редактора, то включаем...
+		wiki_text.style.display = 'none';
+		document.querySelector ( '.level1' ).style.display = 'none';
+		document.querySelector ( '.toolbar' ).style.display = 'none';
+
+		temp = document.getElementById ( 'edbtn__save' );
 		temp.disabled = true;
 		temp.style.background = 'lightgray';
-		temp = document.getElementById ( 'edbtn__preview' ); // блокировка кнопки предпросмотра
+		temp = document.getElementById ( 'edbtn__preview' );
 		temp.disabled = true;
 		temp.style.background = 'lightgray';
 		temp = document.getElementById ( 'cotanbutton' );
 		temp.disabled = true;
 		declass ( temp, 'green' );
 		temp.style.background = 'lightgray';
-		cotan_on = true;
+
 		do_match ( );
-		cotan.style.display = ''; // показать котан-редактор
+		cotan.style.display = '';
+
+		cotan_on = true
 	}
 }
 
@@ -495,13 +511,13 @@ function VisArea ( original, text, tag, analyze, id ) {
 	this.element.cotanarea = this;
 	this.element.className = 'cotancontainer cotanarea-' + this.id;
 
-	var toolbar, // объявляем локальные переменные
+	var mode_toolbar, // объявляем локальные переменные
 		button,
 		temp;
 
-	toolbar = document.createElement ( 'div' ); // создаём панель .cotan-toolbar
-	toolbar.className = 'cotan-toolbar';
-	this.element.appendChild ( toolbar );
+	mode_toolbar = document.createElement ( 'div' ); // создаём панель .cotan-modebar
+	mode_toolbar.className = 'cotan-modebar';
+	this.element.appendChild ( mode_toolbar );
 
 	button = document.createElement ( 'button' ); // кнопка clear-режима
 	button.cotanarea = this;
@@ -519,7 +535,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			setMode ( this.cotanarea.id, 'clear' )
 		}
 	);
-	toolbar.appendChild ( button );
+	mode_toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 	
 	button = document.createElement ( 'button' ); // кнопка whitewash-режима
@@ -538,7 +554,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			setMode ( this.cotanarea.id, 'whitewash' )
 		}
 	);
-	toolbar.appendChild ( button );
+	mode_toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	button = document.createElement ( 'button' ); // кнопка sticker-режима
@@ -557,7 +573,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			setMode ( this.cotanarea.id, 'sticker' )
 		}
 	);
-	toolbar.appendChild ( button );
+	mode_toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	button = document.createElement ( 'button' ); // кнопка preview-режима
@@ -576,11 +592,10 @@ function VisArea ( original, text, tag, analyze, id ) {
 			setMode ( this.cotanarea.id, 'preview' )
 		}
 	);
-	toolbar.appendChild ( button );
+	mode_toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	toolbar = document.createElement ( 'div' ); // панель #cotaned_toolbar
-	toolbar.className = 'cotan-toolbar';
 	toolbar.id = 'cotaned_toolbar';
 	this.element.appendChild ( toolbar );
 
