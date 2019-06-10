@@ -1,4 +1,4 @@
-// ver. 19:17 27.09.2018
+// ver. 01:06 10.06.2019 GMT
 var $lang = NS.split(':', 2)[0]; // для языковых вставок
 var $wiki_text, // будущая ссылка на доку-редактор #wiki__text
 $ctnote, // все наклейки
@@ -51,7 +51,7 @@ function cotanedit() { // эта функция действует после з
 
  $button = document.createElement('button'); // создаём кнопку сохранения для котан-редактора
  $button.className = 'button green toolbutton';
- $button.accessKey = "g";
+ $button.accessKey = "A";
  var $apps = {
  'ady': 'Къэгъэсэбэпын',
  'be': 'Ўжываць',
@@ -78,11 +78,11 @@ function cotanedit() { // эта функция действует после з
  'default': 'Применить'
  };
  var $app = $apps[$lang] ? $apps[$lang] : $apps.default;
- $button.title = $app+' [G]';
+ $button.title = $app+' ['+$button.accessKey+']';
  $button.type = 'button';
  $button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/accept.png';
+ $temp.src = '/lib/plugins/cotan/accept.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  $temp.appendChild(document.createTextNode($app));
@@ -91,7 +91,7 @@ function cotanedit() { // эта функция действует после з
 
  $button = document.createElement('button'); // создаём кнопку отката для котан-редактора
  $button.className = 'button toolbutton';
- $button.accessKey = "x";
+ $button.accessKey = "Q";
  var $anns = {
  'ady': 'Iэтыжын',
  'be': 'Ануляваць',
@@ -118,11 +118,11 @@ function cotanedit() { // эта функция действует после з
  'default': 'Отменить'
  };
  var $annu = $anns[$lang] ? $anns[$lang] : $anns.default;
- $button.title = $annu+' [X]';
+ $button.title = $annu+' ['+$button.accessKey+']';
  $button.type = 'button';
  $button.onclick = noSave; // функция отката изменений
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/cancel.png';
+ $temp.src = '/lib/plugins/cotan/cancel.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  $temp.appendChild(document.createTextNode($annu));
@@ -158,7 +158,7 @@ function cotanedit() { // эта функция действует после з
  'default': 'Помощь'
  };
  var $help = $helps[$lang] ? $helps[$lang] : $helps.default;
- $temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/tpl/tempe/cotan/help.png"><span>'+$help+'</span></button>';
+ $temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>'+$help+'</span></button>';
  $cotan.appendChild($temp);
 
  $wiki_text.parentNode.insertBefore($cotan, $wiki_text.nextSibling); //вставляем котан-редактор под доку-редактором
@@ -515,7 +515,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
  $button.type = 'button';
  $button.id = 'cotanarea-' + this.id + '-clear';
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/clear.png';
+ $temp.src = '/lib/plugins/cotan/clear.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  var $origs = {
@@ -558,7 +558,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
  $button.type = 'button';
  $button.id = 'cotanarea-' + this.id + '-whitewash';
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/whitewash.png';
+ $temp.src = '/lib/plugins/cotan/whitewash.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  var $masks = {
@@ -601,7 +601,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
  $button.type = 'button';
  $button.id = 'cotanarea-' + this.id + '-sticker';
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/sticker.png';
+ $temp.src = '/lib/plugins/cotan/sticker.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  var $txts = {
@@ -644,7 +644,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
  $button.type = 'button';
  $button.id = 'cotanarea-' + this.id + '-preview';
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/preview.png';
+ $temp.src = '/lib/plugins/cotan/preview.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  var $prvws = {
@@ -692,7 +692,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
  $button.type = 'button';
  $button.id = 'cotanarea-' + this.id + '-addbubble';
  $temp = document.createElement('img');
- $temp.src = '/lib/tpl/tempe/cotan/add.png';
+ $temp.src = '/lib/plugins/cotan/add.png';
  $button.appendChild($temp);
  $temp = document.createElement('span');
  var $adds = {
@@ -967,8 +967,10 @@ function Bubbles( $id, $x, $y, $width, $height, $text, $cotanarea, $new, $rotate
    this.bubble.textedit_element.focus();
    $ctnote = document.getElementsByClassName('ct-note'); //
    for ($i in $ctnote) {
-    $ctnote[$i].style.display = 'none';
-	$ctnote[$i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0)';
+	if ($ctnote[$i].style !== undefined) {
+     $ctnote[$i].style.display = 'none';
+	}
+	 $ctnote[$i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0)';
    }
   }
   this.textedit_element.onblur = function() {
@@ -986,7 +988,9 @@ function Bubbles( $id, $x, $y, $width, $height, $text, $cotanarea, $new, $rotate
    this.bubble.element.style.zIndex = "1";
    $ctnote = document.getElementsByClassName('ct-note'); //
    for ($i in $ctnote) {
-    $ctnote[$i].style.display = 'table-cell';
+	if ($ctnote[$i].style !== undefined) {
+     $ctnote[$i].style.display = 'table-cell';
+	}
 	$ctnote[$i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0.8)';
    }
   }
