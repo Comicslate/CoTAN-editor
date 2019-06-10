@@ -1,241 +1,36 @@
-// ver. 2019.06.10 01:25 GMT
+// ver. 2019.06.10 04:51 GMT
 
 // ЯЗЫКИ
 var $lang = NS.split(':', 2)[0],
-	$apps = {
-		'ady': 'Къэгъэсэбэпын',
-		'be': 'Ўжываць',
-		'bg': 'Приложи',
-		'da': 'Anvende',
-		'de': 'Anwenden',
-		'el': 'Ισχύουν',
-		'en': 'Apply',
-		'eo': 'Apliki',
-		'es': 'Aplicar',
-		'fi': 'Levitä',
-		'fr': 'Appliquer',
-		'he': 'החל',
-		'hi': 'लागू',
-		'id': 'Menerapkan',
-		'it': 'Applicare',
-		'ja': '適用',
-		'ko': '적용',
-		'pl': 'Stosować',
-		'pt': 'Aplicar',
-		'ru': 'Применить',
-		'uk': 'Застосовувати',
-		'zh': '申请',
-		'default': 'Применить'
-	},
-	$anns = {
-		'ady': 'Iэтыжын',
-		'be': 'Ануляваць',
-		'bg': 'Отмени',
-		'da': 'Annuller',
-		'de': 'Abbrechen',
-		'el': 'Ακύρωση',
-		'en': 'Cancel',
-		'eo': 'Nuligi',
-		'es': 'Cancelar',
-		'fi': 'Peruuta',
-		'fr': 'Annuler',
-		'he': 'לבטל',
-		'hi': 'रद्द',
-		'id': 'Membatalkan',
-		'it': 'Annulla',
-		'ja': '消',
-		'ko': '취소',
-		'pl': 'Anulować',
-		'pt': 'Cancelar',
-		'ru': 'Отменить',
-		'uk': 'Анулювати',
-		'zh': '取消',
-		'default': 'Отменить'
-	},
-	$helps = {
-		'ady': 'ДэІэпыкъуныгъэ',
-		'be': 'Дапамагаць',
-		'bg': 'Помощ',
-		'da': 'Hjælp',
-		'de': 'Hilfe',
-		'el': 'Βοήθεια',
-		'en': 'Help',
-		'eo': 'Helpo',
-		'es': 'Ayuda',
-		'fi': 'Ohje',
-		'fr': 'Aide',
-		'he': 'לעזור',
-		'hi': 'मदद',
-		'it': 'Aiuto',
-		'id': 'Membantu',
-		'ja': '助',
-		'ko': '도움말',
-		'pl': 'Pomagać',
-		'pt': 'Ajuda',
-		'ru': 'Помощь',
-		'uk': 'Допомагати',
-		'zh': '救命',
-		'default': 'Помощь'
-	},
-	$stkrs = {
-		'ady': 'Тхыгъэ',
-		'be': 'Тэкст',
-		'bg': 'Текст',
-		'da': 'Tekst',
-		'de': 'Text',
-		'el': 'Κείμενο',
-		'en': 'Text',
-		'eo': 'Teksto',
-		'es': 'Texto',
-		'fi': 'Teksti',
-		'fr': 'Texte', 
-		'he': 'טקסט',
-		'hi': 'पाठ',
-		'id': 'Teks',
-		'it': 'Testo',
-		'ja': 'テキスト',
-		'ko': '텍스트',
-		'pl': 'Tekst',
-		'pt': 'Texto',
-		'ru': 'Текст',
-		'uk': 'Текст',
-		'zh': '文本',
-		'default': 'Текст'
-	},
-	$origs = {
-		'ady': 'Оригинал',
-		'be': 'Арыгінал',
-		'bg': 'Оригинал',
-		'da': 'Original',
-		'de': 'Original',
-		'el': 'Αρχική',
-		'en': 'Original',
-		'eo': 'Originala',
-		'es': 'Original',
-		'fi': 'Originaali',
-		'fr': 'Original',
-		'he': 'המקורי',
-		'hi': 'मूल',
-		'id': 'Asli',
-		'it': 'Originale',
-		'ja': '独自の',
-		'ko': '래',
-		'pl': 'Oryginał',
-		'pt': 'Original',
-		'ru': 'Оригинал',
-		'uk': 'Оригінал',
-		'zh': '原创',
-		'default': 'Оригинал'
-	},
-	$masks = {
-		'ady': 'Маскэ',
-		'be': 'Маскі',
-		'bg': 'Маски',
-		'da': 'Maske',
-		'de': 'Maske',
-		'el': 'Μάσκες',
-		'en': 'Masks',
-		'eo': 'Maskoj',
-		'es': 'Máscara',
-		'fi': 'Maski',
-		'fr': 'Masques',
-		'he': 'מסכות',
-		'hi': 'मास्क',
-		'id': 'Masker',
-		'it': 'Maschere',
-		'ja': 'マスク',
-		'ko': '마',
-		'pl': 'Maski',
-		'pt': 'Máscara',
-		'ru': 'Маски',
-		'uk': 'Маски',
-		'zh': '面具',
-		'default': 'Маски'
-	},
-	$txts = {
-		'ady': 'Тхыгъэ',
-		'be': 'Тэксты',
-		'bg': 'Текстове',
-		'da': 'Tekster',
-		'de': 'Texte',
-		'el': 'Κείμενα',
-		'en': 'Texts',
-		'eo': 'Tekstoj',
-		'es': 'Texto',
-		'fi': 'Tekstit',
-		'fr': 'Textes',
-		'he': 'טקסטים',
-		'hi': 'ग्रंथों',
-		'id': 'Teks',
-		'it': 'Testi',
-		'ja': 'テキスト',
-		'ko': '텍스트',
-		'pl': 'Teksty',
-		'pt': 'Textos',
-		'ru': 'Тексты',
-		'uk': 'Тексти',
-		'zh': '短信',
-		'default': 'Тексты'
-	},
-	$prvws = {
-		'ady': 'Къеплъыныгъэ',
-		'be': 'Агляд',
-		'bg': 'Преглед',
-		'da': 'Eftersyn',
-		'de': 'Check-up',
-		'el': 'Τσεκ-απ',
-		'en': 'Checkup',
-		'eo': 'Inspektado',
-		'es': 'Chequeo',
-		'fi': 'Tarkastus',
-		'fr': 'Apperçu',
-		'he': 'בדיקה',
-		'hi': 'निरीक्षण',
-		'id': 'Pemeriksaan',
-		'it': 'Verifica',
-		'ja': '検査',
-		'ko': '검사',
-		'pl': 'Przegląd',
-		'pt': 'Exame',
-		'ru': 'Осмотр',
-		'uk': 'Огляд',
-		'zh': '检查',
-		'default': 'Осмотр'
-	},
-	$adds = {
-		'ady': 'ЩIыгъун баллон',
-		'be': 'Дадаць балон',
-		'bg': 'Добави балон',
-		'da': 'Tilføj ballon',
-		'de': 'Ballon fügen',
-		'el': 'Προσθέστε μπαλόνι',
-		'en': 'Add balloon',
-		'eo': 'Aldoni balono',
-		'es': 'Añadir el balón',
-		'fi': 'Lisää ilmapallo',
-		'fr': 'Ajouter ballon',
-		'he': 'להוסיף בלון',
-		'hi': 'जोड़ने के गुब्बारे',
-		'id': 'Tambahkan balon',
-		'it': 'Aggiungere il pallone',
-		'ja': '追加のバルーン',
-		'ko': '추가 풍선',
-		'pl': 'Dodaj balon',
-		'pt': 'Adicionar balão',
-		'ru': 'Добавить баллон',
-		'uk': 'Додати балон',
-		'zh': '添加气球',
-		'default': 'Добавить баллон'
+	$lines = {
+		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ', 'ЩIыгъун баллон'],
+		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд', 'Дадаць балон'],
+		'bg': ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Оригинал', 'Маски', 'Текстове', 'Преглед', 'Добави балон'],
+		'da': ['Anvende', 'Annuller', 'Hjælp', 'Tekst', 'Original', 'Maske', 'Tekster', 'Eftersyn', 'Tilføj ballon'],
+		'de': ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Original', 'Maske', 'Texte', 'Check-up', 'Ballon fügen'],
+		'el': ['Ισχύουν', 'Ακύρωση', 'Βοήθεια', 'Κείμενο', 'Αρχική', 'Μάσκες', 'Κείμενα', 'Τσεκ-απ', 'Προσθέστε μπαλόνι'],
+		'en': ['Apply', 'Cancel', 'Help', 'Text', 'Original', 'Masks', 'Texts', 'Checkup', 'Add balloon'],
+		'eo': ['Apliki', 'Nuligi', 'Helpo', 'Teksto', 'Originala', 'Maskoj', 'Tekstoj', 'Inspektado', 'Aldoni balono'],
+		'es': ['Aplicar', 'Cancelar', 'Ayuda', 'Texto', 'Original', 'Máscara', 'Texto', 'Chequeo', 'Añadir el balón'],
+		'fi': ['Levitä', 'Peruuta', 'Ohje', 'Teksti', 'Originaali', 'Maski', 'Tekstit', 'Tarkastus', 'Lisää ilmapallo'],
+		'fr': ['Appliquer', 'Annuler', 'Aide', 'Texte', ' Original', 'Masques', 'Textes', 'Apperçu', 'Ajouter ballon'],
+		'he': ['החל', 'לבטל', 'לעזור', 'טקסט', 'המקורי', 'מסכות', 'טקסטים', 'בדיקה', 'להוסיף בלון'],
+		'hi': ['लागू', 'रद्द', 'मदद', 'पाठ', 'मूल', 'मास्क', 'ग्रंथों', 'निरीक्षण', 'जोड़ने के गुब्बारे'],
+		'id': ['Menerapkan', 'Membatalkan', 'Aiuto', 'Teks', 'Asli', 'Masker', 'Teks', 'Pemeriksaan', 'Tambahkan balon'],
+		'it': ['Applicare', 'Annulla', 'Membantu', 'Testo', 'Originale', 'Maschere', 'Testi', 'Verifica', 'Aggiungere il pallone'],
+		'ja': ['適用', '消', '助', 'テキスト', '独自の', 'マスク', 'テキスト', '検査', '追加のバルーン'],
+		'ko': ['적용', '취소', '도움말', '텍스트', '래', '마', '텍스트', '검사', '추가 풍선'],
+		'pl': ['Stosować', 'Anulować', 'Pomagać', 'Tekst', 'Oryginał', 'Maski', 'Teksty', 'Przegląd', 'Dodaj balon'],
+		'pt': ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Original', 'Máscara', 'Textos', 'Exame', 'Adicionar balão'],
+		'ru': ['Применить', 'Отменить', 'Помощь', 'Текст', 'Оригинал', 'Маски', 'Тексты', 'Осмотр', 'Добавить баллон'],
+		'uk': ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Оригінал', 'Маски', 'Тексти', 'Огляд', 'Додати балон'],
+		'zh': ['申请', '取消', '救命', '文本', '原创', '面具', '短信', '检查', '添加气球'],
+		'default': ['Apply', 'Cancel', 'Help', 'Text', 'Original', 'Masks', 'Texts', 'Checkup', 'Add balloon']
 	};
-
-var $app = $apps[$lang] ? $apps[$lang] : $apps.default,
-	$annu = $anns[$lang] ? $anns[$lang] : $anns.default,
-	$help = $helps[$lang] ? $helps[$lang] : $helps.default,
-	$orig = $origs[$lang] ? $origs[$lang] : $origs.default,
-	$mask = $masks[$lang] ? $masks[$lang] : $masks.default,
-	$txt = $txts[$lang] ? $txts[$lang] : $txts.default,
-	$prvw = $prvws[$lang] ? $prvws[$lang] : $prvws.default,
-	$add = $adds[$lang] ? $adds[$lang] : $adds.default;
+var $line = [];
+for (x in $lines.default) {
+	$line[x] = $lines[$lang][x] ? $lines[$lang][x] : $lines.default[x]
+};
 
 // ВВОДНЫЕ
 
@@ -289,35 +84,35 @@ function cotanedit() { // эта функция действует после з
 	$button = document.createElement('button'); // создаём кнопку сохранения для котан-редактора
 	$button.className = 'button green toolbutton';
 	$button.accessKey = "A";
-	$button.title = $app+' ['+$button.accessKey+']';
+	$button.title = $line[0]+' ['+$button.accessKey+']';
 	$button.type = 'button';
 	$button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	$temp = document.createElement('img');
 	$temp.src = '/lib/plugins/cotan/accept.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($app));
+	$temp.appendChild(document.createTextNode($line[0]));
 	$button.appendChild($temp);
 	$cotan.appendChild($button);
 
 	$button = document.createElement('button'); // создаём кнопку отката для котан-редактора
 	$button.className = 'button toolbutton';
 	$button.accessKey = "Q";
-	$button.title = $annu+' ['+$button.accessKey+']';
+	$button.title = $line[1]+' ['+$button.accessKey+']';
 	$button.type = 'button';
 	$button.onclick = noSave; // функция отката изменений
 	$temp = document.createElement('img');
 	$temp.src = '/lib/plugins/cotan/cancel.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($annu));
+	$temp.appendChild(document.createTextNode($line[1]));
 	$button.appendChild($temp);
 	$cotan.appendChild($button);
 	
 	$temp = document.createElement('a'); // создаём ссылку на справку для котан-редактора
 	$temp.href = '/'+$lang+'/wiki/12balloons';
 	$temp.target = '_blank';
-	$temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>'+$help+'</span></button>';
+	$temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>'+$line[2]+'</span></button>';
 	$cotan.appendChild($temp);
 
 	$wiki_text.parentNode.insertBefore($cotan, $wiki_text.nextSibling); //вставляем котан-редактор под доку-редактором
@@ -518,7 +313,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 		if (this.mode === 'whitewash') {
 			$bubble_text = '#'
 		} else if (this.mode === 'sticker') {
-			$bubble_text = $stkrs[$lang] ? $stkrs[$lang] : $stkrs.default;
+			$bubble_text = $line[3];
 		}
 		var $bubble = new Bubbles( $bubble_id, $x, $y, 100, 50, $bubble_text, this, true);
 		$bubble.cotanarea = this;
@@ -652,7 +447,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 	$temp.src = '/lib/plugins/cotan/clear.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($orig));
+	$temp.appendChild(document.createTextNode($line[4]));
 	$button.appendChild($temp);
 	$button.addEventListener('click', function(){
 		setMode(this.cotanarea.id, 'clear');
@@ -669,7 +464,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 	$temp.src = '/lib/plugins/cotan/whitewash.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($mask));
+	$temp.appendChild(document.createTextNode($line[5]));
 	$button.appendChild($temp);
 	$button.addEventListener('click', function(){
 		setMode(this.cotanarea.id, 'whitewash');
@@ -686,7 +481,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 	$temp.src = '/lib/plugins/cotan/sticker.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($txt));
+	$temp.appendChild(document.createTextNode($line[6]));
 	$button.appendChild($temp);
 	$button.addEventListener('click', function(){
 		setMode(this.cotanarea.id, 'sticker');
@@ -703,7 +498,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 	$temp.src = '/lib/plugins/cotan/preview.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($prvw));
+	$temp.appendChild(document.createTextNode($line[7]));
 	$button.appendChild($temp);
 	$button.addEventListener('click', function(){
 		setMode(this.cotanarea.id, 'preview');
@@ -725,7 +520,7 @@ function VisArea($original, $text, $tag, $analyze, $id) {
 	$temp.src = '/lib/plugins/cotan/add.png';
 	$button.appendChild($temp);
 	$temp = document.createElement('span');
-	$temp.appendChild(document.createTextNode($add));
+	$temp.appendChild(document.createTextNode($line[8]));
 	$button.appendChild($temp);
 	$button.onclick = function(e) {
 		this.cotanarea.addBubble(e, this)
