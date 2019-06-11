@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.11 00:30 GMT
+// ver. 2019.06.11 03:39 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -522,71 +522,6 @@ function VisArea ( original, text, tag, analyze, id ) {
 	mode_toolbar.className = 'cotan-modebar';
 	this.element.appendChild ( mode_toolbar );
 
-// <зона обстрела. требуется сжать код при сохранении рабочести эвентов
-/*
-// нерабочий вариант
-	var area_modes = ['clear', 'whitewash', 'sticker', 'preview'];
-	for ( var i = 0; i < area_modes.length; i++ ) { // кнопки режимов
-		button = document.createElement ( 'button' );
-		button.cotanarea = this;
-		button.className = 'button toolbutton';
-		button.type = 'button';
-		button.id = 'cotanarea-' + this.id + '-' + area_modes[i];
-		temp = document.createElement ( 'img' );
-		temp.src = '/lib/plugins/cotan/' + area_modes[i] + '.png';
-		button.appendChild ( temp );
-		temp = document.createElement ( 'span' );
-		temp.appendChild ( document.createTextNode ( line[4+i] ) );
-		button.appendChild ( temp );
-		if ( window.addEventListener ) {
-			button.addEventListener (
-				'click',
-				setMode ( this.cotanarea.id, area_modes[i] ),
-				false
-			)
-		} else if ( window.attachEvent ) {
-			button.attachEvent (
-				'onclick',
-				setMode ( this.cotanarea.id, area_modes[i] )
-			)
-		};
-		
-		toolbar.appendChild ( button );
-		this.modeButtons.push ( button )
-	};
-
-// нерабочий вариант
-	['clear', 'whitewash', 'sticker', 'preview'].forEach (
-		function callback ( e, i ) {
-			button = document.createElement ( 'button' );
-			button.cotanarea = this;
-			button.className = 'button toolbutton';
-			button.type = 'button';
-			button.id = 'cotanarea-' + this.id + '-' + e;
-			temp = document.createElement ( 'img' );
-			temp.src = '/lib/plugins/cotan/' + e + '.png';
-			button.appendChild ( temp );
-			temp = document.createElement ( 'span' );
-			temp.appendChild ( document.createTextNode ( line[4+i] ) );
-			button.appendChild ( temp );
-			if ( window.addEventListener ) {
-				button.addEventListener (
-					'click',
-					setMode ( this.cotanarea.id, e ),
-					false
-				)
-			} else if ( window.attachEvent ) {
-				button.attachEvent (
-					'onclick',
-					setMode ( this.cotanarea.id, e )
-				)
-			};
-			
-			toolbar.appendChild ( button );
-			this.modeButtons.push ( button )
-		}
-	);
-*/
 	button = document.createElement ( 'button' ); // кнопка clear-режима
 	button.cotanarea = this;
 	button.className = 'button toolbutton';
@@ -706,8 +641,6 @@ function VisArea ( original, text, tag, analyze, id ) {
 	};
 	mode_toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
-
-// зона обстрела>
 
 	toolbar = document.createElement ( 'div' ); // панель #cotaned_toolbar
 	toolbar.id = 'cotaned_toolbar';
