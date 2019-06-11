@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.11 00:28 GMT
+// ver. 2019.06.11 00:30 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
