@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.11 03:39 GMT
+// ver. 2019.06.11 04:26 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -514,13 +514,52 @@ function VisArea ( original, text, tag, analyze, id ) {
 	this.element.cotanarea = this;
 	this.element.className = 'cotancontainer cotanarea-' + this.id;
 
-	var mode_toolbar, // объявляем локальные переменные
+	var toolbar, // объявляем локальные переменные
 		button,
 		temp;
 
-	mode_toolbar = document.createElement ( 'div' ); // создаём панель .cotan-modebar
-	mode_toolbar.className = 'cotan-modebar';
-	this.element.appendChild ( mode_toolbar );
+	toolbar = document.createElement ( 'div' ); // создаём панель .cotan-modebar
+	toolbar.className = 'cotan-modebar';
+	this.element.appendChild ( toolbar );
+
+/*	for ( var i = 0; i < 4; i++ ) { // кнопки режимов
+		var area_m = ['clear', 'whitewash', 'sticker', 'preview'], // объявляем локальные переменные
+			button,
+			temp;
+		button = document.createElement ( 'button' );
+		button.cotanarea = this;
+		button.className = 'button toolbutton';
+		button.type = 'button';
+		button.id = 'cotanarea-' + this.id + '-' + area_m[i];
+
+		temp = document.createElement ( 'img' );
+		temp.src = '/lib/plugins/cotan/' + area_m[i] + '.png';
+		button.appendChild ( temp );
+
+		temp = document.createElement ( 'span' );
+		temp.appendChild ( document.createTextNode ( line[4+i] ) );
+		button.appendChild ( temp );
+
+		if ( window.addEventListener ) {
+			button.addEventListener (
+				'click',
+				function ( ) {
+					setMode ( button.cotanarea.id, area_m[i] )
+				}, false
+			)
+		} else if ( window.attachEvent ) {
+			button.attachEvent (
+				'onclick',
+				function ( ) {
+				setMode ( button.cotanarea.id, area_m[i] )
+				}
+			)
+		};
+		
+		toolbar.appendChild ( button );
+		this.modeButtons.push ( button )
+	};
+*/
 
 	button = document.createElement ( 'button' ); // кнопка clear-режима
 	button.cotanarea = this;
@@ -538,8 +577,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'clear' )
-			},
-			false
+			}, false
 		)
 	} else if ( window.attachEvent ) {
 		button.attachEvent (
@@ -549,7 +587,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			}
 		)
 	};
-	mode_toolbar.appendChild ( button );
+	toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 	
 	button = document.createElement ( 'button' ); // кнопка whitewash-режима
@@ -568,8 +606,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'whitewash' )
-			},
-			false
+			}, false
 		)
 	} else if ( window.attachEvent ) {
 		button.attachEvent (
@@ -579,7 +616,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			}
 		)
 	};
-	mode_toolbar.appendChild ( button );
+	toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	button = document.createElement ( 'button' ); // кнопка sticker-режима
@@ -598,8 +635,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'sticker' )
-			},
-			false
+			}, false
 		)
 	} else if ( window.attachEvent ) {
 		button.attachEvent (
@@ -609,7 +645,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			}
 		)
 	};
-	mode_toolbar.appendChild ( button );
+	toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	button = document.createElement ( 'button' ); // кнопка preview-режима
@@ -628,8 +664,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'preview' )
-			},
-			false
+			}, false
 		)
 	} else if ( window.attachEvent ) {
 		button.attachEvent (
@@ -639,7 +674,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 			}
 		)
 	};
-	mode_toolbar.appendChild ( button );
+	toolbar.appendChild ( button );
 	this.modeButtons.push ( button );
 
 	toolbar = document.createElement ( 'div' ); // панель #cotaned_toolbar
