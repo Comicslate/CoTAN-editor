@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.11 04:26 GMT
+// ver. 2019.06.11 05:22 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1202,67 +1202,75 @@ function renderText ( text ) { // обработка шрифтотегов
 		}
 	}
 	//wiki разметка
-	result = result.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' );
-	result = result.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' );
-	result = result.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' );
-	result = result.replace ( /\\\\/g, '<br \>' );
-	result = result.replace ( /<fc ([#\w\d]+)>(.+?)<\/fc>/g, '<span style="color: $1">$2</span>' );
+	result = result
+	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
+	.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' )
+	.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' )
+	.replace ( /\\\\/g, '<br \>' )
+	.replace ( /<fc ([#\w\d]+)>(.+?)<\/fc>/g, '<span style="color: $1">$2</span>' );
 	// спецназ
-	result = result.replace ( /\.\.\./g, '…' );
-	result = result.replace ( /\(pipe\)/g, '&#124;' );
-	result = result.replace ( /\[\-\.\]/g, '<span class = "hyph">' );
-	result = result.replace ( /\-\./g, '&shy;' );
-	result = result.replace ( /\-\-/g, '–' );
-	result = result.replace ( /\-\-\-/g, '—' );
-	result = result.replace ( /\['\]/g, '<strong>&#769;</strong>' );
-	result = result.replace ( /<(b|h)rr>/g, '<$1r style="clear:both" />' );
-	result = result.replace ( /\(nbsp\)/g, '&nbsp;' );
-	result = result.replace ( /\(tab\)/g, '&nbsp;&nbsp;&nbsp;' );
-	result = result.replace ( /\[<\]/g, '<span class = "vyleft">' );
-	result = result.replace ( /\[>\]/g, '<span class = "vyright">' );
-	result = result.replace ( /\[\|\]/g, '<span class = "vycenter">' );
-	result = result.replace ( /\[\=\]/g, '<span class = "vyjust">' );
-	result = result.replace ( /\[mir(x|y)\]/g, '<span class = "mir$1">' );
+	result = result
+	.replace ( /\.\.\./g, '…' )
+	.replace ( /\(pipe\)/g, '&#124;' )
+	.replace ( /\[\-\.\]/g, '<span class = "hyph">' )
+	.replace ( /\-\./g, '&shy;' )
+	.replace ( /\-\-/g, '–' )
+	.replace ( /\-\-\-/g, '—' )
+	.replace ( /\['\]/g, '<strong>&#769;</strong>' )
+	.replace ( /<(b|h)rr>/g, '<$1r style="clear:both" />' )
+	.replace ( /\(nbsp\)/g, '&nbsp;' )
+	.replace ( /\(tab\)/g, '&nbsp;&nbsp;&nbsp;' )
+	.replace ( /\[<\]/g, '<span class = "vyleft">' )
+	.replace ( /\[>\]/g, '<span class = "vyright">' )
+	.replace ( /\[\|\]/g, '<span class = "vycenter">' )
+	.replace ( /\[\=\]/g, '<span class = "vyjust">' )
+	.replace ( /\[mir(x|y)\]/g, '<span class = "mir$1">' );
 	//гарнитура шрифта
-	result = result.replace ( /\[ax\]/g, '<span class = "axol">' );
-	result = result.replace ( /\[df\]/g, '<span class = "fest">' );
-	result = result.replace ( /\[ft\]/g, '<span class = "dspf">' );
-	result = result.replace ( /\[sc\]/g, '<span class = "stri">' );
-	result = result.replace ( /\[lc\]/g, '<span class = "lisi">' );
-	result = result.replace ( /\[cl\]/g, '<span class = "claw">' );
-	result = result.replace ( /\[im\]/g, '<span class = "impt">' );
-	//размер шрифта
-	result = result.replace ( /(\[)!(\d\.\d)(\])/g, fontsizeReplacer );
+	result = result
+	.replace ( /\[ax\]/g, '<span class = "axol">' )
+	.replace ( /\[df\]/g, '<span class = "fest">' )
+	.replace ( /\[ft\]/g, '<span class = "dspf">' )
+	.replace ( /\[sc\]/g, '<span class = "stri">' )
+	.replace ( /\[lc\]/g, '<span class = "lisi">' )
+	.replace ( /\[cl\]/g, '<span class = "claw">' )
+	.replace ( /\[im\]/g, '<span class = "impt">' );
+	result = result
+	.replace ( /(\[)!(\d\.\d)(\])/g, fontsizeReplacer ); //размер шрифта
 	//стили реплик отдельных персонажей
 	//# freefall
-	result = result.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|oth)\]/g, '<span class = "fest $1 f13">' );
-	result = result.replace ( /\[nio\]/g, '<span class = "fest niomi f13">' );
-	result = result.replace ( /\[com\]/g, '<span class = "fest edge f13">' );
+	result = result
+	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|oth)\]/g, '<span class = "fest $1 f13">' )
+	.replace ( /\[nio\]/g, '<span class = "fest niomi f13">' )
+	.replace ( /\[com\]/g, '<span class = "fest edge f13">' );
 	//# kitty
-	result = result.replace ( /\[kit\]/g, '<span class = "fest tsp f12">' );
-	result = result.replace ( /\[mou\]/g, '<span class = "impt dvo f12">' );
-	result = result.replace ( /\[mtt\]/g, '<span class = "fest hlx f12">' );
-	result = result.replace ( /\[nnw\]/g, '<span class = "fest mst f12">' );
-	result = result.replace ( /\[znt\]/g, '<span class = "fest znt f12">' );
-	result = result.replace ( /\[ck-\]/g, '<span class = "fest oth f12">' );
-	//# lions
-	result = result.replace ( /\[rel\]/g, '<span class = "fest oth f17">' );
+	result = result
+	.replace ( /\[kit\]/g, '<span class = "fest tsp f12">' )
+	.replace ( /\[mou\]/g, '<span class = "impt dvo f12">' )
+	.replace ( /\[mtt\]/g, '<span class = "fest hlx f12">' )
+	.replace ( /\[nnw\]/g, '<span class = "fest mst f12">' )
+	.replace ( /\[znt\]/g, '<span class = "fest znt f12">' )
+	.replace ( /\[ck-\]/g, '<span class = "fest oth f12">' );
+	result = result
+	.replace ( /\[rel\]/g, '<span class = "fest oth f17">' ); //# lions
 	//# ponies
-	result = result.replace ( /\[mol\]/g, '<span class = "stri mol f12">' );
-	result = result.replace ( /\[(tsp|rrp|rdp|fsp|ppp|ajp|sdp|bmp)\]/g, '<span class = "stri $1">' );
+	result = result
+	.replace ( /\[mol\]/g, '<span class = "stri mol f12">' )
+	.replace ( /\[(tsp|rrp|rdp|fsp|ppp|ajp|sdp|bmp)\]/g, '<span class = "stri $1">' );
 	//# ozy
-	result = result.replace ( /\[(ozy|mil|otr)\]/g, '<span class = "fest $1">' );
-	result = result.replace ( /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1 f12">' );
-	result = result.replace ( /\[lle\]/g, '<span class = "impt saw f12">' );
-	//# bunny
-	result = result.replace ( /\[bun\]/g, '<span class = "fest oth f15">' );
+	result = result
+	.replace ( /\[(ozy|mil|otr)\]/g, '<span class = "fest $1">' )
+	.replace ( /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1 f12">' )
+	.replace ( /\[lle\]/g, '<span class = "impt saw f12">' );
+	result = result
+	.replace ( /\[bun\]/g, '<span class = "fest oth f15">' ); //# bunny
 	//# ichabod
-	result = result.replace ( /\[ich\]/g, '<span class = "axol mil f17">' );
-	result = result.replace ( /\[ich-\]/g, '<span class = "axol oth f17">' );
-	//# weegie
-	result = result.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' );
-	//конец стиля
-	result = result.replace ( /\[\/\]/g, '</span>' );
+	result = result
+	.replace ( /\[ich\]/g, '<span class = "axol mil f17">' )
+	.replace ( /\[ich-\]/g, '<span class = "axol oth f17">' );
+	result = result
+	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' ); //# weegie
+	result = result
+	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
 	return result
 }
 
