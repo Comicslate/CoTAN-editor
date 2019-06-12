@@ -1,5 +1,5 @@
 "use strict"
-// ver. 2019.06.11 05:22 GMT
+// ver. 2019.06.12 10:04 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -46,7 +46,7 @@ var lang = NS.split ( ':', 2 )[0],
 	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ); // адрес до первого слеша
 
 for ( var i in lines.default ) {
-	line[i] = lines[lang][i] ? lines[lang][i] : lines.default[i]
+	line[i] = lines[lang][i] || lines.default[i]
 };
 
 if ( cotan_media ) { // если нашёлся
