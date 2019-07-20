@@ -1,33 +1,33 @@
-// ver. 2019.06.12 10:04 GMT
+// ver. 2019.07.14 05:57 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
-	lines = {
-		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ', 'ЩIыгъун баллон'],
-		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд', 'Дадаць балон'],
-		'bg': ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Оригинал', 'Маски', 'Текстове', 'Преглед', 'Добави балон'],
-		'da': ['Anvende', 'Annuller', 'Hjælp', 'Tekst', 'Original', 'Maske', 'Tekster', 'Eftersyn', 'Tilføj ballon'],
-		'de': ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Original', 'Maske', 'Texte', 'Check-up', 'Ballon fügen'],
-		'el': ['Ισχύουν', 'Ακύρωση', 'Βοήθεια', 'Κείμενο', 'Αρχική', 'Μάσκες', 'Κείμενα', 'Τσεκ-απ', 'Προσθέστε μπαλόνι'],
-		'en': ['Apply', 'Cancel', 'Help', 'Text', 'Original', 'Masks', 'Texts', 'Checkup', 'Add balloon'],
-		'eo': ['Apliki', 'Nuligi', 'Helpo', 'Teksto', 'Originala', 'Maskoj', 'Tekstoj', 'Inspektado', 'Aldoni balono'],
-		'es': ['Aplicar', 'Cancelar', 'Ayuda', 'Texto', 'Original', 'Máscara', 'Texto', 'Chequeo', 'Añadir el balón'],
-		'fi': ['Levitä', 'Peruuta', 'Ohje', 'Teksti', 'Originaali', 'Maski', 'Tekstit', 'Tarkastus', 'Lisää ilmapallo'],
-		'fr': ['Appliquer', 'Annuler', 'Aide', 'Texte', ' Original', 'Masques', 'Textes', 'Apperçu', 'Ajouter ballon'],
-		'he': ['החל', 'לבטל', 'לעזור', 'טקסט', 'המקורי', 'מסכות', 'טקסטים', 'בדיקה', 'להוסיף בלון'],
-		'hi': ['लागू', 'रद्द', 'मदद', 'पाठ', 'मूल', 'मास्क', 'ग्रंथों', 'निरीक्षण', 'जोड़ने के गुब्बारे'],
-		'id': ['Menerapkan', 'Membatalkan', 'Aiuto', 'Teks', 'Asli', 'Masker', 'Teks', 'Pemeriksaan', 'Tambahkan balon'],
-		'it': ['Applicare', 'Annulla', 'Membantu', 'Testo', 'Originale', 'Maschere', 'Testi', 'Verifica', 'Aggiungere il pallone'],
-		'ja': ['適用', '消', '助', 'テキスト', '独自の', 'マスク', 'テキスト', '検査', '追加のバルーン'],
-		'ko': ['적용', '취소', '도움말', '텍스트', '래', '마', '텍스트', '검사', '추가 풍선'],
-		'pl': ['Stosować', 'Anulować', 'Pomagać', 'Tekst', 'Oryginał', 'Maski', 'Teksty', 'Przegląd', 'Dodaj balon'],
-		'pt': ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Original', 'Máscara', 'Textos', 'Exame', 'Adicionar balão'],
-		'ru': ['Применить', 'Отменить', 'Помощь', 'Текст', 'Оригинал', 'Маски', 'Тексты', 'Осмотр', 'Добавить баллон'],
-		'uk': ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Оригінал', 'Маски', 'Тексти', 'Огляд', 'Додати балон'],
-		'zh': ['申请', '取消', '救命', '文本', '原创', '面具', '短信', '检查', '添加气球'],
-		'default': ['Apply', 'Cancel', 'Help', 'Text', 'Original', 'Masks', 'Texts', 'Checkup', 'Add balloon']
+	elines = {
+		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
+		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
+		'bg': ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Добави балон', 'Оригинал', 'Маски', 'Текстове', 'Преглед'],
+		'da': ['Anvende', 'Annuller', 'Hjælp', 'Tekst', 'Tilføj ballon', 'Original', 'Maske', 'Tekster', 'Eftersyn'],
+		'de': ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Ballon fügen', 'Original', 'Maske', 'Texte', 'Check-up'],
+		'el': ['Ισχύουν', 'Ακύρωση', 'Βοήθεια', 'Κείμενο', 'Προσθέστε μπαλόνι', 'Αρχική', 'Μάσκες', 'Κείμενα', 'Τσεκ-απ'],
+		'en': ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup'],
+		'eo': ['Apliki', 'Nuligi', 'Helpo', 'Teksto', 'Aldoni balono', 'Originala', 'Maskoj', 'Tekstoj', 'Inspektado'],
+		'es': ['Aplicar', 'Cancelar', 'Ayuda', 'Texto', 'Añadir el balón', 'Original', 'Máscara', 'Texto', 'Chequeo'],
+		'fi': ['Levitä', 'Peruuta', 'Ohje', 'Teksti', 'Lisää ilmapallo', 'Originaali', 'Maski', 'Tekstit', 'Tarkastus'],
+		'fr': ['Appliquer', 'Annuler', 'Aide', 'Texte', 'Ajouter ballon', ' Original', 'Masques', 'Textes', 'Apperçu'],
+		'he': ['החל', 'לבטל', 'לעזור', 'טקסט', 'להוסיף בלון', 'המקורי', 'מסכות', 'טקסטים', 'בדיקה'],
+		'hi': ['लागू', 'रद्द', 'मदद', 'पाठ', 'जोड़ने के गुब्बारे', 'मूल', 'मास्क', 'ग्रंथों', 'निरीक्षण'],
+		'id': ['Menerapkan', 'Membatalkan', 'Aiuto', 'Teks', 'Tambahkan balon', 'Asli', 'Masker', 'Teks', 'Pemeriksaan'],
+		'it': ['Applicare', 'Annulla', 'Membantu', 'Testo', 'Aggiungere il pallone', 'Originale', 'Maschere', 'Testi', 'Verifica'],
+		'ja': ['適用', '消', '助', 'テキスト', '追加のバルーン', '独自の', 'マスク', 'テキスト', '検査'],
+		'ko': ['적용', '취소', '도움말', '텍스트', '추가 풍선', '래', '마', '텍스트', '검사'],
+		'pl': ['Stosować', 'Anulować', 'Pomagać', 'Tekst', 'Dodaj balon', 'Oryginał', 'Maski', 'Teksty', 'Przegląd'],
+		'pt': ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Adicionar balão', 'Original', 'Máscara', 'Textos', 'Exame'],
+		'ru': ['Применить', 'Отменить', 'Помощь', 'Текст', 'Добавить баллон', 'Оригинал', 'Маски', 'Тексты', 'Осмотр'],
+		'uk': ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Додати балон', 'Оригінал', 'Маски', 'Тексти', 'Огляд'],
+		'zh': ['申请', '取消', '救命', '文本', '添加气球', '原创', '面具', '短信', '检查'],
+		'default': ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup']
 	},
-	line = [],
+	eline = [],
 	wiki_text, // будущая ссылка на доку-редактор #wiki__text
 	ctnote, // все наклейки
 	cotan, // будущая ссылка на котан-редактор
@@ -44,8 +44,8 @@ var lang = NS.split ( ':', 2 )[0],
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
 	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ); // адрес до первого слеша
 
-for ( var i in lines.default ) {
-	line[i] = lines[lang][i] || lines.default[i]
+for ( var i in elines.default ) {
+	eline[i] = elines[lang][i] || elines.default[i]
 };
 
 if ( cotan_media ) { // если нашёлся
@@ -88,13 +88,13 @@ function cotanedit ( ) { // эта функция действует после 
 	button.type = 'button';
 	button.className = 'button green toolbutton';
 	button.accessKey = "A";
-	button.title = line[0] + ' [' + button.accessKey + ']';
+	button.title = eline[0] + ' [' + button.accessKey + ']';
 	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	temp = document.createElement ( 'img' );
 	temp.src = '/lib/plugins/cotan/accept.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[0] ) );
+	temp.appendChild ( document.createTextNode ( eline[0] ) );
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 
@@ -102,20 +102,20 @@ function cotanedit ( ) { // эта функция действует после 
 	button.type = 'button';
 	button.className = 'button toolbutton';
 	button.accessKey = "Q";
-	button.title = line[1] + ' [' + button.accessKey + ']';
+	button.title = eline[1] + ' [' + button.accessKey + ']';
 	button.onclick = noSave; // функция отката изменений
 	temp = document.createElement ( 'img' );
 	temp.src = '/lib/plugins/cotan/cancel.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[1] ) );
+	temp.appendChild ( document.createTextNode ( eline[1] ) );
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 	
 	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
 	temp.href = '/' + lang + '/wiki/12balloons';
 	temp.target = '_blank';
-	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>' + line[2] + '</span></button>';
+	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>' + eline[2] + '</span></button>';
 	cotan_toolbar.appendChild ( temp );
 
 	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
@@ -341,7 +341,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 		if ( this.mode === 'whitewash' ) {
 			bubble_text = '#'
 		} else if ( this.mode === 'sticker' ) {
-			bubble_text = line[3];
+			bubble_text = eline[3];
 		}
 		var bubble = new Bubbles ( bubble_id, x, y, 100, 50, bubble_text, this, true );
 		bubble.cotanarea = this;
@@ -515,166 +515,85 @@ function VisArea ( original, text, tag, analyze, id ) {
 
 	var toolbar, // объявляем локальные переменные
 		button,
+		buttons = [],
 		temp;
 
 	toolbar = document.createElement ( 'div' ); // создаём панель .cotan-modebar
 	toolbar.className = 'cotan-modebar';
 	this.element.appendChild ( toolbar );
-
-/*	for ( var i = 0; i < 4; i++ ) { // кнопки режимов
-		var area_m = ['clear', 'whitewash', 'sticker', 'preview'], // объявляем локальные переменные
-			button,
-			temp;
+	
+	var area_modes = ['clear', 'whitewash', 'sticker', 'preview']; // объявляем локальные переменные
+	for ( var i = 0; i < area_modes.length; i++ ) { // кнопки режимов
 		button = document.createElement ( 'button' );
 		button.cotanarea = this;
 		button.className = 'button toolbutton';
 		button.type = 'button';
-		button.id = 'cotanarea-' + this.id + '-' + area_m[i];
+		button.id = 'cotanarea-' + this.id + '-' + area_modes[i];
 
 		temp = document.createElement ( 'img' );
-		temp.src = '/lib/plugins/cotan/' + area_m[i] + '.png';
+		temp.src = '/lib/plugins/cotan/' + area_modes[i] + '.png';
 		button.appendChild ( temp );
 
 		temp = document.createElement ( 'span' );
-		temp.appendChild ( document.createTextNode ( line[4+i] ) );
+		temp.appendChild ( document.createTextNode ( eline[5+i] ) );
 		button.appendChild ( temp );
-
-		if ( window.addEventListener ) {
-			button.addEventListener (
-				'click',
-				function ( ) {
-					setMode ( button.cotanarea.id, area_m[i] )
-				}, false
-			)
-		} else if ( window.attachEvent ) {
-			button.attachEvent (
-				'onclick',
-				function ( ) {
-				setMode ( button.cotanarea.id, area_m[i] )
-				}
-			)
-		};
 		
 		toolbar.appendChild ( button );
-		this.modeButtons.push ( button )
+		this.modeButtons.push ( button );
+		buttons[i] = button
 	};
-*/
 
-	button = document.createElement ( 'button' ); // кнопка clear-режима
-	button.cotanarea = this;
-	button.className = 'button toolbutton';
-	button.type = 'button';
-	button.id = 'cotanarea-' + this.id + '-clear';
-	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/clear.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[4] ) );
-	button.appendChild ( temp );
 	if ( window.addEventListener ) {
-		button.addEventListener (
+		buttons[0].addEventListener (
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'clear' )
 			}, false
-		)
-	} else if ( window.attachEvent ) {
-		button.attachEvent (
-			'onclick',
-			function ( ) {
-				setMode ( this.cotanarea.id, 'clear' )
-			}
-		)
-	};
-	toolbar.appendChild ( button );
-	this.modeButtons.push ( button );
-	
-	button = document.createElement ( 'button' ); // кнопка whitewash-режима
-	button.cotanarea = this;
-	button.className = 'button toolbutton';
-	button.type = 'button';
-	button.id = 'cotanarea-' + this.id + '-whitewash';
-	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/whitewash.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[5] ) );
-	button.appendChild ( temp );
-	if ( window.addEventListener ) {
-		button.addEventListener (
+		);
+		buttons[1].addEventListener (
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'whitewash' )
 			}, false
-		)
-	} else if ( window.attachEvent ) {
-		button.attachEvent (
-			'onclick',
-			function ( ) {
-				setMode ( this.cotanarea.id, 'whitewash' )
-			}
-		)
-	};
-	toolbar.appendChild ( button );
-	this.modeButtons.push ( button );
-
-	button = document.createElement ( 'button' ); // кнопка sticker-режима
-	button.cotanarea = this;
-	button.className = 'button toolbutton';
-	button.type = 'button';
-	button.id = 'cotanarea-' + this.id + '-sticker';
-	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/sticker.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[6] ) );
-	button.appendChild ( temp );
-	if ( window.addEventListener ) {
-		button.addEventListener (
+		);
+		buttons[2].addEventListener (
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'sticker' )
 			}, false
-		)
-	} else if ( window.attachEvent ) {
-		button.attachEvent (
-			'onclick',
-			function ( ) {
-				setMode ( this.cotanarea.id, 'sticker' )
-			}
-		)
-	};
-	toolbar.appendChild ( button );
-	this.modeButtons.push ( button );
-
-	button = document.createElement ( 'button' ); // кнопка preview-режима
-	button.cotanarea = this;
-	button.className = 'button toolbutton';
-	button.type = 'button';
-	button.id = 'cotanarea-' + this.id + '-preview';
-	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/preview.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[7] ) );
-	button.appendChild ( temp );
-	if ( window.addEventListener ) {
-		button.addEventListener (
+		);
+		buttons[3].addEventListener (
 			'click',
 			function ( ) {
 				setMode ( this.cotanarea.id, 'preview' )
 			}, false
 		)
 	} else if ( window.attachEvent ) {
-		button.attachEvent (
+		buttons[0].attachEvent (
 			'onclick',
 			function ( ) {
-				setMode ( this.cotanarea.id, 'preview' )
+			setMode ( this.cotanarea.id, 'clear' )
+			}
+		);
+		buttons[1].attachEvent (
+			'onclick',
+			function ( ) {
+			setMode ( this.cotanarea.id, 'whitewash' )
+			}
+		);
+		buttons[2].attachEvent (
+			'onclick',
+			function ( ) {
+			setMode ( this.cotanarea.id, 'sticker' )
+			}
+		);
+		buttons[3].attachEvent (
+			'onclick',
+			function ( ) {
+			setMode ( this.cotanarea.id, 'preview' )
 			}
 		)
 	};
-	toolbar.appendChild ( button );
-	this.modeButtons.push ( button );
 
 	toolbar = document.createElement ( 'div' ); // панель #cotaned_toolbar
 	toolbar.id = 'cotaned_toolbar';
@@ -689,7 +608,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 	temp.src = '/lib/plugins/cotan/add.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( line[8] ) );
+	temp.appendChild ( document.createTextNode ( eline[4] ) );
 	button.appendChild ( temp );
 	button.onclick = function ( e ) {
 		this.cotanarea.addBubble ( e, this )
