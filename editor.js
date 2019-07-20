@@ -1,4 +1,4 @@
-// ver. 2019.07.14 05:57 GMT
+// ver. 2019.07.20 20:23 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -630,6 +630,40 @@ function VisArea ( original, text, tag, analyze, id ) {
 	temp = document.createElement ( 'div' ); // защита от закукоживания размечаемых наклеек жёстко по содержимому
 	temp.style.clear = 'both';
 	this.imgarea.appendChild ( temp );
+
+	/* вставка чужих картинок 21.07.2019 */
+	if ( NS.match ( "sci-fi:freefall" ) != null ) {
+		var lang_work,
+			file_ext,
+			url_num = window.location.href.match ( /[:\/](\d\d\d\d)/i );
+		if ( url_num != null ) {
+			var lang_num = url_num[1]*1;
+			switch ( lang ) {
+				case 'da':
+					lang_work = ( lang_num < 499 ) ? ( 1 ) : ( 0 );
+					file_ext = '.gif';
+					break;
+				case 'de':
+					lang_work = ( lang_num < 569 ) ? ( 1 ) : ( 0 );
+					file_ext = '.gif';
+					break;
+				case 'it':
+					lang_work = ( lang_num < 3173 ) ? ( 1 ) : ( 0 );
+					file_ext = '.png';
+					break;
+				case 'pl':
+					lang_work = ( ( lang_num < 554 ) || ( ( lang_num > 554 ) && ( lang_num < 670 ) ) || ( ( lang_num > 670 ) && ( lang_num < 761 ) ) ) ? ( 1 ) : ( 0 );
+					file_ext = '.gif';
+					break;
+			}
+		};
+		if ( lang_work ) {
+			var new_img = document.createElement ( 'img' );
+			new_img.src = '/_media/sci-fi/freefall/' + lang + '/' + url_num[1] + file_ext;
+			new_img.style = 'width: 982px; margin-top: 15px;';
+			this.element.appendChild ( new_img );
+		}
+	};
 	
 	this.spawnBubbles ( text );
 	cotan.appendChild ( this.element );
