@@ -1,4 +1,4 @@
-// ver. 2019.07.20 20:23 GMT
+// ver. 2019.07.21 04:39 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -37,6 +37,7 @@ var lang = NS.split ( ':', 2 )[0],
 	cotan_preg_cotan = '\\{\\{( ?)(aimg|cotan)>:?(.+?\\.(jpg|png|jpeg|bmp|gif|svg))( ?)\\}\\}([\\w\\W]*?)\\{\\{<(aimg|cotan)\\}\\}', // распознавалка наклеек
 	cotan_preg_img = '\\{\\{( ?):?(.+?\\.(jpg|png|jpeg|bmp|gif|svg))( ?)\\}\\}', // распознавалка картинки
 	cotan_preg = '(' + cotan_preg_cotan + '|' + cotan_preg_img + ')', // совмещение распознавалок
+	cotan_path = '/lib/plugins/cotan/img/',
 
 	cotan_preg_img_target = '\\{\\{ ?%FILE% ?\\}\\}', // поиск текста в доку-редакторе для всех 3 возможных вариантов
 	cotan_preg_aimg_target = '\\{ ?\\{aimg>%FILE%\\}\\ ?}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
@@ -91,7 +92,7 @@ function cotanedit ( ) { // эта функция действует после 
 	button.title = eline[0] + ' [' + button.accessKey + ']';
 	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/accept.png';
+	temp.src = cotan_path + 'accept.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
 	temp.appendChild ( document.createTextNode ( eline[0] ) );
@@ -105,7 +106,7 @@ function cotanedit ( ) { // эта функция действует после 
 	button.title = eline[1] + ' [' + button.accessKey + ']';
 	button.onclick = noSave; // функция отката изменений
 	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/cancel.png';
+	temp.src = cotan_path + 'cancel.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
 	temp.appendChild ( document.createTextNode ( eline[1] ) );
@@ -115,7 +116,7 @@ function cotanedit ( ) { // эта функция действует после 
 	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
 	temp.href = '/' + lang + '/wiki/12balloons';
 	temp.target = '_blank';
-	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="/lib/plugins/cotan/help.png"><span>' + eline[2] + '</span></button>';
+	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="' + cotan_path + 'help.png"><span>' + eline[2] + '</span></button>';
 	cotan_toolbar.appendChild ( temp );
 
 	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
@@ -531,7 +532,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 		button.id = 'cotanarea-' + this.id + '-' + area_modes[i];
 
 		temp = document.createElement ( 'img' );
-		temp.src = '/lib/plugins/cotan/' + area_modes[i] + '.png';
+		temp.src = cotan_path + area_modes[i] + '.png';
 		button.appendChild ( temp );
 
 		temp = document.createElement ( 'span' );
@@ -605,7 +606,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 	button.type = 'button';
 	button.id = 'cotanarea-' + this.id + '-addbubble';
 	temp = document.createElement ( 'img' );
-	temp.src = '/lib/plugins/cotan/add.png';
+	temp.src = cotan_path + 'add.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
 	temp.appendChild ( document.createTextNode ( eline[4] ) );
@@ -640,19 +641,19 @@ function VisArea ( original, text, tag, analyze, id ) {
 			var lang_num = url_num[1]*1;
 			switch ( lang ) {
 				case 'da':
-					lang_work = ( lang_num < 499 ) ? ( 1 ) : ( 0 );
+					lang_work = +( lang_num < 498 );
 					file_ext = '.gif';
 					break;
 				case 'de':
-					lang_work = ( lang_num < 569 ) ? ( 1 ) : ( 0 );
+					lang_work = +( lang_num <= 568 );
 					file_ext = '.gif';
 					break;
 				case 'it':
-					lang_work = ( lang_num < 3173 ) ? ( 1 ) : ( 0 );
+					lang_work = +( lang_num <= 3172 );
 					file_ext = '.png';
 					break;
 				case 'pl':
-					lang_work = ( ( lang_num < 554 ) || ( ( lang_num > 554 ) && ( lang_num < 670 ) ) || ( ( lang_num > 670 ) && ( lang_num < 761 ) ) ) ? ( 1 ) : ( 0 );
+					lang_work = +( lang_num <= 760 && lang_num != 554 && lang_num != 670 );
 					file_ext = '.gif';
 					break;
 			}
