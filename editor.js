@@ -1,4 +1,4 @@
-// ver. 2019.07.29 4:53 GMT
+// ver. 2019.07.29 05:03 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -383,17 +383,19 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 			+ temp.text
 			+ '\n~';
 		}
-
+		img_wid = ( img_wid != '' ) ? ( '?' + img_wid ) : ( '' );
 		if ( result != '' ) {
 			result = '{{'
 			+ 'cotan>'
 			+ this.original
+			+ img_wid
 			+ '}}'
 			+ result
 			+ '\n{{<cotan}}'
 		} else {
 			result = '{{'
 			+ this.original
+			+ img_wid
 			+ '}}';
 		}
 
