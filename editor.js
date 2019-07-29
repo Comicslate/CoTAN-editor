@@ -1,4 +1,4 @@
-// ver. 2019.07.21 04:39 GMT
+// ver. 2019.07.29 4:53 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -34,14 +34,14 @@ var lang = NS.split ( ':', 2 )[0],
 	cotan_on = false, // показан ли он изначально?
 	cotan_areas = new Array ( ), // массив полей на случай нескольких картинок на странице
 
-	cotan_preg_cotan = '\\{\\{( ?)(aimg|cotan)>:?(.+?\\.(jpg|png|jpeg|bmp|gif|svg))( ?)\\}\\}([\\w\\W]*?)\\{\\{<(aimg|cotan)\\}\\}', // распознавалка наклеек
-	cotan_preg_img = '\\{\\{( ?):?(.+?\\.(jpg|png|jpeg|bmp|gif|svg))( ?)\\}\\}', // распознавалка картинки
+	cotan_preg_cotan = '\\{\\{(aimg|cotan)>:?(.+?\\.(jpe?g|png|bmp|gif|svg|webp))((\\?(\\d+))?)\\}\\}([\\w\\W]*?)\\{\\{<(aimg|cotan)\\}\\}', // распознавалка наклеек
+	cotan_preg_img = '\\{\\{:?(.+?\\.(jpe?g|png|bmp|gif|svg|webp))((\\?(\\d+))?)\\}\\}', // распознавалка картинки
 	cotan_preg = '(' + cotan_preg_cotan + '|' + cotan_preg_img + ')', // совмещение распознавалок
 	cotan_path = '/lib/plugins/cotan/img/',
 
-	cotan_preg_img_target = '\\{\\{ ?%FILE% ?\\}\\}', // поиск текста в доку-редакторе для всех 3 возможных вариантов
-	cotan_preg_aimg_target = '\\{ ?\\{aimg>%FILE%\\}\\ ?}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
-	cotan_preg_cotan_target = '\\{ ?\\{cotan>%FILE%\\}\\ ?}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
+	cotan_preg_img_target   = '\\{\\{%FILE%(\\?\\d+)?\\}\\}', // поиск картинки в доку-редакторе для всех 3 возможных вариантов
+	cotan_preg_aimg_target  = '\\{\\{aimg>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
+	cotan_preg_cotan_target = '\\{\\{cotan>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
 	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ); // адрес до первого слеша
 
@@ -203,56 +203,40 @@ function do_match ( ) { // функция поиска картинки/разм
 
 	var images = preg_match_all ( cotan_preg, content );
 	for ( var i in images ) {
-		var image_data = { space_before: '', tag_type: '', image_link: '', image_ext: '', space_after: '', balloons_raw: '' };
-		if ( images[i][3] ) {
-			// эта ветка выполняется только в случае, если обнаружена существующая зона aimg или cotan.
+		var image_data = { tag_type: '', image_link: '', image_ext: '', width: '', balloons_raw: '' };
+		if ( images[i][2] ) {
+			// эта ветка выполняется только в случае, если обнаружена существующая зона aimg или cotan
 			// индексы:
-			image_data["space_before"] = images[i][2]; // 2 - пробел перед картинкой. служит для центрирования.
-			image_data["tag_type"] = images[i][3];     // 3 - тэг (aimg или cotan)
-			image_data["image_link"] = images[i][4];   // 4 - оригинальный адрес картинки, исключая двоеточие (так же, как это делает cotan). может быть как внутренним, так и внешним (на http:// )
-			image_data["image_ext"] = images[i][5];    // 5 - расширение файла. включено в 4-й индекс.
-			image_data["space_after"] = images[i][6];  // 6 - пробел после картинки. служит для центрирования.
-			image_data["balloons_raw"] = images[i][7] // 7 - необработанное содержимое баллонов.
+			image_data["tag_type"]     = images[i][2]; // тэг (aimg или cotan)
+			image_data["image_link"]   = images[i][3]; // оригинальный адрес картинки, исключая двоеточие (так же, как это делает cotan). может быть как внутренним, так и внешним (на http:// )
+			image_data["image_ext"]    = images[i][4]; // расширение файла, часть предыдущего
+			image_data["width"]        = ( images[i][5] != '' ) ? ( images[i][7] ) : ( '' ); // ширина
+			image_data["balloons_raw"] = images[i][8]  // необработанное содержимое баллонов
 		} else {
-			// эта ветка выполняется в случае, если найдена необработанная картинка.
+			// эта ветка выполняется в случае, если найдена необработанная картинка
 			// индексы (аналогично):
-			image_data["space_before"] = images[i][9]; // 9 - пробел перед картинкой.
-			image_data["tag_type"] = '';
-			image_data["image_link"] = images[i][10];  // 10 - оригинальный адрес картинки
-			image_data["image_ext"] = images[i][11];   // 11 - расширение файла.
-			image_data["space_after"] = images[i][12]; // 12 - пробел после картинки.
-			image_data["balloons_raw"] = ''
+			image_data["tag_type"]     = '';
+			image_data["image_link"]   = images[i][10]; // оригинальный адрес картинки
+			image_data["image_ext"]    = images[i][11]; // расширение файла, часть предыдущего
+			image_data["width"]        = ( images[i][12] != '' ) ? ( images[i][14] ) : ( '' ); // ширина
+			image_data["balloons_raw"] = ''             // у простой картинки баллонов нет
 		};
 		new VisArea (
 			image_data["image_link"],
 			image_data["balloons_raw"],
 			image_data["tag_type"],
 			analyzeImage (
-				image_data["space_before"],
 				image_data["image_link"],
-				image_data["space_after"]
 			),
-			i
+			i,
+			image_data["width"]
 		)
 	}
 }
 
-function analyzeImage ( space1, file, space2 ) {
+function analyzeImage ( file ) {
 // эта функция анализирует код картинки и наличие пробелов и возвращает следующее:
 	var result = new Object ( );
-	if ( // result.align - прилипание (center, left, right, default)
-		space1 == ' '
-		&&
-		space2 == ' '
-	) {
-		result.align = 'center'
-	} else if ( space1 == ' ' ) {
-		result.align = 'right'
-	} else if ( space2 == ' ' ) {
-		result.align = 'left'
-	} else {
-		result.align = 'default'
-	}
 	
 	if ( file.match ( /^https?:\/\// ) ) { // result.source - расположение: внутреняя картинка на вики (internal) или внешняя ссылка (external)
 		result.source = 'external'
@@ -325,7 +309,7 @@ function preg_match_all ( regex, haystack ) { // эквивалент php-фун
 // ### AREA ###
 // ############
 
-function VisArea ( original, text, tag, analyze, id ) {
+function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.addBubble = function ( e, source ) { // создание пустого баллона
 		var x,
 			y;
@@ -403,49 +387,13 @@ function VisArea ( original, text, tag, analyze, id ) {
 		if ( result != '' ) {
 			result = '{{'
 			+ 'cotan>'
-			+ (
-				(
-					this.align == 'center'
-					||
-					this.align == 'right'
-				)
-				? ( ' ' )
-				: ( '' )
-			)
 			+ this.original
-			+ (
-				(
-					this.align == 'center'
-					||
-					this.align == 'left'
-				)
-				? ( ' ' )
-				: ( '' )
-			)
 			+ '}}'
 			+ result
 			+ '\n{{<cotan}}'
 		} else {
 			result = '{{'
-			+ (
-				(
-					this.align == 'center'
-					||
-					this.align == 'right'
-				)
-				? ( ' ' )
-				: ( '' )
-			)
 			+ this.original
-			+ (
-				(
-					this.align == 'center'
-					||
-					this.align == 'left'
-				)
-				? ( ' ' )
-				: ( '' )
-			)
 			+ '}}';
 		}
 
@@ -489,7 +437,6 @@ function VisArea ( original, text, tag, analyze, id ) {
 
 	this.id = id;
 	this.original = original;
-	this.align = analyze.align;
 	this.source = analyze.source;
 	this.relative = analyze.relative;
 	if (
@@ -625,6 +572,7 @@ function VisArea ( original, text, tag, analyze, id ) {
 	this.element.appendChild ( this.imgarea );
 	this.img = document.createElement ( 'img' ); // комикс
 	this.img.className = 'cotanimg';
+	if ( img_wid != '' ) this.img.style = 'width: ' + img_wid + 'px;' ;
 	this.img.src = this.file.replace ( /_media[:\/]\w\w\w?[:\/]/, '_media/' ); // удаление языка из пути картинки
 	this.imgarea.appendChild ( this.img );
 
