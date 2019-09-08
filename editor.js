@@ -1,4 +1,4 @@
-// ver. 2019.07.29 05:05 GMT
+// ver. 2019.09.08 16:39 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -70,10 +70,10 @@ function cotanedit ( ) { // эта функция действует после 
 		temp;
 	button = document.createElement ( 'input' ); // создаём кнопку CoTAN
 	button.type = 'button';
-	button.accessKey = 'c';
+	button.accessKey = 'C';
 	button.value = 'CoTAN';
 	button.id = 'cotanbutton';
-	button.title = 'CoTAN [C]';
+	button.title = button.value + ' [' + button.accessKey + ']';
 	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	target.appendChild ( button );
 
