@@ -1,4 +1,4 @@
-// ver. 2019.10.08 12:28 GMT
+// ver. 2019.10.08 12:54 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -935,23 +935,21 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			&&
 			this.type === 'patch'
 		) {
-			this.colorpicker_button = document.createElement ( 'div' );
+			this.colorpicker_button = document.createElement ( 'div' ); // девятиточечная иконка цветовыбирателя
 			this.colorpicker_button.className = "handle colorpickerbutton";
 			this.colorpicker_button.innerHTML = '&nbsp;';
 			this.element.appendChild ( this.colorpicker_button );
-			this.colorpicker_button.onclick = function ( ) { // ! множит кнопки цвета
-				this.colorpicker = document.createElement ( 'input' );
-				this.parentNode.appendChild ( this.colorpicker );
-				this.colorpicker.type = "color";
-				this.colorpicker.onchange = "clickColor(0, -1, -1, 5)";
-				this.colorpicker.value = color;
-				setTimeout(() => ( color = this.colorpicker.value ), 14900);
-				setTimeout(() => this.colorpicker.remove(), 15000);
+			this.colorpicker_button.onclick = function ( ) { // при клике по девятиточечной иконке
+				this.colorpicker = document.createElement ( 'input' ); // вызывается инпут-элемент
+				this.parentNode.appendChild ( this.colorpicker ); // цепляется рядом с иконкой
+				this.style.display = 'none'; // иконка гасится на 15 секунд (чистый колхоз)
+				this.colorpicker.type = "color"; // инпут назначается цветовыбирателем
+				this.colorpicker.value = color; // попытка передать в него переменную color - FAIL, по умолчанке ставится 0 = чёрный
+				this.colorpicker.onchange = "clickColor(0, -1, -1, 5)"; // при клике на инпут - вызов браузерного диалога выбора цвета. неплохо было бы автоматнуть это
+				setTimeout ( ( ) => ( color = this.colorpicker.value ), 14900 ); // возвращает цвет инпута обратно в color
+				setTimeout ( ( ) => ( this.colorpicker.remove ( ) ), 15000 ); // гасит инпут
+				setTimeout ( ( ) => (this.style.display = '' ), 15000 ); // врубает девятиточечную иконку обратно
 			}
-/*			this.colorpicker_button.onblur = function ( ) { // не работает
-				this.color = this.colorpicker.value; // полученное значение цвета передавать скрипту не способно
-				this.colorpicker.remove;
-			}*/
 		}
 	}
 
