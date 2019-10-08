@@ -1,4 +1,4 @@
-// ver. 2019.10.04 11:22 GMT
+// ver. 2019.10.08 11:06 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -939,7 +939,17 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.colorpicker_button.className = "handle colorpickerbutton";
 			this.colorpicker_button.innerHTML = '&nbsp;';
 			this.element.appendChild ( this.colorpicker_button );
-			/* ГДЕ-ТО ВСТАВИТЬ COLORPICKER*/
+			this.colorpicker_button.onclick = function ( ) { // ! множит кнопки цвета
+				this.colorpicker = document.createElement ( 'input' );
+				this.appendChild ( this.colorpicker );
+				this.colorpicker.type = "color";
+				this.colorpicker.onchange = "clickColor(0, -1, -1, 5)";
+				this.colorpicker.value = "#ff0000";
+			}
+/*			this.colorpicker_button.onblur = function ( ) { // не работает
+				this.color = this.colorpicker.value; // полученное значение цвета передавать скрипту не способно
+				this.colorpicker.remove;
+			}*/
 		}
 	}
 
@@ -972,9 +982,9 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		) this.createButtons ( );
 
 		if (
-			this.type === 'text'
-			&&
 			this.cotanarea.mode === 'sticker'
+			&&
+			this.type === 'text'
 		) this.createTextarea ( );
 
 		if ( this.element ) {
