@@ -1,4 +1,4 @@
-// ver. 2019.10.08 12:54 GMT
+// ver. 2019.12.12 13:51 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -120,6 +120,7 @@ function cotanedit ( ) { // эта функция действует после 
 	cotan_toolbar.appendChild ( temp );
 
 	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
+	wiki_text.focus ( );
 }
 
 // запуск функции cotanedit ( ) при загрузке страницы
@@ -168,6 +169,7 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp.disabled = false;
 		enclass ( temp, 'green' );
 		temp.style.background = '';
+		wiki_text.focus ( );
 
 		cotan_on = false
 	} else { // если нет котан-редактора, то включаем...
