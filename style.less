@@ -5,28 +5,28 @@
 	img {
 		border-width: 0; /* более ровные картинки */
 	}
-	.ct-area {
-		display: table;
-		padding: 5px 0 0 4px;
-		position: absolute;
-		z-index: 1;
-		&.ct_bg {
-			z-index: 0;
-		}
-		.ct-note {
-			display: table-cell;
-			left: 0;
-			opacity: 1 !important;
-			padding: 0 0 3px;
-			position: relative;
-			top: 0;
-			vertical-align: middle;
-			.ct-note-content {
-				cursor: default;
-				display: inline; /* без отбивок */
-				font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
-				text-align: center;
-			}
+}
+.ct-area {
+	display: table;
+	padding: 5px 0 0 4px;
+	position: absolute;
+	z-index: 1;
+	&.ct_bg {
+		z-index: 0;
+	}
+	.ct-note {
+		display: table-cell;
+		left: 0;
+		opacity: 1 !important;
+		padding: 0 0 3px;
+		position: relative;
+		top: 0;
+		vertical-align: middle;
+		.ct-note-content {
+			cursor: default;
+			display: inline; /* без отбивок */
+			font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
+			text-align: center;
 		}
 	}
 }
@@ -42,12 +42,14 @@
 
 .cotan {
 	font-size: 125%;
+	margin-top: 0.5em;
 	.cotan-toolbar {
 		.green {
 			background-color: #CCFFBB !important;
 		}
 	}
 	.cotancontainer {
+		padding-top: 3px;
 		.cotan-modebar {
 			text-align: center;
 			.toolbutton {
@@ -152,4 +154,8 @@
 
 div.dokuwiki p:last-child {
 	margin-bottom: 3px;
+}
+
+.semitransparent {
+	opacity: 0.2;
 }
