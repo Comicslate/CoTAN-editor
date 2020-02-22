@@ -1,4 +1,4 @@
-// ver. 2019.12.12 13:51 GMT
+// ver. 2020.02.22 15:54 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -165,6 +165,8 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp = document.getElementById ( 'edbtn__preview' );
 		temp.disabled = false;
 		temp.style.background = '';
+		temp = document.getElementById ( 'pagetools' );
+		temp.style.display = '';
 		temp = document.getElementById ( 'cotanbutton' );
 		temp.disabled = false;
 		enclass ( temp, 'green' );
@@ -183,6 +185,8 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp = document.getElementById ( 'edbtn__preview' );
 		temp.disabled = true;
 		temp.style.background = 'lightgray';
+		temp = document.getElementById ( 'pagetools' );
+		temp.style.display = 'none';
 		temp = document.getElementById ( 'cotanbutton' );
 		temp.disabled = true;
 		declass ( temp, 'green' );
