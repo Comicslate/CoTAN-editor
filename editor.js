@@ -1,4 +1,4 @@
-// ver. 2020.02.22 15:54 GMT
+// ver. 2020.04.12 20:37 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1143,7 +1143,8 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[>\]/g, '<span class = "vyright">' )
 	.replace ( /\[\|\]/g, '<span class = "vycenter">' )
 	.replace ( /\[\=\]/g, '<span class = "vyjust">' )
-	.replace ( /\[mir(x|y)\]/g, '<span class = "mir$1">' );
+	.replace ( /\[mir(x|y)\]/g, '<span class = "mir$1">' )
+	.replace ( /\[@\]/g, '<span class = "anim_mor">' );
 	//гарнитура шрифта
 	result = result
 	.replace ( /\[ax\]/g, '<span class = "axol">' )
@@ -1152,7 +1153,10 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[sc\]/g, '<span class = "stri">' )
 	.replace ( /\[lc\]/g, '<span class = "lisi">' )
 	.replace ( /\[cl\]/g, '<span class = "claw">' )
-	.replace ( /\[im\]/g, '<span class = "impt">' );
+	.replace ( /\[im\]/g, '<span class = "impt">' )
+	.replace ( /\[lu\]/g, '<span class = "lucl">' )
+	.replace ( /\[aa\]/g, '<span class = "aace">' )
+	.replace ( /\[ta\]/g, '<span class = "tean">' );
 	result = result
 	.replace ( /(\[)!(\d\.\d)(\])/g, fontsizeReplacer ); //размер шрифта
 	//стили реплик отдельных персонажей
