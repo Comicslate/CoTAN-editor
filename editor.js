@@ -1,4 +1,4 @@
-// ver. 2020.04.15 06:04 GMT
+// ver. 2020.04.15 06:25 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1109,25 +1109,26 @@ function nHandle ( bubble ) { // объект ручки
 function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
 	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
-		var fontValue = parseFloat ( value );
-		switch ( marker ) {
-			case '!':
-				if (
-					fontValue >= 0.6
-					&&
-					fontValue <= 6
-				) return '<span class = "f' + value.replace ( /\./g, "" ) + '">';
-				break
-			case '=':
-				if (
-					fontValue >= 0.6
-					&&
-					fontValue <= 1.5
-				) return '<span class = "w' + value.replace ( /\./g, "" ) + '">';
-				break
-			default:
-				return openSB + marker + value + closeSB;
-				break
+		var fontValue = parseFloat ( value ), markerLetter;
+		if (
+			fontValue >= 0.6
+			&&
+			fontValue <= 6
+		) {
+			switch ( marker ) {
+				case '!':
+					markerLetter = "f";
+					break
+				case '=':
+					markerLetter = "w";
+					break
+				default:
+					return openSB + marker + value + closeSB;
+					break
+			}
+			return '<span class = "' + markerLetter + value.replace ( /\./g, "" ) + '">'
+		} else {
+			return openSB + marker + value + closeSB
 		}
 	}
 	//wiki разметка
