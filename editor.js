@@ -1,4 +1,4 @@
-// ver. 2020.04.12 20:37 GMT
+// ver. 2020.04.15 06:04 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -599,19 +599,19 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 				case 'da':
 					lang_work = +( lang_num < 498 );
 					file_ext = '.gif';
-					break;
+					break
 				case 'de':
 					lang_work = +( lang_num <= 568 );
 					file_ext = '.gif';
-					break;
+					break
 				case 'it':
 					lang_work = +( lang_num <= 3172 );
 					file_ext = '.png';
-					break;
+					break
 				case 'pl':
 					lang_work = +( lang_num <= 760 && lang_num != 554 && lang_num != 670 );
 					file_ext = '.gif';
-					break;
+					break
 			}
 		};
 		if ( lang_work ) {
@@ -1108,16 +1108,26 @@ function nHandle ( bubble ) { // объект ручки
 
 function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
-	function fontsizeReplacer ( str, openSB, value, closeSB, offset, s ) {
-		var fontSize = parseFloat ( value );
-		if (
-			fontSize >= 0.6
-			&&
-			fontSize <= 6
-		) {
-			return '<span class = "f' + value.replace ( /\./g, "" ) + '">'
-		} else {
-			return openSB + '!' + value + closeSB
+	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
+		var fontValue = parseFloat ( value );
+		switch ( marker ) {
+			case '!':
+				if (
+					fontValue >= 0.6
+					&&
+					fontValue <= 6
+				) return '<span class = "f' + value.replace ( /\./g, "" ) + '">';
+				break
+			case '=':
+				if (
+					fontValue >= 0.6
+					&&
+					fontValue <= 1.5
+				) return '<span class = "w' + value.replace ( /\./g, "" ) + '">';
+				break
+			default:
+				return openSB + marker + value + closeSB;
+				break
 		}
 	}
 	//wiki разметка
@@ -1158,7 +1168,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[aa\]/g, '<span class = "aace">' )
 	.replace ( /\[ta\]/g, '<span class = "tean">' );
 	result = result
-	.replace ( /(\[)!(\d\.\d)(\])/g, fontsizeReplacer ); //размер шрифта
+	.replace ( /(\[)(!|=)(\d\.\d)(\])/g, fontChanger ); // размер и разрядка шрифта
 	//стили реплик отдельных персонажей
 	//# freefall
 	result = result
