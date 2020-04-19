@@ -1,4 +1,4 @@
-// ver. 2020.04.15 06:56 GMT
+// ver. 2020.04.19 22:20 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1111,7 +1111,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
 		var fontValue = parseFloat ( value ), markerLetter;
 		if (
-			fontValue >= 0.6
+			fontValue >= 0.1
 			&&
 			fontValue <= 6
 		) {
