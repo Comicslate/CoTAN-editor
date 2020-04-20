@@ -1,4 +1,4 @@
-// ver. 2020.04.19 22:20 GMT
+// ver. 2020.04.20 03:34 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1109,26 +1109,21 @@ function nHandle ( bubble ) { // объект ручки
 function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
 	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
-		var fontValue = parseFloat ( value ), markerLetter;
-		if (
-			fontValue >= 0.1
-			&&
-			fontValue <= 6
-		) {
+		var fontValue = parseFloat ( value.replace ( ",", "." ).replace ( "-", "" ) );
+		if ( fontValue > 0 ) {
 			switch ( marker ) {
 				case '!':
-					markerLetter = "f";
-					break
+					return '<span style = "font-size: ' + fontValue + 'em">';
+					break;
 				case '=':
-					markerLetter = "w";
-					break
+					return '<span style = "line-height: ' + fontValue * 100 + '%">';
+					break;
 				default:
-					return openSB + marker + value + closeSB;
+					return '<abbr title="Incorrect marker" >'+ openSB + marker + value + closeSB + '</abbr>';
 					break
 			}
-			return '<span class = "' + markerLetter + value.replace ( /\./g, "" ) + '">'
 		} else {
-			return openSB + marker + value + closeSB
+			return '<abbr title="Incorrect digit" >' + openSB + marker + value + closeSB + '</abbr>'
 		}
 	}
 	//wiki разметка
@@ -1169,38 +1164,38 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[aa\]/g, '<span class = "aace">' )
 	.replace ( /\[ta\]/g, '<span class = "tean">' );
 	result = result
-	.replace ( /(\[)(!|=)(\d\.\d)(\])/g, fontChanger ); // размер и разрядка шрифта
+	.replace ( /(\[)(.)(-?\d+[\.,]\d+)(\])/g, fontChanger ); // размер и разрядка шрифта
 	//стили реплик отдельных персонажей
 	//# freefall
 	result = result
-	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|oth)\]/g, '<span class = "fest $1 f13">' )
-	.replace ( /\[nio\]/g, '<span class = "fest niomi f13">' )
-	.replace ( /\[com\]/g, '<span class = "fest edge f13">' );
+	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|oth)\]/g, '<span class = "fest $1" style = "font-size: 1.3em">' )
+	.replace ( /\[nio\]/g, '<span class = "fest niomi" style = "font-size: 1.3em">' )
+	.replace ( /\[com\]/g, '<span class = "fest edge" style = "font-size: 1.3em">' );
 	//# kitty
 	result = result
-	.replace ( /\[kit\]/g, '<span class = "fest tsp f12">' )
-	.replace ( /\[mou\]/g, '<span class = "impt dvo f12">' )
-	.replace ( /\[mtt\]/g, '<span class = "fest hlx f12">' )
-	.replace ( /\[nnw\]/g, '<span class = "fest mst f12">' )
-	.replace ( /\[znt\]/g, '<span class = "fest znt f12">' )
-	.replace ( /\[ck-\]/g, '<span class = "fest oth f12">' );
+	.replace ( /\[kit\]/g, '<span class = "fest tsp" style = "font-size: 1.2em">' )
+	.replace ( /\[mou\]/g, '<span class = "impt dvo" style = "font-size: 1.2em">' )
+	.replace ( /\[mtt\]/g, '<span class = "fest hlx" style = "font-size: 1.2em">' )
+	.replace ( /\[nnw\]/g, '<span class = "fest mst" style = "font-size: 1.2em">' )
+	.replace ( /\[znt\]/g, '<span class = "fest znt" style = "font-size: 1.2em">' )
+	.replace ( /\[ck-\]/g, '<span class = "fest oth" style = "font-size: 1.2em">' );
 	result = result
-	.replace ( /\[rel\]/g, '<span class = "fest oth f17">' ); //# lions
+	.replace ( /\[rel\]/g, '<span class = "fest oth" style = "font-size: 1.7em">' ); //# lions
 	//# ponies
 	result = result
-	.replace ( /\[mol\]/g, '<span class = "stri mol f12">' )
+	.replace ( /\[mol\]/g, '<span class = "stri mol" style = "font-size: 1.2em">' )
 	.replace ( /\[(tsp|rrp|rdp|fsp|ppp|ajp|sdp|bmp)\]/g, '<span class = "stri $1">' );
 	//# ozy
 	result = result
 	.replace ( /\[(ozy|mil|otr)\]/g, '<span class = "fest $1">' )
-	.replace ( /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1 f12">' )
-	.replace ( /\[lle\]/g, '<span class = "impt saw f12">' );
+	.replace ( /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1" style = "font-size: 1.2em">' )
+	.replace ( /\[lle\]/g, '<span class = "impt saw" style = "font-size: 1.2em">' );
 	result = result
-	.replace ( /\[bun\]/g, '<span class = "fest oth f15">' ); //# bunny
+	.replace ( /\[bun\]/g, '<span class = "fest oth" style = "font-size: 1.5em">' ); //# bunny
 	//# ichabod
 	result = result
-	.replace ( /\[ich\]/g, '<span class = "axol mil f17">' )
-	.replace ( /\[ich-\]/g, '<span class = "axol oth f17">' );
+	.replace ( /\[ich\]/g, '<span class = "axol mil" style = "font-size: 1.7em">' )
+	.replace ( /\[ich-\]/g, '<span class = "axol oth" style = "font-size: 1.7em">' );
 	result = result
 	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' ); //# weegie
 	result = result
