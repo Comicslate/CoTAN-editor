@@ -1116,7 +1116,7 @@ function renderText ( text ) { // обработка шрифтотегов
 					return '<span style = "font-size: ' + fontValue + 'em">';
 					break;
 				case '=':
-					return '<span style = "line-height: ' + fontValue * 100 + '%">';
+					return '<span style = "line-height: ' + fontValue * 100 + '%; display: inline-block;">';
 					break;
 				default:
 					return '<abbr title="Incorrect marker" >'+ openSB + marker + value + closeSB + '</abbr>';
