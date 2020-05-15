@@ -1,4 +1,4 @@
-// ver. 2020.04.20 03:34 GMT
+// ver. 2020.05.15 17:37 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1203,6 +1203,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	result = result
 	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src="http$1" class="media" alt="" width="$3">' )
 	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src="/_media/' + NS.substr ( NS.indexOf ( ":" ) + 1 ) + ':$1" class="media" alt="" width="$3">' )
+	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( /width=""/g, '' );
 	return result
 }
