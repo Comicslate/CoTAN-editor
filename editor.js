@@ -1,4 +1,4 @@
-// ver. 2020.06.06 18:46 GMT
+// ver. 2020.06.17 11:30 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -1129,7 +1129,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
 	.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' )
 	.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' )
-	.replace ( /\\\\/g, '<br \>' )
+	.replace ( /\\\\( +\n?|\n)/g, '<br \>' )
 	.replace ( /<fc ([#\w\d]+)>(.+?)<\/fc>/g, '<span style="color: $1">$2</span>' );
 	// спецназ
 	result = result
