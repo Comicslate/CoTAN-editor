@@ -1,4 +1,4 @@
-// ver. 2020.06.17 11:30 GMT
+// ver. 2020.07.21 08:50 GMT
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -382,7 +382,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 			+ ','
 			+ temp.height
 			+ ( ( temp.angle != 0 ) ? ( ',' + temp.angle ) : ( '' ) ) // EvilCat 5.11.2013: добавлена запись поворота
-			+ ( ( temp.radius != 0 ) ? ( ';' + temp.radius ) : ( '' ) ) // asd скругления
+			+ ( ( temp.radius !== '' ) ? ( ';' + temp.radius ) : ( '' ) ) // asd скругления
 			+ '\n'
 			+ temp.text
 			+ '\n~';
@@ -834,7 +834,8 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			enclass ( this.element, 'ct-area' );
 			if ( this.type === 'text' ) this.element.style.zIndex = "1"
 		} else {
-			enclass ( this.element, 'bubble' )
+			enclass ( this.element, 'bubble' );
+			enclass ( this.element, ' mask' )
 		}
 	}
 
