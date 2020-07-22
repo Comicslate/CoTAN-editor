@@ -1,4 +1,4 @@
-// ver. 2020.07.22 12:06 GMT+10
+// ver. 2020.07.22 13:12 GMT+10
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -72,7 +72,7 @@ function cotanedit ( ) { // эта функция действует после 
 	button.type = 'button';
 	button.accessKey = 'C';
 	button.value = 'CoTAN';
-	button.id = 'cotanbutton';
+	button.id = 'cotan-editor';
 	button.title = button.value + ' [' + button.accessKey + ']';
 	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	target.appendChild ( button );
@@ -170,7 +170,7 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp.style.background = '';
 		temp = document.getElementById ( 'pagetools' );
 		temp.style.display = '';
-		temp = document.getElementById ( 'cotanbutton' );
+		temp = document.getElementById ( 'cotan-editor' );
 		temp.disabled = false;
 		enclass ( temp, 'green' );
 		temp.style.background = '';
@@ -189,7 +189,7 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		temp.style.background = 'lightgray';
 		temp = document.getElementById ( 'pagetools' );
 		temp.style.display = 'none';
-		temp = document.getElementById ( 'cotanbutton' );
+		temp = document.getElementById ( 'cotan-editor' );
 		temp.disabled = true;
 		declass ( temp, 'green' );
 		temp.style.background = 'lightgray';
@@ -265,7 +265,7 @@ function setMode ( area_id, mode ) {
 	if ( area_id > cotan_areas.length ) return;
 	var area = cotan_areas[area_id];
 	area.setMode ( mode );
-	var addbutton = document.getElementById ( 'cotanarea-' + area.id + '-addbubble' );
+	var addbutton = document.getElementById ( 'cotan-area-' + area.id + '-addbubble' );
 	switch ( area.mode ) {
 		case 'clear':
 			enclass ( area.modeButtons[0], 'active' );
@@ -469,7 +469,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 
 	this.element = document.createElement ( 'div' ); // создаём область визуального интерфейса.
 	this.element.cotanarea = this;
-	this.element.className = 'cotancontainer cotanarea-' + this.id;
+	this.element.className = 'cotan-container cotan-area-' + this.id;
 
 	var toolbar, // объявляем локальные переменные
 		button,
@@ -486,7 +486,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		button.cotanarea = this;
 		button.className = 'button toolbutton';
 		button.type = 'button';
-		button.id = 'cotanarea-' + this.id + '-' + area_modes[i];
+		button.id = 'cotan-area-' + this.id + '-' + area_modes[i];
 
 		temp = document.createElement ( 'img' );
 		temp.src = cotan_path + area_modes[i] + '.png';
@@ -561,7 +561,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	button.cotanarea = this;
 	button.className = 'button toolbutton';
 	button.type = 'button';
-	button.id = 'cotanarea-' + this.id + '-addbubble';
+	button.id = 'cotan-area-' + this.id + '-addbubble';
 	temp = document.createElement ( 'img' );
 	temp.src = cotan_path + 'add.png';
 	button.appendChild ( temp );
@@ -585,10 +585,6 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	if ( img_wid != '' ) this.img.style = 'width: ' + img_wid + 'px;' ;
 	this.img.src = this.file.replace ( /_media[:\/]\w\w\w?[:\/]/, '_media/' ); // удаление языка из пути картинки
 	this.imgarea.appendChild ( this.img );
-
-	temp = document.createElement ( 'div' ); // защита от закукоживания размечаемых наклеек жёстко по содержимому
-	temp.style.clear = 'both';
-	this.imgarea.appendChild ( temp );
 
 	/* вставка чужих картинок 21.07.2019 */
 	if ( NS.match ( "sci-fi:freefall" ) != null ) {
