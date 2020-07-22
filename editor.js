@@ -1,4 +1,4 @@
-// ver. 2020.07.21 08:50 GMT
+// ver. 2020.07.22 12:06 GMT+10
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 )[0],
@@ -113,11 +113,15 @@ function cotanedit ( ) { // эта функция действует после 
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 	
+	button = document.createElement ( 'button' ); // создаём кнопку помощи
+	button.type = 'button';
+	button.className = 'button toolbutton';
 	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
 	temp.href = '/' + lang + '/wiki/12balloons';
 	temp.target = '_blank';
-	temp.innerHTML = '<button type="button" class="button toolbutton"><img src="' + cotan_path + 'help.png"><span>' + eline[2] + '</span></button>';
-	cotan_toolbar.appendChild ( temp );
+	temp.innerHTML = '<img src="' + cotan_path + 'help.png"><span>' + eline[2] + '</span>';
+	button.appendChild ( temp );
+	cotan_toolbar.appendChild ( button );
 
 	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
 }
