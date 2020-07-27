@@ -1,4 +1,4 @@
-// ver. 2020.07.27 22:12 GMT+10
+// ver. 2020.07.27 22:45 GMT+10
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 ) [ 0 ],
@@ -1199,15 +1199,31 @@ function renderText ( text ) { // обработка шрифтотегов
 	result = result
 	.replace ( /\[ich\]/g, '<span class = "axol mil" style = "font-size: 1.7em">' )
 	.replace ( /\[ich-\]/g, '<span class = "axol oth" style = "font-size: 1.7em">' );
+	//# weegie
 	result = result
-	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' ); //# weegie
+	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' );
+	// плагин typography
 	result = result
+	.replace ( /<typo (.+)>(.+)<\/typo>/g, '<span style="$1">$2</span>' )
+	.replace ( /fc:/g, 'color:' )
+	.replace ( /bg:/g, 'background-color:' )
+	.replace ( /fs:/g, 'font-size:' )
+	.replace ( /fw:/g, 'font-weight:' )
+	.replace ( /fv:/g, 'font-variant:' )
+	.replace ( /ff:/g, 'font-family:' )
+	.replace ( /lh:/g, 'line-height:' )
+	.replace ( /ls:/g, 'letter-spacing:' )
+	.replace ( /ws:/g, 'word-spacing:' )
+	.replace ( /sp:/g, 'white-space:' )
+	.replace ( /va:/g, 'vertical-align:' )
+	.replace ( /tt:/g, 'text-transform:' )
+	.replace ( /ts:/g, 'text-shadow:' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
 	result = result
 	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src="http$1" class="media" alt="" width="$3">' )
 	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src="/_media/' + NS.substr ( NS.indexOf ( ":" ) + 1 ) + ':$1" class="media" alt="" width="$3">' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
-	.replace ( /width=""/g, '' );
+	.replace ( / ?width="" ?/g, ' ' );
 	return result
 }
 
