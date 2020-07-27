@@ -1,4 +1,4 @@
-// ver. 2020.07.27 22:45 GMT+10
+// ver. 2020.07.27 23:28 GMT+10
 
 // ВВОДНЫЕ
 var lang = NS.split ( ':', 2 ) [ 0 ],
@@ -1134,8 +1134,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
 	.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' )
 	.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' )
-	.replace ( /\\\\( +\n?|\n)/g, '<br \>' )
-	.replace ( /<fc ([#\w\d]+)>(.+?)<\/fc>/g, '<span style="color: $1">$2</span>' );
+	.replace ( /\\\\( +\n?|\n)/g, '<br \>' );
 	// спецназ
 	result = result
 	.replace ( /\.\.\./g, '…' )
@@ -1204,26 +1203,31 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' );
 	// плагин typography
 	result = result
-	.replace ( /<typo (.+)>(.+)<\/typo>/g, '<span style="$1">$2</span>' )
+	.replace ( /<typo (.+?)>(.+?)<\/typo>/g, '<span style = "$1">$2</span>' )
 	.replace ( /fc:/g, 'color:' )
+	.replace ( /<fc (.+?)>(.+?)<\/fc>/g, '<span style = "color: $1">$2</span>' )
 	.replace ( /bg:/g, 'background-color:' )
+	.replace ( /<bg (.+?)>(.+?)<\/bg>/g, '<span style = "background-color: $1">$2</span>' )
 	.replace ( /fs:/g, 'font-size:' )
+	.replace ( /<fs (.+?)>(.+?)<\/fs>/g, '<span style = "font-size: $1">$2</span>' )
 	.replace ( /fw:/g, 'font-weight:' )
+	.replace ( /<fw (.+?)>(.+?)<\/fw>/g, '<span style = "font-weight: $1">$2</span>' )
 	.replace ( /fv:/g, 'font-variant:' )
 	.replace ( /ff:/g, 'font-family:' )
+	.replace ( /<ff (.+?)>(.+?)<\/ff>/g, '<span style = "font-family: $1">$2</span>' )
 	.replace ( /lh:/g, 'line-height:' )
 	.replace ( /ls:/g, 'letter-spacing:' )
 	.replace ( /ws:/g, 'word-spacing:' )
 	.replace ( /sp:/g, 'white-space:' )
 	.replace ( /va:/g, 'vertical-align:' )
 	.replace ( /tt:/g, 'text-transform:' )
-	.replace ( /ts:/g, 'text-shadow:' )
-	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
+	.replace ( /ts:/g, 'text-shadow:' );
 	result = result
-	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src="http$1" class="media" alt="" width="$3">' )
-	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src="/_media/' + NS.substr ( NS.indexOf ( ":" ) + 1 ) + ':$1" class="media" alt="" width="$3">' )
+	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + NS.substr ( NS.indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
-	.replace ( / ?width="" ?/g, ' ' );
+	.replace ( / ?width="" ?/g, ' ' )
+	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
 	return result
 }
 
