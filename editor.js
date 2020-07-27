@@ -1,7 +1,7 @@
-// ver. 2020.07.22 13:12 GMT+10
+// ver. 2020.07.27 22:12 GMT+10
 
 // ВВОДНЫЕ
-var lang = NS.split ( ':', 2 )[0],
+var lang = NS.split ( ':', 2 ) [ 0 ],
 	elines = {
 		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
 		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
@@ -1108,7 +1108,7 @@ function nHandle ( bubble ) { // объект ручки
 function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
 	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
-		var fontValue = parseFloat ( value.replace ( ",", "." ).replace ( "-", "" ) );
+		var fontValue = parseFloat ( value.replace ( ",", "." ) );
 		if ( fontValue > 0 ) {
 			switch ( marker ) {
 				case '!':
@@ -1117,8 +1117,12 @@ function renderText ( text ) { // обработка шрифтотегов
 				case '=':
 					return '<span style = "line-height: ' + fontValue * 100 + '%; display: inline-block;">';
 					break;
+				case 'y':
+				case 'x':
+					return '<p style = "transform: scale' + marker + '(' + fontValue + ');">';
+					break;
 				default:
-					return '<abbr title="Incorrect marker" >'+ openSB + marker + value + closeSB + '</abbr>';
+					return '<abbr title="Incorrect marker" >' + openSB + marker + value + closeSB + '</abbr>';
 					break
 			}
 		} else {
@@ -1163,7 +1167,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[aa\]/g, '<span class = "aace">' )
 	.replace ( /\[ta\]/g, '<span class = "tean">' );
 	result = result
-	.replace ( /(\[)(.)(-?\d+[\.,]\d+)(\])/g, fontChanger ); // размер и разрядка шрифта
+	.replace ( /(\[)(.)(-?\d+[\.,]?\d*)(\])/g, fontChanger ); // размер и разрядка шрифта
 	//стили реплик отдельных персонажей
 	//# freefall
 	result = result
