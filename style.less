@@ -1,3 +1,51 @@
+@keyframes bb_blink {
+	from {
+		background-color: rgba(255, 255, 255, 0.8);
+		border-color: rgba(0, 0, 0, 0.6);
+	}
+	50% {
+		background-color: rgba(255, 255, 255, 0.8);
+		border-color: rgba(0, 0, 0, 0.6);
+	}
+	51% {
+		background-color: rgba(255, 255, 255, 1);
+		border-color: rgba(0, 0, 0, 0);
+	}
+	to {
+		background-color: rgba(255, 255, 255, 1);
+		border-color: rgba(0, 0, 0, 0);
+	}
+}
+
+/* общее */
+
+.ct-area {
+	display: table;
+	margin: 5px 0 0 4px;
+	position: absolute;
+	&:not(.ct_bg) {
+		z-index: 1;
+	}
+	&.ct_bg {
+		z-index: 0;
+	}
+	.ct-note {
+		display: table-cell;
+		vertical-align: middle;
+		.ct-note-content {
+			cursor: default;
+			display: block;
+			font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
+			text-align: center;
+			p {
+				margin: 0;
+			}
+		}
+	}
+}
+
+/* основной режим */
+
 .ct-container {
 	display: table;
 	margin: 0 auto;
@@ -6,34 +54,10 @@
 		border-width: 0; /* более ровные картинки */
 	}
 }
-.ct-area {
-	display: table;
-	padding: 5px 0 0 4px;
-	position: absolute;
-	z-index: 1;
-	&.ct_bg {
-		z-index: 0;
-	}
-	.ct-note {
-		display: table-cell;
-		left: 0;
-		opacity: 1 !important;
-		padding: 0 0 3px;
-		position: relative;
-		top: 0;
-		vertical-align: middle;
-		.ct-note-content {
-			cursor: default;
-			display: inline; /* без отбивок */
-			font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
-			text-align: center;
-		}
-	}
-}
 
 /* CoTAN-редактор */
 
-#cotanbutton { /* кнопка редактора */
+#cotan-editor { /* кнопка редактора */
 	background-image: linear-gradient(to bottom, #CCBBFF, #AA99DD);
 	&:hover { /* она же при наведении */
 		background-image: linear-gradient(to bottom, #CCBBFF, #8877BB);
@@ -43,13 +67,21 @@
 .cotan {
 	font-size: 125%;
 	margin-top: 0.5em;
+	.toolbutton {
+		margin: 0 2px;
+		img {
+			margin-right: 3px;
+		}
+		* {
+			vertical-align: middle;
+		}
+	}
 	.cotan-toolbar {
 		.green {
 			background-color: #CCFFBB !important;
 		}
 	}
-	.cotancontainer {
-		padding-top: 3px;
+	.cotan-container {
 		.cotan-modebar {
 			text-align: center;
 			.toolbutton {
@@ -69,22 +101,18 @@
 			}
 		}
 		#cotaned_toolbar {
-			margin: 0 0 3px 0;
-			text-align: left;
+			margin-bottom: 3px;
 		}
 		.cotanimgarea {
 			position: relative;
 			.cotanimg {
-				float: left;
+				margin: 3px;
 			}
-			.ct-area {
-				padding: 2px 0 0 1px;
+			& > div {
+				border-radius: 5px; /* пока управляемое скругление не будет внедрено в редактор */
 			}
 			.bubble {
-				background: none repeat scroll 0 0 rgba(255,255,255,0.8);
-				display: table;
-				margin: 2px -1px 0 1px; /* фиксаж для забеливания */
-				outline: 1px dashed rgba(0, 0, 0, 0.6); 
+				border: 1px dashed rgba(0, 0, 0, 0.6); 
 				position: absolute;
 				&:hover {
 					background: rgba(0, 0, 0, 0.4);
@@ -93,7 +121,7 @@
 					}
 				}
 				&.ct-area {
-					margin: 0; /* дефиксаж для перевода */
+					transform: translate(-1px,-1px); /* учитывает, что при разметке есть бордер в 1px, а на просмотре его нет */
 				}
 				.handle {
 					cursor: pointer;
@@ -137,23 +165,14 @@
 				textarea {
 					position: relative;
 				}
+				&.mask {
+					box-sizing: border-box;
+					margin: 5px 2px 2px 4px;
+					animation: bb_blink 3s linear infinite;
+				}
 			}
 		}
 	}
-	.toolbutton {
-		margin: 0 2px;
-		img {
-			margin-right: 3px;
-			vertical-align: middle;
-		}
-		span {
-			vertical-align: middle;
-		}
-	}
-}
-
-div.dokuwiki p:last-child {
-	margin-bottom: 3px;
 }
 
 .semitransparent {
