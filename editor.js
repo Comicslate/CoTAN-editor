@@ -1,6 +1,7 @@
-// ver. 2020.07.27 23:28 GMT+10
+// ver. 2020.09.11 15:21 GMT+10
 
 // ВВОДНЫЕ
+console.log ( 'CoTAN ver. 2020.09.11 15:21 GMT+10' );
 var lang = NS.split ( ':', 2 ) [ 0 ],
 	elines = {
 		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
@@ -740,7 +741,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			} else if ( val == 'edit' ) {
 				if ( this.textedit_element ) {
 					this.textedit_element.style.top = this.height + 'px';
-					this.textedit_element.style.zIndex = 100;
+					this.textedit_element.style.zIndex = "100";
 					this.textedit_element.style.display = 'block'
 				}
 			} else if ( val == 'handled' ) {
@@ -819,24 +820,9 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 	this.createContainer = function ( ) {
 		this.element = document.createElement ( 'div' );
 		this.element.bubble = this;
-		if (
-			this.cotanarea.mode === 'preview'
-			||
-			this.cotanarea.mode === 'sticker'
-		) {
-			if (
-				this.cotanarea.mode === 'sticker'
-				&&
-				this.type === 'text'
-			) {
-				enclass ( this.element, 'bubble' )
-			}
-			enclass ( this.element, 'ct-area' );
-			if ( this.type === 'text' ) this.element.style.zIndex = "1"
-		} else {
-			enclass ( this.element, 'bubble' );
-			enclass ( this.element, ' mask' )
-		}
+		if ( this.cotanarea.mode === 'sticker' && this.type === 'text' ) enclass ( this.element, 'bubble' );
+		( this.cotanarea.mode === 'preview' || this.cotanarea.mode === 'sticker' ) ? enclass ( this.element, 'ct-area' ) : enclass ( this.element, 'bubble mask' );
+		if ( this.type === 'text' ) declass ( this.element, 'ct_bg' );
 	}
 
 	this.createView = function ( ) {
@@ -854,11 +840,12 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		) {
 			var color = 'white';
 			div.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
-			this.element.style.zIndex = "0"
+			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
 			this.text_element = document.createElement ( 'p' );
 			this.text_element.innerHTML = renderText ( this.text );
 			temp.appendChild ( this.text_element )
+//			temp.innerHTML += renderText ( this.text );
 		}
 	}
 
@@ -1250,6 +1237,6 @@ function enclass ( obj, _class ) { // добавление класса
 
 function declass ( obj, _class ) { // удаление класса
 	obj.className = obj.className
-					.replace ( _class, '' )
-					.replace ( new RegExp ( '(^ | (?= )| $)', 'ig' ), '' )
+		.replace ( _class, '' )
+		.replace ( new RegExp ( '(^ | (?= )| $)', 'ig' ), '' )
 }
