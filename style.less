@@ -1,7 +1,6 @@
 /* общее */
 
 .ct-area {
-	-moz-transform: translate(0, -1px);
 	display: table;
 	margin: 5px 0 0 4px;
 	position: absolute;
@@ -32,6 +31,9 @@
 	display: table;
 	margin: 0 auto;
 	position: relative;
+	.ct-area {
+		-moz-transform: translate(0, -1px);
+	}
 	img {
 		border-width: 0; /* более ровные картинки */
 	}
