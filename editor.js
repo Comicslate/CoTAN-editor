@@ -1,9 +1,8 @@
-// ver. 2020.09.11 15:21 GMT+10
-
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2020.09.11 15:21 GMT+10' );
-var lang = NS.split ( ':', 2 ) [ 0 ],
-	elines = {
+console.log ( 'CoTAN ver. 2020.10.10 00:47 GMT+10' );
+var lang = JSINFO [ 'lang' ],
+	ct_text = [ ],
+	ct_texts = {
 		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
 		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
 		'bg': ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Добави балон', 'Оригинал', 'Маски', 'Текстове', 'Преглед'],
@@ -24,11 +23,12 @@ var lang = NS.split ( ':', 2 ) [ 0 ],
 		'pl': ['Stosować', 'Anulować', 'Pomagać', 'Tekst', 'Dodaj balon', 'Oryginał', 'Maski', 'Teksty', 'Przegląd'],
 		'pt': ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Adicionar balão', 'Original', 'Máscara', 'Textos', 'Exame'],
 		'ru': ['Применить', 'Отменить', 'Помощь', 'Текст', 'Добавить баллон', 'Оригинал', 'Маски', 'Тексты', 'Осмотр'],
+		'sib': [ ],
+		'sjn': [ ],
 		'uk': ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Додати балон', 'Оригінал', 'Маски', 'Тексти', 'Огляд'],
 		'zh': ['申请', '取消', '救命', '文本', '添加气球', '原创', '面具', '短信', '检查'],
 		'default': ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup']
 	},
-	eline = [],
 	wiki_text, // будущая ссылка на доку-редактор #wiki__text
 	ctnote, // все наклейки
 	cotan, // будущая ссылка на котан-редактор
@@ -44,11 +44,13 @@ var lang = NS.split ( ':', 2 ) [ 0 ],
 	cotan_preg_aimg_target  = '\\{\\{aimg>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
 	cotan_preg_cotan_target = '\\{\\{cotan>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
-	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ); // адрес до первого слеша
+	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ), // адрес до первого слеша
+	i;
 
-for ( var i in elines.default ) {
-	eline[i] = elines[lang][i] || elines.default[i]
-};
+ct_texts.default = ct_texts [ 'en' ];
+ct_texts [ 'sib' ] = ct_texts [ 'ru' ];
+ct_texts [ 'sjn' ] = ct_texts [ 'en' ];
+for ( i in ct_texts.default ) { ct_text [ i ] = ct_texts [ lang ] [ i ] || ct_texts.default [ i ] };
 
 if ( cotan_media ) { // если нашёлся
 	cotan_media = cotan_media[1] + '/_media/'; // дописываем /_media/
@@ -90,13 +92,13 @@ function cotanedit ( ) { // эта функция действует после 
 	button.type = 'button';
 	button.className = 'button green toolbutton';
 	button.accessKey = "A";
-	button.title = eline[0] + ' [' + button.accessKey + ']';
+	button.title = ct_text [ 0 ] + ' [' + button.accessKey + ']';
 	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
 	temp = document.createElement ( 'img' );
 	temp.src = cotan_path + 'accept.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( eline[0] ) );
+	temp.appendChild ( document.createTextNode ( ct_text [ 0 ] ) );
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 
@@ -104,13 +106,13 @@ function cotanedit ( ) { // эта функция действует после 
 	button.type = 'button';
 	button.className = 'button toolbutton';
 	button.accessKey = "Q";
-	button.title = eline[1] + ' [' + button.accessKey + ']';
+	button.title = ct_text [ 1 ] + ' [' + button.accessKey + ']';
 	button.onclick = noSave; // функция отката изменений
 	temp = document.createElement ( 'img' );
 	temp.src = cotan_path + 'cancel.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( eline[1] ) );
+	temp.appendChild ( document.createTextNode ( ct_text [ 1 ] ) );
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 	
@@ -120,7 +122,7 @@ function cotanedit ( ) { // эта функция действует после 
 	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
 	temp.href = '/' + lang + '/wiki/12balloons';
 	temp.target = '_blank';
-	temp.innerHTML = '<img src="' + cotan_path + 'help.png"><span>' + eline[2] + '</span>';
+	temp.innerHTML = '<img src="' + cotan_path + 'help.png"><span>' + ct_text [ 2 ] + '</span>';
 	button.appendChild ( temp );
 	cotan_toolbar.appendChild ( button );
 
@@ -148,7 +150,7 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 			area;
 		if ( typeof ( arguments[0] ) != 'undefined' ) save = arguments[0]; // может быть передан код отмены изменений
 
-		for ( var i in cotan_areas ) {
+		for ( i in cotan_areas ) {
 			if ( cotan_areas[i] ) {
 				area = cotan_areas[i];
 				if ( save ) area.saveBubbles ( );
@@ -211,7 +213,7 @@ function do_match ( ) { // функция поиска картинки/разм
 	if ( !content ) return;
 
 	var images = preg_match_all ( cotan_preg, content );
-	for ( var i in images ) {
+	for ( i in images ) {
 		var image_data = { tag_type: '', image_link: '', image_ext: '', width: '', balloons_raw: '' };
 		if ( images[i][2] ) {
 			// эта ветка выполняется только в случае, если обнаружена существующая зона aimg или cotan
@@ -297,7 +299,7 @@ function setMode ( area_id, mode ) {
 			addbutton.disabled = true;
 			break
 	}
-	for ( var i in area.bubbles ) {
+	for ( i in area.bubbles ) {
 		if ( area.bubbles[i] ) area.bubbles[i].redraw ( )
 	}
 }
@@ -306,7 +308,7 @@ function preg_match_all ( regex, haystack ) { // эквивалент php-фун
 	var globalRegex = new RegExp ( regex, 'gi' ),
 		globalMatch = haystack.match ( globalRegex ),
 		matchArray = new Array ( );
-	for ( var i in globalMatch ) {
+	for ( i in globalMatch ) {
 		var nonGlobalRegex = new RegExp ( regex ),
 			nonGlobalMatch = globalMatch[i].match ( nonGlobalRegex );
 		matchArray.push ( nonGlobalMatch );
@@ -335,7 +337,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		if ( this.mode === 'whitewash' ) {
 			bubble_text = '#'
 		} else if ( this.mode === 'sticker' ) {
-			bubble_text = eline[3];
+			bubble_text = ct_text [ 3 ];
 		}
 		var bubble = new Bubbles ( bubble_id, x, y, 100, 50, bubble_text, this, true );
 		bubble.cotanarea = this;
@@ -361,7 +363,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		//  12 - символика текста баллона
 		
 		if ( list ) {
-			for ( var i in list ) { // создаём новые
+			for ( i in list ) { // создаём новые
 				var bubble_id;
 				bubble_id = this.bubbles.length;
 				bubble = new Bubbles ( i, list[i][3], list[i][2], list[i][4], list[i][5], list[i][11], this, false, list[i][7], list[i][9] );
@@ -375,7 +377,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		// сначала создаём целевой текст
 		var temp,
 			result = '';
-		for ( var i in this.bubbles ) {
+		for ( i in this.bubbles ) {
 			if ( !this.bubbles[i] ) continue;
 			temp = this.bubbles[i];
 			result += '\n@'
@@ -430,7 +432,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	}
 
 	this.scrape = function ( ) {
-		for ( var i in this.bubbles ) {
+		for ( i in this.bubbles ) {
 			if ( this.bubbles[i] ) this.bubbles[i].scrape ( )
 		}
 		this.element.parentNode.removeChild ( this.element );
@@ -440,7 +442,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.setMode = function ( mode ) {
 		var area_modes = ['clear', 'whitewash', 'sticker', 'preview'];
 		this.mode = '';
-		for ( var i in area_modes ) {
+		for ( i in area_modes ) {
 			if ( mode == area_modes[i] ) this.mode = mode
 		}
 		if ( this.mode == '' ) this.mode = 'whitewash' // при потере переменной функции? по дефолту? но дефолтный режим ставится в последней строке этой функции
@@ -482,7 +484,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.element.appendChild ( toolbar );
 	
 	var area_modes = ['clear', 'whitewash', 'sticker', 'preview']; // объявляем локальные переменные
-	for ( var i = 0; i < area_modes.length; i++ ) { // кнопки режимов
+	for ( i = 0; i < area_modes.length; i++ ) { // кнопки режимов
 		button = document.createElement ( 'button' );
 		button.cotanarea = this;
 		button.className = 'button toolbutton';
@@ -494,7 +496,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		button.appendChild ( temp );
 
 		temp = document.createElement ( 'span' );
-		temp.appendChild ( document.createTextNode ( eline[5+i] ) );
+		temp.appendChild ( document.createTextNode ( ct_text [ 5 + i ] ) );
 		button.appendChild ( temp );
 		
 		toolbar.appendChild ( button );
@@ -567,7 +569,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	temp.src = cotan_path + 'add.png';
 	button.appendChild ( temp );
 	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( eline[4] ) );
+	temp.appendChild ( document.createTextNode ( ct_text [ 4 ] ) );
 	button.appendChild ( temp );
 	button.onclick = function ( e ) {
 		this.cotanarea.addBubble ( e, this )
@@ -588,7 +590,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.imgarea.appendChild ( this.img );
 
 	/* вставка чужих картинок 21.07.2019 */
-	if ( NS.match ( "sci-fi:freefall" ) != null ) {
+	if ( JSINFO [ 'id' ].match ( "sci-fi:freefall" ) != null ) {
 		var lang_work,
 			file_ext,
 			url_num = window.location.href.match ( /[:\/](\d\d\d\d)/i );
@@ -867,7 +869,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.bubble.textedit_element.style.display = "";
 			this.bubble.textedit_element.focus ( );
 			ctnote = document.getElementsByClassName ( 'ct-note' );
-			for ( var i in ctnote ) {
+			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'none';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0)'
 			}
@@ -882,7 +884,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.bubble.textedit_element.style.display = "none";
 			this.bubble.element.style.zIndex = "1";
 			ctnote = document.getElementsByClassName ( 'ct-note' );
-			for ( var i in ctnote ) {
+			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'table-cell';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0.8)'
 			}
@@ -1211,7 +1213,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /ts:/g, 'text-shadow:' );
 	result = result
 	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + NS.substr ( NS.indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
