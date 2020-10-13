@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2020.10.10 00:47 GMT+10' );
+console.log ( 'CoTAN ver. 2020.10.13 10:22 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -164,6 +164,7 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 		wiki_text.style.display = '';
 		document.querySelector ( '.level1' ).style.display = '';
 		document.querySelector ( '.toolbar' ).style.display = '';
+		wiki_text.focus ( );
 
 		temp = document.getElementById ( 'edbtn__save' );
 		temp.disabled = false;
