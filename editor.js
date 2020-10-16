@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2020.10.16 22:17 GMT+10' );
+console.log ( 'CoTAN ver. 2020.10.16 23:06 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1154,9 +1154,9 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[im\]/g, '<span class = "impt">' )
 	.replace ( /\[lu\]/g, '<span class = "lucl">' )
 	.replace ( /\[aa\]/g, '<span class = "aace">' )
-	.replace ( /\[ta\]/g, '<span class = "tean">' );
-	.replace ( /\[fa\]/g, '<span class = "fawe">' );
-	.replace ( /\[sp\]/g, '<span class = "spac">' );
+	.replace ( /\[ta\]/g, '<span class = "tean">' )
+	.replace ( /\[fa\]/g, '<span class = "fawe">' )
+	.replace ( /\[sp\]/g, '<span class = "spac">' )
 	.replace ( /\[un\]/g, '<span class = "unic">' );
 	result = result
 	.replace ( /(\[)(.)(-?\d+[\.,]?\d*)(\])/g, fontChanger ); // размер и разрядка шрифта
