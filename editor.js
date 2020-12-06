@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2020.10.16 23:06 GMT+10' );
+console.log ( 'CoTAN ver. 2020.12.07 05:24 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -60,7 +60,8 @@ if ( cotan_media ) { // если нашёлся
 
 function cotanedit ( ) { // эта функция действует после загрузки страницы и добавляет котан-редактор и кнопку его запуска
 	if ( cotan_media == '' ) return; // уходим, если это главная страница
-	
+	if ( window.location.href.match ( /\/(d|h)\d+/i ) != null ) return; // ленты тоже игнорим
+
 	// ищем область кнопок target
 	wiki_text = document.getElementById ( 'wiki__text' ); // получаем и сохраняем ссылку на доку-редактор #wiki__text
 	if ( !wiki_text ) return; // уходим, если нет доку-редактора
