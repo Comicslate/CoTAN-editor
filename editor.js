@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.02.02 01:07 GMT+10' );
+console.log ( 'CoTAN ver. 2021.03.04 22:08 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1164,7 +1164,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	//стили реплик отдельных персонажей
 	//# freefall
 	result = result
-	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|gre|oth)\]/g, '<span class = "fest $1" style = "font-size: 1.3em">' )
+	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|gre|vag|oth)\]/g, '<span class = "fest $1" style = "font-size: 1.3em">' )
 	.replace ( /\[nio\]/g, '<span class = "fest niomi" style = "font-size: 1.3em">' )
 	.replace ( /\[com\]/g, '<span class = "fest edge" style = "font-size: 1.3em">' );
 	//# kitty
@@ -1219,6 +1219,8 @@ function renderText ( text ) { // обработка шрифтотегов
 	result = result
 	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\[\[ ?(..)w>([^\|\]]+)\|([^\]]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
+	.replace ( /\[\[ ?(..)w>([^\|\]]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
