@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.03.04 22:08 GMT+10' );
+console.log ( 'CoTAN ver. 2021.03.05 04:51 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1219,8 +1219,10 @@ function renderText ( text ) { // обработка шрифтотегов
 	result = result
 	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\[\[ ?(..)w>([^\|\]]+)\|([^\]]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
-	.replace ( /\[\[ ?(..)w>([^\|\]]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
+	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
+	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
+	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_]+?) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
+	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
