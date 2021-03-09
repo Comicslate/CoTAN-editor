@@ -21,6 +21,10 @@
 			p {
 				margin: 0;
 			}
+			a.interwiki {
+				background-image: none !important;
+				padding: 0;
+			}
 		}
 	}
 }
@@ -106,6 +110,11 @@
 				}
 				&.ct-area {
 					transform: translate(-1px,-1px); /* учитывает, что при разметке есть бордер в 1px, а на просмотре его нет */
+					.ct-note-content {
+						* {
+							word-wrap: anywhere;
+						}
+					}
 				}
 				.handle {
 					cursor: pointer;
