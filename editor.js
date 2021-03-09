@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.03.05 04:51 GMT+10' );
+console.log ( 'CoTAN ver. 2021.03.08 18:58 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1103,21 +1103,25 @@ function renderText ( text ) { // обработка шрифтотегов
 		if ( fontValue > 0 ) {
 			switch ( marker ) {
 				case '!':
-					return '<span style = "font-size: ' + fontValue + 'em">';
+					return '<span style = "font-size: ' + fontValue + 'em; display: inline-block;">';
 					break;
 				case '=':
 					return '<span style = "line-height: ' + fontValue * 100 + '%; display: inline-block;">';
 					break;
+				case '_':
+					if ( fontValue > 1500 ) fontValue = 1500;
+					return '<span style = "width: ' + fontValue + 'px; display: inline-block;"></span>';
+					break;
 				case 'y':
 				case 'x':
-					return '<p style = "transform: scale' + marker + '(' + fontValue + ');">';
+					return '<span style = "transform: scale' + marker + '(' + fontValue + '); display: inline-block;">';
 					break;
 				default:
-					return '<abbr title="Incorrect marker" >' + openSB + marker + value + closeSB + '</abbr>';
+					return '<abbr title = "Incorrect marker" >' + openSB + marker + value + closeSB + '</abbr>';
 					break
 			}
 		} else {
-			return '<abbr title="Incorrect digit" >' + openSB + marker + value + closeSB + '</abbr>'
+			return '<abbr title = "Incorrect digit" >' + openSB + marker + value + closeSB + '</abbr>'
 		}
 	}
 	//wiki разметка
@@ -1221,8 +1225,8 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
 	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
-	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_]+?) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
-	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
+	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_\(\)]+?) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
+	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_\(\)]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
