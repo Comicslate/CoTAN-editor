@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.03.08 18:58 GMT+10' );
+console.log ( 'CoTAN ver. 2021.03.12 11:11 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1098,32 +1098,6 @@ function nHandle ( bubble ) { // объект ручки
 
 function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
-	function fontChanger ( str, openSB, marker, value, closeSB, offset, s ) {
-		var fontValue = parseFloat ( value.replace ( ",", "." ) );
-		if ( fontValue > 0 ) {
-			switch ( marker ) {
-				case '!':
-					return '<span style = "font-size: ' + fontValue + 'em; display: inline-block;">';
-					break;
-				case '=':
-					return '<span style = "line-height: ' + fontValue * 100 + '%; display: inline-block;">';
-					break;
-				case '_':
-					if ( fontValue > 1500 ) fontValue = 1500;
-					return '<span style = "width: ' + fontValue + 'px; display: inline-block;"></span>';
-					break;
-				case 'y':
-				case 'x':
-					return '<span style = "transform: scale' + marker + '(' + fontValue + '); display: inline-block;">';
-					break;
-				default:
-					return '<abbr title = "Incorrect marker" >' + openSB + marker + value + closeSB + '</abbr>';
-					break
-			}
-		} else {
-			return '<abbr title = "Incorrect digit" >' + openSB + marker + value + closeSB + '</abbr>'
-		}
-	}
 	//wiki разметка
 	result = result
 	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
