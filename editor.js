@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.05.10 22:03 GMT+10' );
+console.log ( 'CoTAN ver. 2021.05.11 01:14 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -1147,7 +1147,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	//стили реплик отдельных персонажей
 	//# freefall
 	result = result
-	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|gre|vag|oth)\]/g, '<span class = "fest $1" style = "font-size: 1.3em">' )
+	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|pol|mst1?|bow|ish|gre|vag|ops|oth)\]/g, '<span class = "fest $1" style = "font-size: 1.3em">' )
 	.replace ( /\[nio\]/g, '<span class = "fest niomi" style = "font-size: 1.3em">' )
 	.replace ( /\[com\]/g, '<span class = "fest edge" style = "font-size: 1.3em">' );
 	//# kitty
