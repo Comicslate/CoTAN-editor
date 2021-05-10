@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.03.12 11:11 GMT+10' );
+console.log ( 'CoTAN ver. 2021.05.10 22:03 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -16,6 +16,7 @@ var lang = JSINFO [ 'lang' ],
 		'fr': ['Appliquer', 'Annuler', 'Aide', 'Texte', 'Ajouter ballon', ' Original', 'Masques', 'Textes', 'Apperçu'],
 		'he': ['החל', 'לבטל', 'לעזור', 'טקסט', 'להוסיף בלון', 'המקורי', 'מסכות', 'טקסטים', 'בדיקה'],
 		'hi': ['लागू', 'रद्द', 'मदद', 'पाठ', 'जोड़ने के गुब्बारे', 'मूल', 'मास्क', 'ग्रंथों', 'निरीक्षण'],
+		'hu': ['Alkalmazás', 'Törlés', 'Segítség', 'Szöveg', 'Ballon hozzáadása', 'Eredeti', 'Maszkok', 'Szövegek', 'Ellenőrzés'],
 		'id': ['Menerapkan', 'Membatalkan', 'Aiuto', 'Teks', 'Tambahkan balon', 'Asli', 'Masker', 'Teks', 'Pemeriksaan'],
 		'it': ['Applicare', 'Annulla', 'Membantu', 'Testo', 'Aggiungere il pallone', 'Originale', 'Maschere', 'Testi', 'Verifica'],
 		'ja': ['適用', '消', '助', 'テキスト', '追加のバルーン', '独自の', 'マスク', 'テキスト', '検査'],
@@ -607,6 +608,10 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 					lang_work = +( lang_num <= 568 );
 					file_ext = '.gif';
 					break
+				case 'hu':
+					lang_work = +( lang_num <= 2513 );
+					file_ext = '.gif';
+					break
 				case 'it':
 					lang_work = +( lang_num <= 3172 );
 					file_ext = '.png';
@@ -1195,12 +1200,12 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /tt:/g, 'text-transform:' )
 	.replace ( /ts:/g, 'text-shadow:' );
 	result = result
-	.replace ( /\{\{ ?http([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\{\{([a-z0-9\.\/\:\-\_]+?)(\?nolink)?[\&\?]?(\d+)?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
-	.replace ( /\[\[ ?(..)w>([^\|\]\<]+) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
-	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_\(\)]+?) ?\| ?([^\]\<]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
-	.replace ( /\[\[ ?http([a-z0-9\.\/\:\-\_\(\)]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
+	.replace ( /\{\{ ?http([^\[\]\}\{\|\<\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
+	.replace     ( /\{\{ ?([^\[\]\}\{\|\<\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\[\[ ?(..)w>([^\[\]\|\<\>]+?) ?\| ?([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
+	.replace ( /\[\[ ?(..)w>([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
+	.replace ( /\[\[ ?http([^\[\]\|\<\>]+?) ?\| ?([^\[\]\|\<\>]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
+	.replace ( /\[\[ ?http([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
