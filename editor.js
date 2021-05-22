@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.05.22 14:56 GMT+10' );
+console.log ( 'CoTAN ver. 2021.05.22 15:24 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -874,7 +874,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.bubble.element.style.zIndex = "2";
 			this.bubble.textedit_element.style.display = "";
 			this.bubble.textedit_element.focus ( );
-			ctnote = document.getElementsByClassName ( 'ct-note' );
+			ctnote = document.querySelectorAll ( '.cotanimgarea .ct-note' );
 			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'none';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0)'
@@ -889,7 +889,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			) this.bubble.fresh = false;
 			this.bubble.textedit_element.style.display = "none";
 			this.bubble.element.style.zIndex = "1";
-			ctnote = document.getElementsByClassName ( 'ct-note' );
+			ctnote = document.querySelectorAll ( '.cotanimgarea .ct-note' );
 			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'table-cell';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0.8)'
@@ -967,25 +967,20 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.createView ( )
 		};
 		
-		if ( // в двух режимах, где требуется наклеечный интерфейс
-			(
-				this.cotanarea.mode === 'whitewash'
-				&&
-				this.type === 'patch'
-			)
-			||
-			(
-				this.cotanarea.mode === 'sticker'
-				&&
-				this.type === 'text'
-			)
+		if ( // наклеечный интерфейс на масках
+			this.cotanarea.mode === 'whitewash'
+			&&
+			this.type === 'patch'
 		) this.createButtons ( );
 
-		if (
+		if ( // наклеечный интерфейс на текстах
 			this.cotanarea.mode === 'sticker'
 			&&
 			this.type === 'text'
-		) this.createTextarea ( );
+		) {
+			this.createButtons ( );
+			this.createTextarea ( );
+		}
 
 		if ( this.element ) {
 			this.cotanarea.imgarea.appendChild ( this.element );
