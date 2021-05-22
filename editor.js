@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.05.11 01:14 GMT+10' );
+console.log ( 'CoTAN ver. 2021.05.22 14:56 GMT+10' );
 var lang = JSINFO [ 'lang' ],
 	ct_text = [ ],
 	ct_texts = {
@@ -853,8 +853,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		} else if ( this.type === 'text' ) {
 			this.text_element = document.createElement ( 'p' );
 			this.text_element.innerHTML = renderText ( this.text );
-			temp.appendChild ( this.text_element )
-//			temp.innerHTML += renderText ( this.text );
+			temp.appendChild ( this.text_element );
 		}
 	}
 
@@ -1105,6 +1104,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	var result = text;
 	//wiki разметка
 	result = result
+	.replace ( /</g, '&lt;' )
 	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
 	.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' )
 	.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' )
