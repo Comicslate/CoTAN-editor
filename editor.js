@@ -1,6 +1,8 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.05.22 15:24 GMT+10' );
-var lang = JSINFO [ 'lang' ],
+console.log ( 'CoTAN ver. 2021.06.07 05:31 GMT+10' );
+var lang = JSINFO . lang,
+	ct_id = JSINFO . id . replace ( /:/g, '/' ),
+	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
 	ct_text = [ ],
 	ct_texts = {
 		'ady': ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
@@ -45,104 +47,98 @@ var lang = JSINFO [ 'lang' ],
 	cotan_preg_aimg_target  = '\\{\\{aimg>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
 	cotan_preg_cotan_target = '\\{\\{cotan>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
-	cotan_media = document.location.href.match ( /^(https?:\/\/.+?)\//i ), // адрес до первого слеша
+	cotan_media = document . location . href . match ( /^(https?:\/\/.+?)\//i ), // адрес до первого слеша
 	i;
 
 ct_texts.default = ct_texts [ 'en' ];
 ct_texts [ 'sib' ] = ct_texts [ 'ru' ];
 ct_texts [ 'sjn' ] = ct_texts [ 'en' ];
-for ( i in ct_texts.default ) { ct_text [ i ] = ct_texts [ lang ] [ i ] || ct_texts.default [ i ] };
+for ( i in ct_texts.default ) {
+	ct_text [ i ] = ct_texts [ lang ] [ i ] || ct_texts . default [ i ]
+};
 
-if ( cotan_media ) { // если нашёлся
-	cotan_media = cotan_media[1] + '/_media/'; // дописываем /_media/
-} else { // если не нашёлся (главная страница)
-	cotan_media = ''; // оставляем как есть
-}
+cotan_media =
+	( cotan_media )
+	? ( cotan_media [ 1 ] + '/_media/' )
+	: '';
 
 function cotanedit ( ) { // эта функция действует после загрузки страницы и добавляет котан-редактор и кнопку его запуска
-	if ( cotan_media == '' ) return; // уходим, если это главная страница
-	if ( window.location.href.match ( /\/(d|h)\d+/i ) != null ) return; // ленты тоже игнорим
+	if ( cotan_media == '' ) return; // защита от сбоев в урле
+	if ( window . location . href . match ( /\/(d|h)\d+/i ) != null ) return; // ленты тоже игнорим
 
 	// ищем область кнопок target
-	wiki_text = document.getElementById ( 'wiki__text' ); // получаем и сохраняем ссылку на доку-редактор #wiki__text
-	if ( !wiki_text ) return; // уходим, если нет доку-редактора
-	var target = document.getElementById ( 'edbtn__save' ); // ищем доку-кнопку сохранения
-	if ( !target ) return; // уходим, если это доку-редактор без кнопки сохранения (?) допустим
-	target = target.parentNode; // получаем область кнопок
-	if ( !target ) return; // уходим, если это доку-редактор с кнопкой сохранения, но без области кнопок (?) бред
+	wiki_text = document . getElementById ( 'wiki__text' ); // получаем и сохраняем ссылку на доку-редактор #wiki__text
+	if ( !wiki_text ) return; // если нет доку-редактора - выход
+	var target = document . getElementById ( 'edbtn__save' ); // ищем кнопку сохранения
+	if ( !target ) return; // если она не прогрузилась - выход
+	target = target . parentNode; // ищем область кнопок
+	if ( !target ) return; // если она не прогрузилась - выход
 
 	var button, // объявляем локальные переменные
 		temp;
 	button = document.createElement ( 'input' ); // создаём кнопку CoTAN
-	button.type = 'button';
-	button.accessKey = 'C';
-	button.value = 'CoTAN';
-	button.id = 'cotan-editor';
-	button.title = button.value + ' [' + button.accessKey + ']';
-	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
-	target.appendChild ( button );
+	button . type = 'button';
+	button . accessKey = 'C';
+	button . value = 'CoTAN';
+	button . id = 'cotan-editor';
+	button . title = button . value + ' [' + button . accessKey + ']';
+	button . onclick = cotan_toggle; // функция показа/скрытия котан-редактора
+	target . appendChild ( button );
 
-	cotan = document.createElement ( 'div' ); // создаём область котан-редактора
-	cotan.className = 'cotan';
-	cotan.style.display = 'none'; // сначала скрыта
+	cotan = document . createElement ( 'div' ); // создаём область котан-редактора
+	cotan . className = 'cotan';
+	cotan . style . display = 'none'; // сначала скрыта
 
-	var cotan_toolbar = document.createElement ( 'div' ); // создаём область котан-тулбара
-	cotan_toolbar.className = 'cotan-toolbar';
-	cotan.appendChild ( cotan_toolbar );
+	var cotan_toolbar = document . createElement ( 'div' ); // создаём область котан-тулбара
+	cotan_toolbar . className = 'cotan-toolbar';
+	cotan . appendChild ( cotan_toolbar );
 
-	button = document.createElement ( 'button' ); // создаём кнопку сохранения для котан-редактора
-	button.type = 'button';
-	button.className = 'button green toolbutton';
-	button.accessKey = "A";
-	button.title = ct_text [ 0 ] + ' [' + button.accessKey + ']';
-	button.onclick = cotan_toggle; // функция показа/скрытия котан-редактора
-	temp = document.createElement ( 'img' );
-	temp.src = cotan_path + 'accept.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( ct_text [ 0 ] ) );
-	button.appendChild ( temp );
-	cotan_toolbar.appendChild ( button );
+	button = document . createElement ( 'button' ); // создаём кнопку сохранения для котан-редактора
+	button . type = 'button';
+	button . className = 'button green toolbutton';
+	button . accessKey = "A";
+	button . title = ct_text [ 0 ] + ' [' + button . accessKey + ']';
+	button . onclick = cotan_toggle; // функция показа/скрытия котан-редактора
+	temp = document . createElement ( 'img' );
+	temp . src = cotan_path + 'accept.png';
+	button . appendChild ( temp );
+	temp = document . createElement ( 'span' );
+	temp . appendChild ( document . createTextNode ( ct_text [ 0 ] ) );
+	button . appendChild ( temp );
+	cotan_toolbar . appendChild ( button );
 
-	button = document.createElement ( 'button' ); // создаём кнопку отката для котан-редактора
-	button.type = 'button';
-	button.className = 'button toolbutton';
-	button.accessKey = "Q";
-	button.title = ct_text [ 1 ] + ' [' + button.accessKey + ']';
+	button = document . createElement ( 'button' ); // создаём кнопку отката для котан-редактора
+	button . type = 'button';
+	button . className = 'button toolbutton';
+	button . accessKey = "Q";
+	button . title = ct_text [ 1 ] + ' [' + button . accessKey + ']';
 	button.onclick = noSave; // функция отката изменений
-	temp = document.createElement ( 'img' );
-	temp.src = cotan_path + 'cancel.png';
-	button.appendChild ( temp );
-	temp = document.createElement ( 'span' );
-	temp.appendChild ( document.createTextNode ( ct_text [ 1 ] ) );
-	button.appendChild ( temp );
-	cotan_toolbar.appendChild ( button );
+	temp = document . createElement ( 'img' );
+	temp . src = cotan_path + 'cancel.png';
+	button . appendChild ( temp );
+	temp = document . createElement ( 'span' );
+	temp . appendChild ( document . createTextNode ( ct_text [ 1 ] ) );
+	button . appendChild ( temp );
+	cotan_toolbar . appendChild ( button );
 	
-	button = document.createElement ( 'button' ); // создаём кнопку помощи
-	button.type = 'button';
-	button.className = 'button toolbutton';
-	temp = document.createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
-	temp.href = '/' + lang + '/wiki/12balloons';
-	temp.target = '_blank';
-	temp.innerHTML = '<img src="' + cotan_path + 'help.png"><span>' + ct_text [ 2 ] + '</span>';
-	button.appendChild ( temp );
-	cotan_toolbar.appendChild ( button );
+	button = document . createElement ( 'button' ); // создаём кнопку помощи
+	button . type = 'button';
+	button . className = 'button toolbutton';
+	temp = document . createElement ( 'a' ); // создаём ссылку на справку для котан-редактора
+	temp . href = '/' + lang + '/wiki/12balloons';
+	temp . target = '_blank';
+	temp . innerHTML = '<img src="' + cotan_path + 'help.png"><span>' + ct_text [ 2 ] + '</span>';
+	button . appendChild ( temp );
+	cotan_toolbar . appendChild ( button );
 
-	wiki_text.parentNode.insertBefore ( cotan, wiki_text.nextSibling ); //вставляем котан-редактор под доку-редактором
+	wiki_text . parentNode . insertBefore ( cotan, wiki_text . nextSibling ); //вставляем котан-редактор под доку-редактором
 }
 
 // запуск функции cotanedit ( ) при загрузке страницы
-if ( window.addEventListener ) { // W3C стандарт NB **not** 'onload'
-	window.addEventListener (
-		'load',
-		cotanedit,
-		false
-	);
-} else if ( window.attachEvent ) { // Microsoft стандарт
-	window.attachEvent (
-		'onload',
-		cotanedit
-	);
+if ( window . addEventListener ) { // W3C стандарт NB **not** 'onload'
+	window . addEventListener ( 'load', cotanedit, false );
+} else if ( window . attachEvent ) { // Microsoft стандарт
+	window . attachEvent ( 'onload', cotanedit );
 }
 
 function cotan_toggle ( ) { // функция показа/скрытия котан-редактора
@@ -150,36 +146,36 @@ function cotan_toggle ( ) { // функция показа/скрытия кот
 	if ( cotan_on ) { // если есть котан-редактор, то выключаем...
 		var save = true,
 			area;
-		if ( typeof ( arguments[0] ) != 'undefined' ) save = arguments[0]; // может быть передан код отмены изменений
+		if ( typeof ( arguments [ 0 ] ) != 'undefined' ) save = arguments [ 0 ]; // может быть передан код отмены изменений
 
 		for ( i in cotan_areas ) {
-			if ( cotan_areas[i] ) {
-				area = cotan_areas[i];
-				if ( save ) area.saveBubbles ( );
-				area.scrape ( )
+			if ( cotan_areas [ i ] ) {
+				area = cotan_areas [ i ];
+				if ( save ) area . saveBubbles ( );
+				area . scrape ( )
 			}
 		}
 		cotan_areas = new Array ( );
 
-		cotan.style.display = 'none';
+		cotan . style . display = 'none';
 
-		wiki_text.style.display = '';
-		document.querySelector ( '.level1' ).style.display = '';
-		document.querySelector ( '.toolbar' ).style.display = '';
-		wiki_text.focus ( );
+		wiki_text . style . display = '';
+		document . querySelector ( '.level1' ) . style . display = '';
+		document . querySelector ( '.toolbar' ) . style . display = '';
+		wiki_text . focus ( );
 
-		temp = document.getElementById ( 'edbtn__save' );
-		temp.disabled = false;
-		temp.style.background = '';
-		temp = document.getElementById ( 'edbtn__preview' );
-		temp.disabled = false;
-		temp.style.background = '';
-		temp = document.getElementById ( 'pagetools' );
-		temp.style.display = '';
-		temp = document.getElementById ( 'cotan-editor' );
-		temp.disabled = false;
+		temp = document . getElementById ( 'edbtn__save' );
+		temp . disabled = false;
+		temp . style . background = '';
+		temp = document . getElementById ( 'edbtn__preview' );
+		temp . disabled = false;
+		temp . style . background = '';
+		temp = document . getElementById ( 'pagetools' );
+		temp . style . display = '';
+		temp = document . getElementById ( 'cotan-editor' );
+		temp . disabled = false;
 		enclass ( temp, 'green' );
-		temp.style.background = '';
+		temp . style . background = '';
 
 		cotan_on = false
 	} else { // если нет котан-редактора, то включаем...
@@ -460,9 +456,9 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 		&&
 		this.relative
 	) {
-		this.file = cotan_media + JSINFO.namespace.replace ( ':', '/') + '/' + original
+		this . file = cotan_media + ct_ns + '/' + original
 	} else if ( this.source == 'internal' ) {
-		this.file = cotan_media + original.replace ( ':', '/' )
+		this . file = cotan_media + original . replace ( /:/g, '/' )
 	} else {
 		this.file = this.original
 	}
@@ -593,7 +589,7 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.imgarea.appendChild ( this.img );
 
 	/* вставка чужих картинок 21.07.2019 */
-	if ( JSINFO [ 'id' ].match ( "sci-fi:freefall" ) != null ) {
+	if ( ct_id . match ( "sci-fi/freefall" ) != null ) {
 		var lang_work,
 			file_ext,
 			url_num = window.location.href.match ( /[:\/](\d\d\d\d)/i );
@@ -1113,10 +1109,10 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\-\-/g, '–' )
 	.replace ( /\-\-\-/g, '—' )
 	.replace ( /\['\]/g, '<strong>&#769;</strong>' )
-	.replace ( /<(b|h)rr>/g, '<$1r style="clear:both" />' )
+	.replace ( /&lt;(b|h)rr>/g, '<$1r style="clear:both" />' )
 	.replace ( /\(nbsp\)/g, '&nbsp;' )
 	.replace ( /\(tab\)/g, '&nbsp;&nbsp;&nbsp;' )
-	.replace ( /\[<\]/g, '<span class = "vyleft">' )
+	.replace ( /\[&lt;\]/g, '<span class = "vyleft">' )
 	.replace ( /\[>\]/g, '<span class = "vyright">' )
 	.replace ( /\[\|\]/g, '<span class = "vycenter">' )
 	.replace ( /\[\=\]/g, '<span class = "vyjust">' )
@@ -1175,18 +1171,18 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' );
 	// плагин typography
 	result = result
-	.replace ( /<typo (.+?)>(.+?)<\/typo>/g, '<span style = "$1">$2</span>' )
+	.replace ( /&lt;typo (.+?)>(.+?)&lt;\/typo>/g, '<span style = "$1">$2</span>' )
 	.replace ( /fc:/g, 'color:' )
-	.replace ( /<fc (.+?)>(.+?)<\/fc>/g, '<span style = "color: $1">$2</span>' )
+	.replace ( /&lt;fc (.+?)>(.+?)&lt;\/fc>/g, '<span style = "color: $1">$2</span>' )
 	.replace ( /bg:/g, 'background-color:' )
-	.replace ( /<bg (.+?)>(.+?)<\/bg>/g, '<span style = "background-color: $1">$2</span>' )
+	.replace ( /&lt;bg (.+?)>(.+?)&lt;\/bg>/g, '<span style = "background-color: $1">$2</span>' )
 	.replace ( /fs:/g, 'font-size:' )
-	.replace ( /<fs (.+?)>(.+?)<\/fs>/g, '<span style = "font-size: $1">$2</span>' )
+	.replace ( /&lt;fs (.+?)>(.+?)&lt;\/fs>/g, '<span style = "font-size: $1">$2</span>' )
 	.replace ( /fw:/g, 'font-weight:' )
-	.replace ( /<fw (.+?)>(.+?)<\/fw>/g, '<span style = "font-weight: $1">$2</span>' )
+	.replace ( /&lt;fw (.+?)>(.+?)&lt;\/fw>/g, '<span style = "font-weight: $1">$2</span>' )
 	.replace ( /fv:/g, 'font-variant:' )
 	.replace ( /ff:/g, 'font-family:' )
-	.replace ( /<ff (.+?)>(.+?)<\/ff>/g, '<span style = "font-family: $1">$2</span>' )
+	.replace ( /&lt;ff (.+?)>(.+?)&lt;\/ff>/g, '<span style = "font-family: $1">$2</span>' )
 	.replace ( /lh:/g, 'line-height:' )
 	.replace ( /ls:/g, 'letter-spacing:' )
 	.replace ( /ws:/g, 'word-spacing:' )
@@ -1195,12 +1191,13 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /tt:/g, 'text-transform:' )
 	.replace ( /ts:/g, 'text-shadow:' );
 	result = result
-	.replace ( /\{\{ ?http([^\[\]\}\{\|\<\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
-	.replace     ( /\{\{ ?([^\[\]\}\{\|\<\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + JSINFO [ 'id' ].substr ( JSINFO [ 'id' ].indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\[\[ ?(..)w>([^\[\]\|\<\>]+?) ?\| ?([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
-	.replace ( /\[\[ ?(..)w>([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
-	.replace ( /\[\[ ?http([^\[\]\|\<\>]+?) ?\| ?([^\[\]\|\<\>]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
-	.replace ( /\[\[ ?http([^\[\]\|\<\>]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
+	.replace ( /\{\{ ?http([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\{\{ ?([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + ct_id . substr ( ct_id . indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
+	.replace ( /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
+	.replace ( /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
+	.replace ( /\[\[ ?http([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
+	.replace ( /\[\[ ?http([^\[\]\|\>]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
+	.replace ( /\[\[ ?([^\]\|]+?) ?\| ?([^\]\|]+?) ?\]\]/g, '<a class = "wikilink1" href = "$1" >$2</a>' ) // только [[ | ]], и класс wikilink1 привязан напостоянно!
 	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
 	.replace ( / ?width="" ?/g, ' ' )
 	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
