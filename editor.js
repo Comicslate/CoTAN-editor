@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.07 05:31 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.08 02:36 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -48,7 +48,7 @@ var lang = JSINFO . lang,
 	cotan_preg_cotan_target = '\\{\\{cotan>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
 	cotan_media = document . location . href . match ( /^(https?:\/\/.+?)\//i ), // адрес до первого слеша
-	i;
+	i, j;
 
 ct_texts.default = ct_texts [ 'en' ];
 ct_texts [ 'sib' ] = ct_texts [ 'ru' ];
@@ -640,7 +640,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 	if ( rounder ) {
 		this.rads = rounder // asd скругления
 	} else {
-		this.rads = ''
+		this.rads = '5px'
 	}
 	this.__defineGetter__ (
 		"radius", function ( ) {
@@ -845,6 +845,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		) {
 			var color = 'white';
 			div.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
+			div.style.borderRadius = this.rads;
 			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
 			this.text_element = document.createElement ( 'p' );
@@ -976,7 +977,9 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		) {
 			this.createButtons ( );
 			this.createTextarea ( );
+			grad_fix ( );
 		}
+		if ( this.cotanarea.mode === 'preview' ) grad_fix ( );
 
 		if ( this.element ) {
 			this.cotanarea.imgarea.appendChild ( this.element );
@@ -1225,4 +1228,33 @@ function declass ( obj, _class ) { // удаление класса
 	obj.className = obj.className
 		.replace ( _class, '' )
 		.replace ( new RegExp ( '(^ | (?= )| $)', 'ig' ), '' )
+}
+
+function grad_fix ( ) {
+	var bubbles, note, text, tags = [
+		[ /#%/, "linear" ],
+		[ /#\*/, "radial" ]
+	];
+	bubbles = document . querySelectorAll ( '.ct-area' );
+	if ( bubbles ) {
+		for ( i in bubbles ) { // по каждому бабблу
+			for ( j in tags ) { // по обоим маркерам градиентов
+				if (
+					( bubbles [ i ] . innerHTML != undefined )
+					&&
+					( bubbles [ i ] . innerHTML . match ( tags [ j ] [ 0 ] ) != null ) // если есть текст и маркер в нём найден
+				) {
+					note = bubbles [ i ] . querySelector ( ".ct-note" ); // заметка
+					text = note . querySelector ( ".ct-note-content p" ) . innerHTML . split ( tags [ j ] [ 0 ] ) [ 1 ]; // описание градиента
+					note . style . cssText += "background:" // надеть градиент на заметку
+						+ tags [ j ] [ 1 ]
+						+ "-gradient("
+						+ text
+						+ ");";
+					note . innerHTML = '';
+					bubbles [ i ] . querySelectorAll ( ".handle" ) . forEach ( function ( e ) { e . style . cssText += "display: none;" } );
+				}
+			}
+		}
+	}
 }
