@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.19 14:00 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.19 15:17 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -69,9 +69,11 @@ function cotanedit ( ) { // эта функция действует после 
 	// ищем область кнопок target
 	wiki_text = document . getElementById ( 'wiki__text' ); // получаем и сохраняем ссылку на доку-редактор #wiki__text
 	if ( !wiki_text ) return; // если нет доку-редактора - выход
-	wiki_text . value = wiki_text . value
-		. replace ( /(\{\{\<?)aimg(\>|\}\})/g, '$1cotan$2' )
-		. replace ( /@(.+)\n([^~]*)\n~/g, '@$1\n#\n~\n@$1\n$2\n~' );
+	if ( wiki_text . value . match ( '{{aimg' ) ) {
+		wiki_text . value = wiki_text . value
+			. replace ( /(\{\{\<?)aimg(\>|\}\})/g, '$1cotan$2' )
+			. replace ( /@(.+)\n([^~]*)\n~/g, '@$1\n#\n~\n@$1\n$2\n~' );
+	};
 	var target = document . getElementById ( 'edbtn__save' ); // ищем кнопку сохранения
 	if ( !target ) return; // если она не прогрузилась - выход
 	target = target . parentNode; // ищем область кнопок
