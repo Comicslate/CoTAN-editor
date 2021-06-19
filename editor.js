@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.08 02:36 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.19 14:00 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -69,6 +69,9 @@ function cotanedit ( ) { // эта функция действует после 
 	// ищем область кнопок target
 	wiki_text = document . getElementById ( 'wiki__text' ); // получаем и сохраняем ссылку на доку-редактор #wiki__text
 	if ( !wiki_text ) return; // если нет доку-редактора - выход
+	wiki_text . value = wiki_text . value
+		. replace ( /(\{\{\<?)aimg(\>|\}\})/g, '$1cotan$2' )
+		. replace ( /@(.+)\n([^~]*)\n~/g, '@$1\n#\n~\n@$1\n$2\n~' );
 	var target = document . getElementById ( 'edbtn__save' ); // ищем кнопку сохранения
 	if ( !target ) return; // если она не прогрузилась - выход
 	target = target . parentNode; // ищем область кнопок
@@ -585,23 +588,19 @@ function VisArea ( original, text, tag, analyze, id, img_wid ) {
 	this.img = document.createElement ( 'img' ); // комикс
 	this.img.className = 'cotanimg';
 	if ( img_wid != '' ) this.img.style = 'width: ' + img_wid + 'px;' ;
-	this.img.src = this.file.replace ( /_media[:\/]\w\w\w?[:\/]/, '_media/' ); // удаление языка из пути картинки
+	this.img.src = this.file.replace ( /_media\/\w\w\w?\//, '_media/' ); // удаление языка из пути картинки
 	this.imgarea.appendChild ( this.img );
 
 	/* вставка чужих картинок 21.07.2019 */
 	if ( ct_id . match ( "sci-fi/freefall" ) != null ) {
 		var lang_work,
 			file_ext,
-			url_num = window.location.href.match ( /[:\/](\d\d\d\d)/i );
+			url_num = window.location.href.match ( /\/(\d\d\d\d)/i );
 		if ( url_num != null ) {
 			var lang_num = url_num[1]*1;
 			switch ( lang ) {
 				case 'da':
 					lang_work = +( lang_num < 498 );
-					file_ext = '.gif';
-					break
-				case 'de':
-					lang_work = +( lang_num <= 568 );
 					file_ext = '.gif';
 					break
 				case 'hu':
@@ -640,7 +639,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 	if ( rounder ) {
 		this.rads = rounder // asd скругления
 	} else {
-		this.rads = '5px'
+		this.rads = ''
 	}
 	this.__defineGetter__ (
 		"radius", function ( ) {
@@ -845,7 +844,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 		) {
 			var color = 'white';
 			div.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
-			div.style.borderRadius = this.rads;
+			div.style.borderRadius = this.rads || '5px';
 			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
 			this.text_element = document.createElement ( 'p' );
