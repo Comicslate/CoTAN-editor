@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.19 15:17 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.20 14:47 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -9,11 +9,11 @@ var lang = JSINFO . lang,
 		'be': ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
 		'bg': ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Добави балон', 'Оригинал', 'Маски', 'Текстове', 'Преглед'],
 		'da': ['Anvende', 'Annuller', 'Hjælp', 'Tekst', 'Tilføj ballon', 'Original', 'Maske', 'Tekster', 'Eftersyn'],
-		'de': ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Ballon fügen', 'Original', 'Maske', 'Texte', 'Check-up'],
+		'de': ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Neuer Aufkleber', 'Originalzeichnung', 'Masken', 'Texte', 'Vorschau'],
 		'el': ['Ισχύουν', 'Ακύρωση', 'Βοήθεια', 'Κείμενο', 'Προσθέστε μπαλόνι', 'Αρχική', 'Μάσκες', 'Κείμενα', 'Τσεκ-απ'],
 		'en': ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup'],
 		'eo': ['Apliki', 'Nuligi', 'Helpo', 'Teksto', 'Aldoni balono', 'Originala', 'Maskoj', 'Tekstoj', 'Inspektado'],
-		'es': ['Aplicar', 'Cancelar', 'Ayuda', 'Texto', 'Añadir el balón', 'Original', 'Máscara', 'Texto', 'Chequeo'],
+		'es': ['Aplicar', 'Cancelar', 'Ayuda', 'Texto', 'Añadir un balón', 'Dibujo original', 'Máscaras', 'Textos', 'Previsión'],
 		'fi': ['Levitä', 'Peruuta', 'Ohje', 'Teksti', 'Lisää ilmapallo', 'Originaali', 'Maski', 'Tekstit', 'Tarkastus'],
 		'fr': ['Appliquer', 'Annuler', 'Aide', 'Texte', 'Ajouter ballon', ' Original', 'Masques', 'Textes', 'Apperçu'],
 		'he': ['החל', 'לבטל', 'לעזור', 'טקסט', 'להוסיף בלון', 'המקורי', 'מסכות', 'טקסטים', 'בדיקה'],
