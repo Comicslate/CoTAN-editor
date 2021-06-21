@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.20 14:47 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.21 13:52 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -1187,13 +1187,13 @@ function renderText ( text ) { // обработка шрифтотегов
 	.replace ( /fv:/g, 'font-variant:' )
 	.replace ( /ff:/g, 'font-family:' )
 	.replace ( /&lt;ff (.+?)>(.+?)&lt;\/ff>/g, '<span style = "font-family: $1">$2</span>' )
-	.replace ( /lh:/g, 'line-height:' )
-	.replace ( /ls:/g, 'letter-spacing:' )
-	.replace ( /ws:/g, 'word-spacing:' )
-	.replace ( /sp:/g, 'white-space:' )
-	.replace ( /va:/g, 'vertical-align:' )
-	.replace ( /tt:/g, 'text-transform:' )
-	.replace ( /ts:/g, 'text-shadow:' );
+	.replace ( /"lh:/g, '"line-height:' )
+	.replace ( /"ls:/g, '"letter-spacing:' )
+	.replace ( /"ws:/g, '"word-spacing:' )
+	.replace ( /"sp:/g, '"white-space:' )
+	.replace ( /"va:/g, '"vertical-align:' )
+	.replace ( /"tt:/g, '"text-transform:' )
+	.replace ( /"ts:/g, '"text-shadow:' );
 	result = result
 	.replace ( /\{\{ ?http([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
 	.replace ( /\{\{ ?([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + ct_id . substr ( ct_id . indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
