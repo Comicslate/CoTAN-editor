@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.21 13:52 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.26 19:23 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -1176,16 +1176,16 @@ function renderText ( text ) { // обработка шрифтотегов
 	// плагин typography
 	result = result
 	.replace ( /&lt;typo (.+?)>(.+?)&lt;\/typo>/g, '<span style = "$1">$2</span>' )
-	.replace ( /fc:/g, 'color:' )
+	.replace ( /"fc:/g, 'color:' )
 	.replace ( /&lt;fc (.+?)>(.+?)&lt;\/fc>/g, '<span style = "color: $1">$2</span>' )
-	.replace ( /bg:/g, 'background-color:' )
+	.replace ( /"bg:/g, 'background-color:' )
 	.replace ( /&lt;bg (.+?)>(.+?)&lt;\/bg>/g, '<span style = "background-color: $1">$2</span>' )
-	.replace ( /fs:/g, 'font-size:' )
+	.replace ( /"fs:/g, 'font-size:' )
 	.replace ( /&lt;fs (.+?)>(.+?)&lt;\/fs>/g, '<span style = "font-size: $1">$2</span>' )
-	.replace ( /fw:/g, 'font-weight:' )
+	.replace ( /"fw:/g, 'font-weight:' )
 	.replace ( /&lt;fw (.+?)>(.+?)&lt;\/fw>/g, '<span style = "font-weight: $1">$2</span>' )
-	.replace ( /fv:/g, 'font-variant:' )
-	.replace ( /ff:/g, 'font-family:' )
+	.replace ( /"fv:/g, 'font-variant:' )
+	.replace ( /"ff:/g, 'font-family:' )
 	.replace ( /&lt;ff (.+?)>(.+?)&lt;\/ff>/g, '<span style = "font-family: $1">$2</span>' )
 	.replace ( /"lh:/g, '"line-height:' )
 	.replace ( /"ls:/g, '"letter-spacing:' )
