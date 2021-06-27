@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.06.28 06:08 GMT+10' );
+console.log ( 'CoTAN ver. 2021.06.28 07:57 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -39,11 +39,11 @@ var lang = JSINFO . lang,
 	cotan_areas = new Array ( ), // массив полей на случай нескольких картинок на странице
 
 	cotan_preg_cotan = '\\{\\{(aimg|cotan)>:?(.+?\\.(jpe?g|png|bmp|gif|svg|webp))((\\?(\\d+))?)\\}\\}([\\w\\W]*?)\\{\\{<(aimg|cotan)\\}\\}', // распознавалка наклеек
-	cotan_preg_img = '(?<=[^\\[])\\{\\{:?(.+?\\.(jpe?g|png|bmp|gif|svg|webp))((\\?(\\d+))?)\\}\\}(?=[^\\]])', // распознавалка картинки
+	cotan_preg_img = '(?<!\\[)\\{\\{ ?:?(.+?\\.(jpe?g|png|bmp|gif|svg|webp))((\\?(\\d+))?) ?\\}\\}((?!\\])|$)', // распознавалка картинки
 	cotan_preg = '(' + cotan_preg_cotan + '|' + cotan_preg_img + ')', // совмещение распознавалок
 	cotan_path = '/lib/plugins/cotan/img/',
 
-	cotan_preg_img_target   = '(?<=[^\\[])\\{\\{%FILE%(\\?\\d+)?\\}\\}(?=[^\\]])', // поиск картинки в доку-редакторе для всех 3 возможных вариантов
+	cotan_preg_img_target   = '(?<!\\[)\\{\\{ ?%FILE%(\\?\\d+)? ?\\}\\}((?!\\])|$)', // поиск картинки в доку-редакторе для всех 3 возможных вариантов
 	cotan_preg_aimg_target  = '\\{\\{aimg>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<aimg\\}\\}',
 	cotan_preg_cotan_target = '\\{\\{cotan>%FILE%(\\?\\d+)?\\}\\}([\\w\\W]*?)\\{\\{<cotan\\}\\}',
 	colpat_preg = /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})?$/, // цветовая метка
