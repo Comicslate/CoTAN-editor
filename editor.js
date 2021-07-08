@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.07.08 10:39 GMT+10' );
+console.log ( 'CoTAN ver. 2021.07.08 17:39 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -1096,113 +1096,92 @@ function nHandle ( bubble ) { // объект ручки
 }
 
 function renderText ( text ) { // обработка шрифтотегов
-	var result = text;
+	var result = text,
+	repl = [
+	[ /</g, '&lt;' ],
+	[ /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' ],
+	[ /(__)(.+?)(__)/g, '<em class = "u">$2</em>' ],
+	[ /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' ],
+	[ /\\\\( +\n?|\n)/g, '<br \>' ],
+	[ /\.\.\./g, '…' ], // спецназ
+	[ /\(pipe\)/g, '&#124;' ],
+	[ /\[\-\.\]/g, '<span class = "hyph">' ],
+	[ /\-\./g, '&shy;' ],
+	[ /\-\-/g, '–' ],
+	[ /\-\-\-/g, '—' ],
+	[ /\['\]/g, '<strong>&#769;</strong>' ],
+	[ /&lt;(b|h)rr>/g, '<$1r style="clear:both" />' ],
+	[ /\(nbsp\)/g, '&nbsp;' ],
+	[ /\(tab\)/g, '&nbsp;&nbsp;&nbsp;' ],
+	[ /\[&lt;\]/g, '<span class = "vyleft">' ],
+	[ /\[>\]/g, '<span class = "vyright">' ],
+	[ /\[\|\]/g, '<span class = "vycenter">' ],
+	[ /\[\=\]/g, '<span class = "vyjust">' ],
+	[ /\[mir(x|y)\]/g, '<span class = "mir$1">' ],
+	[ /\[@\]/g, '<span class = "anim_mor">' ],
+	[ /\[ax\]/g, '<span class = "axol">' ], //гарнитура шрифта
+	[ /\[df\]/g, '<span class = "fest">' ],
+	[ /\[ft\]/g, '<span class = "dspf">' ],
+	[ /\[sc\]/g, '<span class = "stri">' ],
+	[ /\[lc\]/g, '<span class = "lisi">' ],
+	[ /\[cl\]/g, '<span class = "claw">' ],
+	[ /\[im\]/g, '<span class = "impt">' ],
+	[ /\[lu\]/g, '<span class = "lucl">' ],
+	[ /\[aa\]/g, '<span class = "aace">' ],
+	[ /\[ta\]/g, '<span class = "tean">' ],
+	[ /\[fa\]/g, '<span class = "fawe">' ],
+	[ /\[sp\]/g, '<span class = "spac">' ],
+	[ /\[un\]/g, '<span class = "unic">' ],
+	[ /(\[)(.)(-?\d+[\.,]?\d*)(\])/g, fontChanger ], // размер и разрядка шрифта
+	[ /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "fest $1">' ], //# freefall
+	[ /\[kit\]/g, '<span class = "fest tsp" style = "font-size: 1.2em">' ], //# kitty
+	[ /\[mou\]/g, '<span class = "impt dvo" style = "font-size: 1.2em">' ],
+	[ /\[mtt\]/g, '<span class = "fest hlx" style = "font-size: 1.2em">' ],
+	[ /\[nnw\]/g, '<span class = "fest mst" style = "font-size: 1.2em">' ],
+	[ /\[znt\]/g, '<span class = "fest znt" style = "font-size: 1.2em">' ],
+	[ /\[ck-\]/g, '<span class = "fest oth" style = "font-size: 1.2em">' ],
+	[ /\[rel\]/g, '<span class = "fest oth" style = "font-size: 1.7em">' ], //# lions
+	[ /\[mol\]/g, '<span class = "stri mol" style = "font-size: 1.2em">' ], //# ponies
+	[ /\[(tsp|rrp|rdp|fsp|ppp|ajp|sdp|bmp)\]/g, '<span class = "stri $1">' ],
+	[ /\[(ozy|mil|otr)\]/g, '<span class = "fest $1">' ], //# ozy
+	[ /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1" style = "font-size: 1.2em">' ],
+	[ /\[lle\]/g, '<span class = "impt saw" style = "font-size: 1.2em">' ],
+	[ /\[bun\]/g, '<span class = "fest oth" style = "font-size: 1.5em">' ], //# bunny
+	[ /\[ich\]/g, '<span class = "axol mil" style = "font-size: 1.7em">' ], //# ichabod
+	[ /\[ich-\]/g, '<span class = "axol oth" style = "font-size: 1.7em">' ],
+	[ /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' ], //# weegie
+	[ /&lt;typo (.+?)>(.+?)&lt;\/typo>/g, '<span style = "$1">$2</span>' ], // плагин typography
+	[ /"fc:/g, 'color:' ],
+	[ /&lt;fc (.+?)>(.+?)&lt;\/fc>/g, '<span style = "color: $1">$2</span>' ],
+	[ /"bg:/g, 'background-color:' ],
+	[ /&lt;bg (.+?)>(.+?)&lt;\/bg>/g, '<span style = "background-color: $1">$2</span>' ],
+	[ /"fs:/g, 'font-size:' ],
+	[ /&lt;fs (.+?)>(.+?)&lt;\/fs>/g, '<span style = "font-size: $1">$2</span>' ],
+	[ /"fw:/g, 'font-weight:' ],
+	[ /&lt;fw (.+?)>(.+?)&lt;\/fw>/g, '<span style = "font-weight: $1">$2</span>' ],
+	[ /"fv:/g, 'font-variant:' ],
+	[ /"ff:/g, 'font-family:' ],
+	[ /&lt;ff (.+?)>(.+?)&lt;\/ff>/g, '<span style = "font-family: $1">$2</span>' ],
+	[ /"lh:/g, '"line-height:' ],
+	[ /"ls:/g, '"letter-spacing:' ],
+	[ /"ws:/g, '"word-spacing:' ],
+	[ /"sp:/g, '"white-space:' ],
+	[ /"va:/g, '"vertical-align:' ],
+	[ /"tt:/g, '"text-transform:' ],
+	[ /"ts:/g, '"text-shadow:' ],
+	[ /\{\{ ?http([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' ], // линки
+	[ /\{\{ ?([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + ct_id . substr ( ct_id . indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' ],
+	[ /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' ],
+	[ /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' ],
+	[ /\[\[ ?http([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' ],
+	[ /\[\[ ?http([^\[\]\|\>]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' ],
+	[ /\[\[ ?([^\]\|]+?) ?\| ?([^\]\|]+?) ?\]\]/g, '<a class = "wikilink1" href = "$1" >$2</a>' ], // только [[ | ]], и класс wikilink1 привязан напостоянно!
+	[ /%%(.+)%%/g, "<pre>$1</pre>" ], // защита от невидимых тегов
+	[ / ?width="" ?/g, ' ' ],
+	[ /\[\/\]/g, '</span>' ] //конец стиля
+];
 	//wiki разметка
-	result = result
-	.replace ( /</g, '&lt;' )
-	.replace ( /(\*\*)(.+?)(\*\*)/g, '<strong>$2</strong>' )
-	.replace ( /(__)(.+?)(__)/g, '<em class = "u">$2</em>' )
-	.replace ( /(\/\/)(.+?)(\/\/)/g, '<em>$2</em>' )
-	.replace ( /\\\\( +\n?|\n)/g, '<br \>' );
-	// спецназ
-	result = result
-	.replace ( /\.\.\./g, '…' )
-	.replace ( /\(pipe\)/g, '&#124;' )
-	.replace ( /\[\-\.\]/g, '<span class = "hyph">' )
-	.replace ( /\-\./g, '&shy;' )
-	.replace ( /\-\-/g, '–' )
-	.replace ( /\-\-\-/g, '—' )
-	.replace ( /\['\]/g, '<strong>&#769;</strong>' )
-	.replace ( /&lt;(b|h)rr>/g, '<$1r style="clear:both" />' )
-	.replace ( /\(nbsp\)/g, '&nbsp;' )
-	.replace ( /\(tab\)/g, '&nbsp;&nbsp;&nbsp;' )
-	.replace ( /\[&lt;\]/g, '<span class = "vyleft">' )
-	.replace ( /\[>\]/g, '<span class = "vyright">' )
-	.replace ( /\[\|\]/g, '<span class = "vycenter">' )
-	.replace ( /\[\=\]/g, '<span class = "vyjust">' )
-	.replace ( /\[mir(x|y)\]/g, '<span class = "mir$1">' )
-	.replace ( /\[@\]/g, '<span class = "anim_mor">' );
-	//гарнитура шрифта
-	result = result
-	.replace ( /\[ax\]/g, '<span class = "axol">' )
-	.replace ( /\[df\]/g, '<span class = "fest">' )
-	.replace ( /\[ft\]/g, '<span class = "dspf">' )
-	.replace ( /\[sc\]/g, '<span class = "stri">' )
-	.replace ( /\[lc\]/g, '<span class = "lisi">' )
-	.replace ( /\[cl\]/g, '<span class = "claw">' )
-	.replace ( /\[im\]/g, '<span class = "impt">' )
-	.replace ( /\[lu\]/g, '<span class = "lucl">' )
-	.replace ( /\[aa\]/g, '<span class = "aace">' )
-	.replace ( /\[ta\]/g, '<span class = "tean">' )
-	.replace ( /\[fa\]/g, '<span class = "fawe">' )
-	.replace ( /\[sp\]/g, '<span class = "spac">' )
-	.replace ( /\[un\]/g, '<span class = "unic">' );
-	result = result
-	.replace ( /(\[)(.)(-?\d+[\.,]?\d*)(\])/g, fontChanger ); // размер и разрядка шрифта
-	//стили реплик отдельных персонажей
-	//# freefall
-	result = result
-	.replace ( /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "fest $1">' );
-	//# kitty
-	result = result
-	.replace ( /\[kit\]/g, '<span class = "fest tsp" style = "font-size: 1.2em">' )
-	.replace ( /\[mou\]/g, '<span class = "impt dvo" style = "font-size: 1.2em">' )
-	.replace ( /\[mtt\]/g, '<span class = "fest hlx" style = "font-size: 1.2em">' )
-	.replace ( /\[nnw\]/g, '<span class = "fest mst" style = "font-size: 1.2em">' )
-	.replace ( /\[znt\]/g, '<span class = "fest znt" style = "font-size: 1.2em">' )
-	.replace ( /\[ck-\]/g, '<span class = "fest oth" style = "font-size: 1.2em">' );
-	result = result
-	.replace ( /\[rel\]/g, '<span class = "fest oth" style = "font-size: 1.7em">' ); //# lions
-	//# ponies
-	result = result
-	.replace ( /\[mol\]/g, '<span class = "stri mol" style = "font-size: 1.2em">' )
-	.replace ( /\[(tsp|rrp|rdp|fsp|ppp|ajp|sdp|bmp)\]/g, '<span class = "stri $1">' );
-	//# ozy
-	result = result
-	.replace ( /\[(ozy|mil|otr)\]/g, '<span class = "fest $1">' )
-	.replace ( /\[(ozy|mil|otr)1\]/g, '<span class = "fest $1" style = "font-size: 1.2em">' )
-	.replace ( /\[lle\]/g, '<span class = "impt saw" style = "font-size: 1.2em">' );
-	result = result
-	.replace ( /\[bun\]/g, '<span class = "fest oth" style = "font-size: 1.5em">' ); //# bunny
-	//# ichabod
-	result = result
-	.replace ( /\[ich\]/g, '<span class = "axol mil" style = "font-size: 1.7em">' )
-	.replace ( /\[ich-\]/g, '<span class = "axol oth" style = "font-size: 1.7em">' );
-	//# weegie
-	result = result
-	.replace ( /\[wee\]/g, '<span class = "impt sdp f45 cl_bold">' );
-	// плагин typography
-	result = result
-	.replace ( /&lt;typo (.+?)>(.+?)&lt;\/typo>/g, '<span style = "$1">$2</span>' )
-	.replace ( /"fc:/g, 'color:' )
-	.replace ( /&lt;fc (.+?)>(.+?)&lt;\/fc>/g, '<span style = "color: $1">$2</span>' )
-	.replace ( /"bg:/g, 'background-color:' )
-	.replace ( /&lt;bg (.+?)>(.+?)&lt;\/bg>/g, '<span style = "background-color: $1">$2</span>' )
-	.replace ( /"fs:/g, 'font-size:' )
-	.replace ( /&lt;fs (.+?)>(.+?)&lt;\/fs>/g, '<span style = "font-size: $1">$2</span>' )
-	.replace ( /"fw:/g, 'font-weight:' )
-	.replace ( /&lt;fw (.+?)>(.+?)&lt;\/fw>/g, '<span style = "font-weight: $1">$2</span>' )
-	.replace ( /"fv:/g, 'font-variant:' )
-	.replace ( /"ff:/g, 'font-family:' )
-	.replace ( /&lt;ff (.+?)>(.+?)&lt;\/ff>/g, '<span style = "font-family: $1">$2</span>' )
-	.replace ( /"lh:/g, '"line-height:' )
-	.replace ( /"ls:/g, '"letter-spacing:' )
-	.replace ( /"ws:/g, '"word-spacing:' )
-	.replace ( /"sp:/g, '"white-space:' )
-	.replace ( /"va:/g, '"vertical-align:' )
-	.replace ( /"tt:/g, '"text-transform:' )
-	.replace ( /"ts:/g, '"text-shadow:' );
-	result = result
-	.replace ( /\{\{ ?http([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "http$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\{\{ ?([^\[\]\}\{\|\>]+?)(\?nolink)?[\&\?]?(\d+)? ?\}\}/g, '<img src = "/_media/' + ct_id . substr ( ct_id . indexOf ( "/" ) + 1 ) + '/$1" class = "media" alt = "" width = "$3">' )
-	.replace ( /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$3</a>' )
-	.replace ( /\[\[ ?(..)w>([^\[\]\|\>]+?) ?\]\]/g, '<a href="https://$1.wikipedia.org/wiki/$2" class="interwiki iw_$1w" target="_blank" title="https://$1.wikipedia.org/wiki/$2" rel="noopener">$2</a>' )
-	.replace ( /\[\[ ?http([^\[\]\|\>]+?) ?\| ?([^\[\]\|\>]+) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$2</a>' )
-	.replace ( /\[\[ ?http([^\[\]\|\>]+?) ?\]\]/g, '<a href="http$1" class="urlextern" target="_blank" title="http$1" rel="nofollow noopener">$1</a>' )
-	.replace ( /\[\[ ?([^\]\|]+?) ?\| ?([^\]\|]+?) ?\]\]/g, '<a class = "wikilink1" href = "$1" >$2</a>' ) // только [[ | ]], и класс wikilink1 привязан напостоянно!
-	.replace ( /%%(.+)%%/g, "<pre>$1</pre>" ) // защита от невидимых тегов
-	.replace ( / ?width="" ?/g, ' ' )
-	.replace ( /\[\/\]/g, '</span>' ); //конец стиля
+	for ( i = 0; i < repl . length; i++ ) result = result . replace ( repl [ i ] [ 0 ], repl [ i ] [ 1 ] );
 	return result
 }
 
