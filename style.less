@@ -9,22 +9,22 @@
 	}
 	&.ct_bg {
 		z-index: 0;
+		.ct-note {
+			border-radius: 5px;
+		}
 	}
 	.ct-note {
+		cursor: default;
 		display: table-cell;
+		font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
+		text-align: center;
 		vertical-align: middle;
-		.ct-note-content {
-			cursor: default;
-			display: block;
-			font: 85% Verdana, "Bitstream Vera Sans", "Nimbus Sans L", sans-serif;
-			text-align: center;
-			p {
-				margin: 0;
-			}
-			a.interwiki {
-				background-image: none !important;
-				padding: 0;
-			}
+		p {
+			margin: 0;
+		}
+		a.interwiki {
+			background-image: none !important;
+			padding: 0;
 		}
 	}
 }
@@ -110,7 +110,7 @@
 				}
 				&.ct-area {
 					transform: translate(-1px,-1px); /* учитывает, что при разметке есть бордер в 1px, а на просмотре его нет */
-					.ct-note-content {
+					.ct-note {
 						* {
 							word-wrap: anywhere;
 						}
