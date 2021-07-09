@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.07.09 20:35 GMT+10' );
+console.log ( 'CoTAN ver. 2021.07.09 23:22 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -846,9 +846,8 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			span.style.borderRadius = this.rads || '5px';
 			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
-			this.text_element = document.createElement ( 'p' );
+			this.text_element = span;
 			this.text_element.innerHTML = renderText ( this.text );
-			span.appendChild ( this.text_element );
 		}
 	}
 
@@ -1220,7 +1219,7 @@ function grad_fix ( ) {
 					( bubbles [ i ] . innerHTML . match ( tags [ j ] [ 0 ] ) != null ) // если есть текст и маркер в нём найден
 				) {
 					note = bubbles [ i ] . querySelector ( ".ct-note" ); // заметка
-					text = note . querySelector ( ".ct-note p" ) . innerHTML . split ( tags [ j ] [ 0 ] ) [ 1 ]; // описание градиента
+					text = note . innerHTML . split ( tags [ j ] [ 0 ] ) [ 1 ]; // описание градиента
 					note . style . cssText += "background:" // надеть градиент на заметку
 						+ tags [ j ] [ 1 ]
 						+ "-gradient("
