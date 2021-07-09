@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.07.08 17:39 GMT+10' );
+console.log ( 'CoTAN ver. 2021.07.09 20:35 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -832,26 +832,23 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 	}
 
 	this.createView = function ( ) {
-		var div, temp;
-		div = document.createElement ( 'div' );
-		enclass ( div, 'ct-note' );
-		temp = document.createElement ( 'span' );
-		enclass ( temp, 'ct-note-content' );
-		div.appendChild ( temp );
-		this.element.appendChild ( div );
+		var span;
+		span = document.createElement ( 'span' );
+		enclass ( span, 'ct-note' );
+		this.element.appendChild ( span );
 		if (
 			this.type === 'patch'
 			&&
 			this.cotanarea.mode != 'whitewash'
 		) {
 			var color = 'white';
-			div.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
-			div.style.borderRadius = this.rads || '5px';
+			span.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
+			span.style.borderRadius = this.rads || '5px';
 			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
 			this.text_element = document.createElement ( 'p' );
 			this.text_element.innerHTML = renderText ( this.text );
-			temp.appendChild ( this.text_element );
+			span.appendChild ( this.text_element );
 		}
 	}
 
@@ -1223,7 +1220,7 @@ function grad_fix ( ) {
 					( bubbles [ i ] . innerHTML . match ( tags [ j ] [ 0 ] ) != null ) // если есть текст и маркер в нём найден
 				) {
 					note = bubbles [ i ] . querySelector ( ".ct-note" ); // заметка
-					text = note . querySelector ( ".ct-note-content p" ) . innerHTML . split ( tags [ j ] [ 0 ] ) [ 1 ]; // описание градиента
+					text = note . querySelector ( ".ct-note p" ) . innerHTML . split ( tags [ j ] [ 0 ] ) [ 1 ]; // описание градиента
 					note . style . cssText += "background:" // надеть градиент на заметку
 						+ tags [ j ] [ 1 ]
 						+ "-gradient("
