@@ -1,5 +1,5 @@
 // ВВОДНЫЕ
-console.log ( 'CoTAN ver. 2021.07.09 23:22 GMT+10' );
+console.log ( 'CoTAN ver. 2021.07.11 00:27 GMT+10' );
 var lang = JSINFO . lang,
 	ct_id = JSINFO . id . replace ( /:/g, '/' ),
 	ct_ns = JSINFO . namespace . replace ( /:/g, '/' ),
@@ -140,10 +140,10 @@ function cotanedit ( ) { // эта функция действует после 
 }
 
 // запуск функции cotanedit ( ) при загрузке страницы
-if ( window . addEventListener ) { // W3C стандарт NB **not** 'onload'
-	window . addEventListener ( 'load', cotanedit, false );
-} else if ( window . attachEvent ) { // Microsoft стандарт
-	window . attachEvent ( 'onload', cotanedit );
+if (document.readyState === 'loading') {
+	window.addEventListener('DOMContentLoaded', cotanedit, false);
+} else {
+	cotanedit();
 }
 
 function cotan_toggle ( ) { // функция показа/скрытия котан-редактора
@@ -832,21 +832,21 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 	}
 
 	this.createView = function ( ) {
-		var span;
-		span = document.createElement ( 'span' );
-		enclass ( span, 'ct-note' );
-		this.element.appendChild ( span );
+		var div;
+		div = document.createElement ( 'div' );
+		enclass ( div, 'ct-note' );
+		this.element.appendChild ( div );
 		if (
 			this.type === 'patch'
 			&&
 			this.cotanarea.mode != 'whitewash'
 		) {
 			var color = 'white';
-			span.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
-			span.style.borderRadius = this.rads || '5px';
+			div.style.backgroundColor = 'rgba(' + this.color.R + ',' + this.color.G + ',' + this.color.B + ',' + '1)';
+			div.style.borderRadius = this.rads || '5px';
 			enclass ( this.element, 'ct_bg' );
 		} else if ( this.type === 'text' ) {
-			this.text_element = span;
+			this.text_element = div;
 			this.text_element.innerHTML = renderText ( this.text );
 		}
 	}
@@ -868,7 +868,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			this.bubble.element.style.zIndex = "2";
 			this.bubble.textedit_element.style.display = "";
 			this.bubble.textedit_element.focus ( );
-			ctnote = document.querySelectorAll ( '.cotanimgarea .ct-note' );
+			ctnote = document.querySelectorAll ( '.cotanimgarea .bubble.ct-note' );
 			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'none';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0)'
@@ -883,7 +883,7 @@ function Bubbles ( id, x, y, width, height, text, cotanarea, nova, rotate, round
 			) this.bubble.fresh = false;
 			this.bubble.textedit_element.style.display = "none";
 			this.bubble.element.style.zIndex = "1";
-			ctnote = document.querySelectorAll ( '.cotanimgarea .ct-note' );
+			ctnote = document.querySelectorAll ( '.cotanimgarea .bubble.ct-note' );
 			for ( i in ctnote ) {
 				if ( ctnote[i].style !== undefined ) ctnote[i].style.display = 'table-cell';
 				if ( ctnote[i].parentNode !== undefined ) ctnote[i].parentNode.style.background = 'none repeat scroll 0 0 rgba(255,255,255,0.8)'
@@ -1129,7 +1129,7 @@ function renderText ( text ) { // обработка шрифтотегов
 	[ /\[sp\]/g, '<span class = "spac">' ],
 	[ /\[un\]/g, '<span class = "unic">' ],
 	[ /(\[)(.)(-?\d+[\.,]?\d*)(\])/g, fontChanger ], // размер и разрядка шрифта
-	[ /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "fest $1">' ], //# freefall
+	[ /\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "$1">' ], //# freefall
 	[ /\[kit\]/g, '<span class = "fest tsp" style = "font-size: 1.2em">' ], //# kitty
 	[ /\[mou\]/g, '<span class = "impt dvo" style = "font-size: 1.2em">' ],
 	[ /\[mtt\]/g, '<span class = "fest hlx" style = "font-size: 1.2em">' ],
