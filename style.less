@@ -47,7 +47,7 @@
 
 #cotan-editor { /* кнопка редактора */
 	background-image: linear-gradient(to bottom, #CCBBFF, #AA99DD);
-	&:hover { /* она же при наведении */
+	&:hover {
 		background-image: linear-gradient(to bottom, #CCBBFF, #8877BB);
 	}
 }
@@ -96,16 +96,17 @@
 			.cotanimg {
 				margin: 3px;
 			}
-			& > div {
-				border-radius: 5px; /* пока управляемое скругление не будет внедрено в редактор */
+			.mask {
+				border-radius: 5px;
 			}
 			.bubble {
-				border: 1px dotted rgba(0, 0, 0, 0.8);
 				position: absolute;
 				&:hover {
-					background: rgba(0, 0, 0, 0.2);
 					.handle {
 						display: inline-block;
+						height: 15px;
+						position: absolute;
+						width: 15px;
 					}
 				}
 				&.ct-area {
@@ -119,9 +120,6 @@
 				.handle {
 					cursor: pointer;
 					display: none;
-					height: 15px;
-					position: absolute;
-					width: 15px;
 				}
 				.movehandle {
 					background: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAGsSURBVDjLpZIxixNRFIW/kVHQQlwEQdgUdkkgTX6BkMIi/yJY5geE/ISAZIuUSb9lgnYWNsraaOkkTSSz6MLWJhmY9+7ZIm8mCUYLvfDg8d49h3POvZEk/qdigMFgkEqqSEp6vV79b4But/shz/OXzrlkMpnU4/BeabfbzGaz2pt3NzIJAd4DAplhAm+w3W7pdDqMRqNaqcB7/3U6nTbjR095fnYfGQiQCRPogOT2yTnD4RDn3CeAqMhg8Panzs8e7AAGkpDApJLITJiJ5U3GoPMiKhUQ5HoDJMwCsLjbMUnu7ThEAHnbNQrMDBkBYCWwIHTuBIEzMC8sNO2ai7vtlQjM6XcCc4Y3lT514FnBUqHEnSJwDry30v8xyV6RBM5OWfAe7+OQegAqjPIgQEl4f1LB7qOUa2DB++E4FbIqKpJEq9VK8zyvPHz8jFedi6PED6VL4vLiNd+Tz3jvkyzL6vcAsiyr9Pt9bn8sWVyvWVxvmKdrFqtfzNM189WGZLUmSTcsv10xHo9xztV285doNptfGo2GVavVK4UF+tOJ4/h9FEUCPkrar/K/1h35Nbw8S+DdbwAAAABJRU5ErkJggg==") no-repeat scroll center center rgba(0, 0, 0, 0);
@@ -158,6 +156,12 @@
 				textarea {
 					position: relative;
 				}
+				&:not(.mask) {
+					border: 1px dotted rgba(0, 0, 0, 0.8);
+					&:hover {
+						background: rgba(0, 0, 0, 0.2);
+					}
+				}
 				&.mask {
 					border: 2px dotted rgba(0, 0, 0, 0.4);
 					box-sizing: border-box;
@@ -170,6 +174,390 @@
 			}
 		}
 	}
+}
+
+/* newCoTAN-редактор */
+
+#newcotan-editor {
+	margin-left: 4px;
+	background-image: linear-gradient(to bottom, #BBCCFF, #99AADD);
+	&:hover {
+		background-image: linear-gradient(to bottom, #BBCCFF, #7788BB);
+	}
+}
+
+.cotan {
+	.cotanimgarea {
+		width: min-content;
+		margin: 0 auto; /* centering image */
+		.ct-area {
+			text-rendering: geometricPrecision; /* fix font rendering. Warn: not worked with FireFox */
+			.ct-note {
+				width: 100%; /* hack for css table centring for empty cell */
+				&::before,
+				&::after { /* for transition, see later */
+					border: 1px solid transparent;
+					border-radius: inherit;
+					bottom: -1px;
+					content: '';
+					display: block;
+					left: -1px;
+					position: absolute;
+					right: -1px;
+					top: -1px;
+					transition: border-color 0.1s ease-out;
+				}
+				&::before {
+					z-index: -2;
+				}
+				&::after {
+					z-index: -1;
+				}
+			}
+			.ct-ui {
+				bottom: -11em;
+				color: #000;
+				font-size: 0;
+				left: -11em;
+				position: absolute;
+				right: -11em;
+				top: -11em;
+				transition: all 0.1s ease-out;
+				.ct-dragArea {
+					bottom: 0;
+					cursor: move;
+					left: 0;
+					position: absolute;
+					right: 0;
+					top: 0;
+				}
+				.ct-handle {
+					background: white;
+					background-clip: padding-box;
+					border: 1em solid black;
+					box-sizing: border-box;
+					height: 11em;
+					position: absolute;
+					transition: all 0.1s ease-out;
+					width: 11em;
+				}
+				.ct-handle_tm,
+				.ct-handle_bm,
+				.ct-handle_lm,
+				.ct-handle_rm {
+					border: 5em solid transparent;
+					outline: 1em solid black;
+					outline-offset: -5em;
+				}
+				.ct-handle_tm {
+					cursor: n-resize;
+					left: 0;
+					right: 0;
+					top: 0;
+					width: auto;
+				}
+				.ct-handle_bm {
+					bottom: 0;
+					cursor: s-resize;
+					left: 0;
+					right: 0;
+					width: auto;
+				}
+				.ct-handle_lm {
+					bottom: 0;
+					cursor: w-resize;
+					height: auto;
+					left: 0;
+					top: 0;
+				}
+				.ct-handle_rm {
+					bottom: 0;
+					cursor: e-resize;
+					height: auto;
+					right: 0;
+					top: 0;
+				}
+				.ct-handle_tl {
+					cursor: nw-resize;
+					left: 0;
+					top: 0;
+				}
+				.ct-handle_tr {
+					cursor: ne-resize;
+					right: 0;
+					top: 0;
+				}
+				.ct-handle_bl {
+					bottom: 0;
+					cursor: sw-resize;
+					left: 0;
+				}
+				.ct-handle_br {
+					bottom: 0;
+					cursor: se-resize;
+					right: 0;
+				}
+				.ct-remove {
+					background: radial-gradient(circle, #ff4949 10px, transparent 11px);
+					cursor: pointer;
+					height: 22em;
+					left: ~"calc(50% - 11em)";
+					opacity: 0.5;
+					position: absolute;
+					top: -22em;
+					transition: opacity 0.1s ease-out;
+					width: 22em;
+					&:hover {
+						opacity: 1;
+					}
+					&::before,
+					&::after {
+						background-color: white;
+						content: '';
+						height: 14em;
+						left: 10em;
+						position: absolute;
+						top: 4em;
+						width: 2em;
+					}
+					&::before {
+						transform: rotate(45deg);
+					}
+					&::after {
+						transform: rotate(-45deg);
+					}
+				}
+				.ct-spoiler {
+					bottom: 0;
+					height: 0;
+					left: 0;
+					position: absolute;
+					right: 0;
+					&::before {
+						background: white;
+						border: ~"calc(1em / 16)" solid black;
+						content: 'T';
+						display: block;
+						font-family: serif;
+						font-size: 16em;
+						height: ~"calc(22em / 16)";
+						left: ~"calc(50% - (22em / 16) / 2)";
+						position: absolute;
+						text-align: center;
+						top: 0;
+						width: ~"calc(22em / 16)";
+						z-index: -1;
+						&:hover {
+							font-size: 0;
+						}
+					}
+					* {
+						display: none;
+						opacity: 0;
+						&:focus {
+							display: block;
+							opacity: 0.3;
+						}
+					}
+					&:hover {
+						* {
+							display: block;
+							opacity: 1;
+						}
+					}
+					.ct-colorpick-input {
+						box-sizing: border-box;
+						display: block;
+						font-size: 16px;
+						width: 100%;
+					}
+					.ct-textarea {
+						box-sizing: border-box;
+						margin: 0;
+						min-height: 128px;
+						width: 100%;
+					}
+				}
+			}
+			&.ct_drag {
+				* {
+					cursor: none !important;
+				}
+				.ct-ui {
+					bottom: -22px;
+					color: transparent !important;
+					font-size: 0 !important;
+					left: -22px;
+					right: -22px;
+					top: -22px;
+				}
+			}
+			&.ct-area_removed { /* hide removed areas */
+				display: none;
+			}
+			&:not(.fix_css_priority) {
+				&.ct-area_patch {
+					z-index: 0;
+				}
+				.ct-area_text {
+					z-index: 1;
+				}
+			}
+			&:focus-within {
+				z-index: 3 !important;
+			}
+			&:hover {
+				.ct-spoiler {
+					*:focus {
+						display: block;
+						opacity: 1;
+					}
+				}
+			}
+		}
+	}
+	.cotan_clear { /* CLEAR MODE */
+		.ct-area {
+			display: none;
+		}
+	}
+	.cotan_whitewash { /* WHITEWASH MODE */
+		.cotanimgarea {
+			.ct-area_patch {
+				.ct-note {
+					border-radius: 5px;
+					outline: 1px dashed transparent;
+					transition: background 0.1s ease-out;
+				}
+				.ct-ui {
+					.ct-spoiler {
+						&::before {
+							background: conic-gradient(
+								hsl(360, 100%, 50%),
+								hsl(315, 100%, 50%),
+								hsl(270, 100%, 50%),
+								hsl(225, 100%, 50%),
+								hsl(180, 100%, 50%),
+								hsl(135, 100%, 50%),
+								hsl(90, 100%, 50%),
+								hsl(45, 100%, 50%),
+								hsl(0, 100%, 50%)
+							);
+							content: '';
+						}
+					}
+				}
+				&.ct_drag {
+					.ct-note {
+						background: transparent !important;
+						&::before {
+							border-color: white;
+						}
+						&::after {
+							border-color: black;
+						}
+					}
+				}
+			}
+			.ct-area_text {
+				display: none;
+			}
+			&:hover {
+				.ct-area_patch {
+					.ct-note {
+						background: transparent !important;
+						&::before {
+							border-color: white;
+						}
+						&::after {
+							border-color: black;
+							border-style: dashed;
+						}
+					}
+					&:hover {
+						z-index: 2; /* avoid overlapping area in use */
+						.ct-ui {
+							font-size: 1px;
+						}
+					}
+				}
+			}
+		}
+	}
+	.cotan_sticker { /* STICKER MODE */
+		.cotanimgarea {
+			.ct-area {
+				opacity: 0;
+				transition: opacity 0.15s ease-out;
+			}
+			.ct-area_patch {
+				.ct-ui {
+					display: none;
+				}
+			}
+			.ct-area_text {
+				.ct-note {
+					::before {
+						border-color: white;
+					}
+					::after {
+						border-color: black;
+					}
+				}
+				.ct-ui {
+					.ct-spoiler {
+						.ct-colorpick-input {
+							display: none;
+						}
+					}
+				}
+			}
+			&:hover {
+				.ct-area {
+					opacity: 1;
+				}
+				.ct-area_text:hover {
+					z-index: 2; /* avoid overlapping area in use */
+					.ct-ui {
+						font-size: 1px;
+					}
+				}
+			}
+		}
+	}
+	.cotan_preview { /* PREVIEW MODE */
+		.ct-ui {
+			display: none;
+		}
+	}
+}
+
+.editButtons:hover::after {
+	animation: op01 1.4s;
+	margin-left: 3px;
+	.lang-be & { content: "🡐 Мышеуправляемый рэдактар налепак"; }
+	.lang-bg & { content: "🡐 Мишката-управляван редактор на стикери"; }
+	.lang-da & { content: "🡐 Musestyret klistermærke-editor"; }
+	.lang-de & { content: "🡐 Mausgesteuerter Aufkleber-Editor"; }
+	.lang-el & { content: "🡐 Επεξεργαστής αυτοκόλλητων με το ποντίκι"; }
+	.lang-en & { content: "🡐 Mouse-controlled sticker editor"; }
+	.lang-eo & { content: "🡐 Redaktilo de glumarkoj kontrolita de muso"; }
+	.lang-es & { content: "🡐 Editor de pegatinas controlado por el ratón"; }
+	.lang-fi & { content: "🡐 Hiiriohjattu tarraeditori"; }
+	.lang-fr & { content: "🡐 Éditeur d'autocollants contrôlé par la souris"; }
+	.lang-he & { content: "🡐 עורך מדבקות הנשלט על ידי עכבר"; }
+	.lang-hi & { content: "🡐 माउस नियंत्रित स्टिकर संपादक"; }
+	.lang-hu & { content: "🡐 Egérrel vezérelt matricaszerkesztő"; }
+	.lang-id & { content: "🡐 Editor stiker yang dikendalikan mouse"; }
+	.lang-it & { content: "🡐 Editor di adesivi controllato dal mouse"; }
+	.lang-ja & { content: "🡐 マウスで操作するステッカーエディター"; }
+	.lang-ko & { content: "🡐 마우스 제어 스티커 편집기"; }
+	.lang-pl & { content: "🡐 Edytor naklejek sterowany myszką"; }
+	.lang-pt & { content: "🡐 Editor de autocolantes controlado pelo rato"; }
+	.lang-ru & { content: "🡐 Мышеуправляемый редактор наклеек"; }
+	.lang-tr & { content: "🡐 Fare kontrollü çıkartma düzenleyici"; }
+	.lang-uk & { content: "🡐 Мишеуправляемий редактор наклейок"; }
+	.lang-zh & { content: "🡐 鼠标控制的贴纸编辑器"; }
 }
 
 .semitransparent {
