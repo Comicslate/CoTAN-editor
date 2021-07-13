@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'newCoTAN ver. 2021.07.10 23:41 GMT+10', 'Спасибо тебе огромное, Orekh!');
+console.log ( 'newCoTAN ver. 12.1 / 2021.07.13 20:48 GMT+10; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -118,7 +118,7 @@ function renderText(text) {
     .replaceAll('(nbsp)', '&nbsp;')
     .replaceAll('(tab)', '&nbsp;&nbsp;&nbsp;');
   // [bbcode]
-  result = result.replaceAll(/\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "$1">'); //# freefall
+  result = result.replaceAll(/\[(flo|sam|hlx|saw|qwe|dvo|edge|blunt|max|rai|kor|mad|mayor|mhlp|nio|pol|mst1?|bow|com|ish|gre|vag|ops|oth)\]/g, '<span class = "$1">'); // # freefall
   result = result.replace(/\[(.*?)\]/g, (orig, escapedName) => {
     const name = escapedName.replace('&lt;', '<');
     const replacements = {
@@ -288,9 +288,10 @@ function renderText(text) {
  * @param {function(number, number)} drag action callback
  * @param {function()} drop action callback
  * @param {number} button button pressed, 0 = LMB, 1 = CMB, 2 = RMB
+ * @param {boolean} altKey alt pressed
  * @returns {HTMLElement} input element
  */
-function makeDraggable(element, grab, drag, drop, button) {
+function makeDraggable(element, grab, drag, drop, button, altKey = false) {
   // call action with coords delta on dragging
   const onmousemove = (mouseEvent) => {
     const { movementX, movementY } = mouseEvent;
@@ -306,6 +307,7 @@ function makeDraggable(element, grab, drag, drop, button) {
   // add mousemove event listener on start dragging
   element.addEventListener('mousedown', (mouseEvent) => {
     if (mouseEvent.button !== button) return;
+    if (mouseEvent.altKey !== altKey) return;
     window.addEventListener('mousemove', onmousemove);
     window.addEventListener('mouseup', onmouseup);
     grab();
@@ -320,6 +322,12 @@ function makeDraggable(element, grab, drag, drop, button) {
 class BorderRadius {
   /**
    * Parse BorderRadius form css style
+   *
+   * 0 1 2 3 / 4 5 6 7 =>
+   *
+   * this.hor = [0, 1, 2, 3]
+   *
+   * this.ver = [4, 5, 6, 7]
    * @param {string} str css text
    * @param {number} width bubble size
    * @param {number} height bubble size
@@ -342,43 +350,34 @@ class BorderRadius {
       return Math.round(n * (side / 100));
     };
     const parts = str.split('/');
-    const hor = parce(parts[0]).map((v) => toPx(v, width));
-    const ver = parce(parts[1] || parts[0]).map((v) => toPx(v, height));
-
-    this.topLeft = [hor[0], ver[0]];
-    this.topRight = [hor[1], ver[1]];
-    this.bottomRight = [hor[2], ver[2]];
-    this.bottomLeft = [hor[3], ver[3]];
+    this.hor = parce(parts[0]).map((v) => toPx(v, width));
+    this.ver = parce(parts[1] || parts[0]).map((v) => toPx(v, height));
   }
 
   clamp(width, height) {
-    const clamp = (arr) => {
-      const hor = Math.max(0, Math.min(arr[0], width));
-      const ver = Math.max(0, Math.min(arr[1], height));
-      // eslint-disable-next-line no-param-reassign
-      arr[0] = hor;
-      // eslint-disable-next-line no-param-reassign
-      arr[1] = ver;
-    };
-    clamp(this.topLeft);
-    clamp(this.topRight);
-    clamp(this.bottomRight);
-    clamp(this.bottomLeft);
+    for (let i = 0; i < 4; i += 1) {
+      this.hor[i] = Math.max(0, Math.min(this.hor[i], width));
+      this.ver[i] = Math.max(0, Math.min(this.ver[i], height));
+    }
   }
 
   toString() {
-    const hor = [
-      `${Math.round(this.topLeft[0])}px`,
-      `${Math.round(this.topRight[0])}px`,
-      `${Math.round(this.bottomRight[0])}px`,
-      `${Math.round(this.bottomLeft[0])}px`,
-    ].join(' ');
-    const ver = [
-      `${Math.round(this.topLeft[1])}px`,
-      `${Math.round(this.topRight[1])}px`,
-      `${Math.round(this.bottomRight[1])}px`,
-      `${Math.round(this.bottomLeft[1])}px`,
-    ].join(' ');
+    const toPx = (float) => {
+      const n = Math.round(float);
+      if (n === 0) return '0';
+      return `${n}px`;
+    };
+    let hor = this.hor.map(toPx);
+    let ver = this.ver.map(toPx);
+
+    const allEq = (arr) => arr.every((v) => v === arr[0]);
+    if (allEq(hor)) hor = [hor[0]];
+    if (allEq(ver)) ver = [ver[0]];
+
+    hor = hor.join(' ');
+    ver = ver.join(' ');
+
+    if (hor === ver) return hor;
     return `${hor} / ${ver}`;
   }
 }
@@ -435,13 +434,28 @@ class Bubble {
     this.rotate = rotate;
   }
 
+  cloneAsPatch() {
+    return new Bubble(
+      {
+        x0: this.aabb.x0,
+        y0: this.aabb.y0,
+        x1: this.aabb.x1,
+        y1: this.aabb.y1,
+      },
+      this.rotate,
+      this.borderRaduis.toString(),
+      '#',
+      this.image,
+    );
+  }
+
   updateStyle() {
     const [x, y, width, height] = this.coords();
     this.element.style.left = `${x}px`;
     this.element.style.top = `${y}px`;
     this.element.style.width = `${width}px`;
     this.element.style.height = `${height}px`;
-    this.element.style.transform = `transform: rotate(${this.rotate}deg)`;
+    this.element.style.transform = `rotate(${this.rotate}deg)`;
     this.note.style.borderRadius = this.borderRaduis;
 
     if (this.type === BUBBLE_TYPE.TEXT) {
@@ -485,7 +499,7 @@ class Bubble {
     const y1 = Math.max(this.aabb.y0, this.aabb.y1);
     const canvasWidth = this.image.width || Infinity;
     const canvasHeight = this.image.height || Infinity;
-    const clamp = (min, v, max) => Math.max(min, Math.min(v, max));
+    const clamp = (min, v, max) => Math.round(Math.max(min, Math.min(v, max)));
     this.aabb.x0 = clamp(0, x0, canvasWidth - 1);
     this.aabb.y0 = clamp(0, y0, canvasHeight - 1);
     this.aabb.x1 = clamp(1, x1, canvasWidth);
@@ -533,23 +547,23 @@ class Bubble {
     const rounder = (element, corner) => {
       const action = {
         tl: (x, y) => {
-          this.borderRaduis.topLeft[0] += x;
-          this.borderRaduis.topLeft[1] += y;
+          this.borderRaduis.hor[0] += x;
+          this.borderRaduis.ver[0] += y;
           this.updateStyle();
         },
         tr: (x, y) => {
-          this.borderRaduis.topRight[0] -= x;
-          this.borderRaduis.topRight[1] += y;
+          this.borderRaduis.hor[1] -= x;
+          this.borderRaduis.ver[1] += y;
           this.updateStyle();
         },
         bl: (x, y) => {
-          this.borderRaduis.bottomLeft[0] += x;
-          this.borderRaduis.bottomLeft[1] -= y;
+          this.borderRaduis.hor[3] += x;
+          this.borderRaduis.ver[3] -= y;
           this.updateStyle();
         },
         br: (x, y) => {
-          this.borderRaduis.bottomRight[0] -= x;
-          this.borderRaduis.bottomRight[1] -= y;
+          this.borderRaduis.hor[2] -= x;
+          this.borderRaduis.ver[2] -= y;
           this.updateStyle();
         },
       }[corner];
@@ -562,17 +576,34 @@ class Bubble {
           this.updateStyle();
           this.element.classList.remove('ct_drag');
         },
-        2,
+        0, true,
       );
     };
+
+    const rotation = (element) => makeDraggable(
+      element,
+      () => this.element.classList.add('ct_drag'),
+      (x) => {
+        this.rotate += x;
+        this.updateStyle();
+      },
+      () => {
+        let rotate = this.rotate % 360;
+        if (rotate < 0) rotate += 360;
+        this.rotate = Math.round(rotate);
+        this.updateStyle();
+        this.element.classList.remove('ct_drag');
+      },
+      0, true,
+    );
 
     this.colorpickInput = h('input', {
       type: 'color',
       value: this.rawBodyText,
       className: 'ct-colorpick-input',
       oninput: () => {
-        this.textarea.value = this.colorpickInput.value;
         this.rawBodyText = this.colorpickInput.value;
+        this.textarea.value = this.rawBodyText;
         this.updateStyle();
       },
     });
@@ -581,30 +612,102 @@ class Bubble {
       className: 'ct-textarea',
       value: this.rawBodyText,
       oninput: () => {
-        this.colorpickInput.value = this.textarea.value;
-        this.updateText(this.textarea.value);
+        this.rawBodyText = this.textarea.value;
+        if (this.type === BUBBLE_TYPE.PATCH) {
+          this.colorpickInput.value = this.rawBodyText;
+          this.updateStyle();
+        } else {
+          this.updateText();
+        }
       },
     });
+
+    const setTitle = (title, element) => {
+      element.setAttribute('title', title);
+      return element;
+    };
+
+    const auto = h('div', {
+      className: 'ct-colorpick-input',
+      style: `
+        background: #eee;
+        border: 1px solid #333;
+        border-radius: 4px;
+        padding: 4px;
+        box-sizing: border-box;
+        text-align: center;
+        cursor: pointer;
+      `,
+      onclick: () => {
+        const [x, y, width, height] = this.coords();
+        const canvas = h('canvas', { width, height });
+        const context = canvas.getContext('2d');
+        const margin = 3;
+        const sx = x - margin;
+        const sy = y - margin;
+        context.drawImage(this.image, sx, sy, width, height, 0, 0, width, height);
+        let data;
+        try {
+          data = context.getImageData(0, 0, width, height);
+        } catch (e) {
+          return; // security error, img on diff domain
+        }
+
+        const hexColor = (rgb) => rgb.map((c) => {
+          const s = c.toString(16);
+          if (s.length === 2) return s;
+          return `0${s}`;
+        }).join('').replace(/^/, '#');
+
+        const colors = {};
+        for (let i = 0; i < data.data.length; i += 4) {
+          const key = hexColor([
+            data.data[i + 0],
+            data.data[i + 1],
+            data.data[i + 2],
+          ]);
+          if (key in colors) {
+            colors[key] += 1;
+          } else {
+            colors[key] = 1;
+          }
+        }
+
+        const dominantColor = Object.entries(colors)
+          .reduce(([prevColor, prevCount], [currColor, currCount]) => {
+            if (prevCount >= currCount) return [prevColor, prevCount];
+            return [currColor, currCount];
+          }, ['#000000', 0])[0];
+
+        this.rawBodyText = dominantColor;
+        this.colorpickInput.value = this.rawBodyText;
+        this.textarea.value = this.rawBodyText;
+        this.updateStyle();
+      },
+    }, [
+      'Auto',
+    ]);
 
     this.element = h('div', { bubble: this, className: mainClassName }, [
       this.note = h('div', { className: 'ct-note' }, [
         // this.text_element = h('span', { className: 'ct-note-content' }),
       ]),
       h('div', { className: 'ct-ui' }, [
-        handle('ct-dragArea', 1, 1, 1, 1),
+        setTitle('Click to move, Alt+Click to rotate', rotation(handle('ct-dragArea', 1, 1, 1, 1))),
 
-        handle('ct-handle ct-handle_tm', 0, 1, 0, 0),
-        handle('ct-handle ct-handle_bm', 0, 0, 0, 1),
-        handle('ct-handle ct-handle_lm', 1, 0, 0, 0),
-        handle('ct-handle ct-handle_rm', 0, 0, 1, 0),
+        setTitle('Click to resize', handle('ct-handle ct-handle_tm', 0, 1, 0, 0)),
+        setTitle('Click to resize', handle('ct-handle ct-handle_bm', 0, 0, 0, 1)),
+        setTitle('Click to resize', handle('ct-handle ct-handle_lm', 1, 0, 0, 0)),
+        setTitle('Click to resize', handle('ct-handle ct-handle_rm', 0, 0, 1, 0)),
 
-        rounder(handle('ct-handle ct-handle_tl', 1, 1, 0, 0), 'tl'),
-        rounder(handle('ct-handle ct-handle_tr', 0, 1, 1, 0), 'tr'),
-        rounder(handle('ct-handle ct-handle_bl', 1, 0, 0, 1), 'bl'),
-        rounder(handle('ct-handle ct-handle_br', 0, 0, 1, 1), 'br'),
+        setTitle('Click to resize, Alt+Click to round', rounder(handle('ct-handle ct-handle_tl', 1, 1, 0, 0), 'tl')),
+        setTitle('Click to resize, Alt+Click to round', rounder(handle('ct-handle ct-handle_tr', 0, 1, 1, 0), 'tr')),
+        setTitle('Click to resize, Alt+Click to round', rounder(handle('ct-handle ct-handle_bl', 1, 0, 0, 1), 'bl')),
+        setTitle('Click to resize, Alt+Click to round', rounder(handle('ct-handle ct-handle_br', 0, 0, 1, 1), 'br')),
 
         h('div', { className: 'ct-remove', onclick: () => this.remove() }),
         h('div', { className: 'ct-spoiler' }, [
+          auto,
           this.colorpickInput,
           this.textarea,
         ]),
@@ -621,9 +724,8 @@ class Bubble {
     return this.element;
   }
 
-  updateText(text) {
-    this.rawBodyText = text;
-    this.note.innerHTML = renderText(text);
+  updateText() {
+    this.note.innerHTML = renderText(this.rawBodyText);
   }
 
   /**
@@ -657,7 +759,7 @@ class Bubble {
       x1: x + width,
       y1: y + height,
     };
-    return new Bubble(aabb, rotate, rounder, rawBodyText, image);
+    return new Bubble(aabb, rotate || 0, rounder, rawBodyText, image);
   }
 
   toString() {
@@ -665,12 +767,12 @@ class Bubble {
     const [x, y, width, height] = this.coords();
     let header = `@${y},${x},${width},${height}`;
     if (this.rotate) header += `,${this.rotate}`;
-    if (
-      this.type === BUBBLE_TYPE.PATCH
-      && this.borderRaduis.toString() !== '5px 5px 5px 5px / 5px 5px 5px 5px'
-    ) {
-      header += `;${this.borderRaduis}`;
+
+    const borderRadius = this.borderRaduis.toString();
+    if (this.type === BUBBLE_TYPE.PATCH && borderRadius !== '5px') {
+      header += `;${borderRadius}`;
     }
+
     let { rawBodyText } = this;
     if (rawBodyText === '#ffffff') {
       rawBodyText = '#';
@@ -686,11 +788,13 @@ class Bubble {
 class ComicArea {
   /**
    * Construct VisArea
+   * @param {string} initTag cotan, aimg, or empty string
    * @param {string} imageLink canvas image
    * @param {string} rawBodyText serialized bubbles
    * @returns {ComicArea} VisArea
    */
-  constructor(imageLink, rawBodyText) {
+  constructor(initTag, imageLink, rawBodyText) {
+    this.initTag = initTag;
     this.original = imageLink;
     if (!/^https?:\/\//.test(imageLink)) {
       this.file = `${cotanMediaUrl + ctNs}/${imageLink}`;
@@ -716,8 +820,13 @@ class ComicArea {
      * @param {MouseEvent} mouseEvent
      */
     const addBubble = (mouseEvent) => {
-      if (mouseEvent.target !== mouseEvent.currentTarget) return;
-      this.addBubble(mouseEvent.offsetX, mouseEvent.offsetY);
+      const tag = mouseEvent.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+      const { left, top } = this.imgarea.getBoundingClientRect();
+      this.addBubble(
+        mouseEvent.clientX - left,
+        mouseEvent.clientY - top,
+      );
       mouseEvent.preventDefault();
     };
     // создаём область визуального интерфейса.
@@ -733,8 +842,8 @@ class ComicArea {
           h('img', { src: `${cotanPath}add.png` }), LOCALIZED.ADD_BALLOON,
         ]),
       ]),
-      this.imgarea = h('div', { className: 'cotanimgarea' }, [
-        this.image = h('img', { className: 'cotanimg', src: this.file, ondblclick: addBubble }),
+      this.imgarea = h('div', { className: 'cotanimgarea', ondblclick: addBubble }, [
+        this.image = h('img', { className: 'cotanimg', src: this.file }),
       ]),
     ]);
 
@@ -792,6 +901,9 @@ class ComicArea {
     const width = 128;
     const height = 64;
     const rotate = 0;
+
+    const x0 = Math.max(0, Math.round(x - width / 2));
+    const y0 = Math.max(0, Math.round(y - height / 2));
     const borderRadius = '';
 
     let rawBodyText = '';
@@ -803,15 +915,23 @@ class ComicArea {
       return;
     }
     const aabb = {
-      x0: x,
-      y0: y,
-      x1: x + width,
-      y1: y + height,
+      x0,
+      y0,
+      x1: x0 + width,
+      y1: y0 + height,
     };
 
     const bubble = new Bubble(aabb, rotate, borderRadius, rawBodyText, this.image);
-    this.imgarea.appendChild(bubble.draw());
     this.body.push(bubble);
+    const element = bubble.draw();
+    this.imgarea.appendChild(element);
+
+    const mouseout = () => {
+      element.style.removeProperty('z-index');
+      element.removeEventListener('mouseout', mouseout);
+    };
+    element.style.zIndex = 5;
+    element.addEventListener('mouseout', mouseout);
   }
 
   spawnBubble(text) {
@@ -819,17 +939,20 @@ class ComicArea {
     const matches = text.match(/@[\w\W]+?\n~\n|[\w\W]*?\n|.*/g);
     this.body = [...matches].map((fragment) => {
       const bubble = Bubble.fromString(fragment, this.image);
-      if (bubble) {
-        this.imgarea.appendChild(bubble.draw());
-        return bubble;
-      }
+      if (bubble && this.initTag === 'aimg') return [bubble.cloneAsPatch(), bubble];
+      if (bubble) return bubble;
       return fragment;
+    }).flat();
+
+    this.body.filter((e) => e instanceof Bubble).forEach((bubble) => {
+      this.imgarea.appendChild(bubble.draw());
     });
   }
 
   toString() {
-    const rawBodyText = this.body.join('');
-    if (rawBodyText.trim() === '') return `{{${this.original}}}`;
+    let rawBodyText = this.body.join('');
+    if (rawBodyText.trim() === '' && this.initTag === '') return `{{${this.original}}}`;
+    if (rawBodyText[0] !== '\n') rawBodyText = `\n${rawBodyText}`;
     return `{{cotan>${this.original}}}${rawBodyText}{{<cotan}}`;
   }
 
@@ -861,12 +984,19 @@ function doMatch(wikitext, cotanContainer) {
   const pattern = /{{(.+?)>(.+?)}}([\w\W]*?){{<.*?}}|{{([^>}]+>)?(.+?)}}|[^{]+|{/gi;
   return [...wikitext.matchAll(pattern)].map((groups) => {
     const [all, tag, tagLink, raw, plainTag, plainImageLink] = groups;
-    if (tag !== 'cotan' && tag !== 'aimg' || plainTag) return all;
-    const link = tagLink || plainImageLink;
-    if (link === undefined) return all;
-    const area = new ComicArea(link, raw);
-    cotanContainer.appendChild(area.domContainer);
-    return area;
+
+    let area;
+    // {{tag>tagLink}}raw{{<tag}}
+    if (tag === 'cotan' || tag === 'aimg') area = new ComicArea(tag, tagLink, raw);
+    // {{not plainTag>plainImageLink}}
+    if (!plainTag && plainImageLink) area = new ComicArea('', plainImageLink, '');
+
+    if (area) {
+      cotanContainer.appendChild(area.domContainer);
+      return area;
+    }
+
+    return all;
   });
 }
 
