@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'newCoTAN ver. 12.1 / 2021.07.13 20:48 GMT+10; Orekh, Rainbow-Spike' );
+console.log ( 'newCoTAN ver. 12.2 / 2021.07.15 21:27 GMT+10; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -858,10 +858,6 @@ class ComicArea {
         switch (pageLang) {
           case 'da':
             langWork = +(langNum < 498);
-            fileExt = '.gif';
-            break;
-          case 'de':
-            langWork = +(langNum <= 568);
             fileExt = '.gif';
             break;
           case 'hu':
