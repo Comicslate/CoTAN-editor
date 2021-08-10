@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'newCoTAN ver. 12.2 / 2021.07.15 21:27 GMT+10; Orekh, Rainbow-Spike' );
+console.log ( 'CoTAN ver. R.1 / 2021.08.10 22:28 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -837,7 +837,7 @@ class ComicArea {
         createRadio(AREA_MODE.STICKER, LOCALIZED.TEXTS),
         createRadio(AREA_MODE.PREVIEW, LOCALIZED.CHECKUP),
       ]),
-      h('div', {}, [ // TODO: remove id cotaned_toolbar
+      h('div', {}, [
         this.addbutton = h('button', { className: 'button toolbutton', onclick: addBubble }, [
           h('img', { src: `${cotanPath}add.png` }), LOCALIZED.ADD_BALLOON,
         ]),
@@ -1059,10 +1059,10 @@ function cotanedit() {
 
   const cotanButton = h('input', {
     type: 'button',
-    accessKey: 'N',
-    value: 'newCoTAN',
+    accessKey: 'C',
+    value: 'CoTAN',
     id: 'newcotan-editor',
-    title: 'CoTAN [N]',
+    title: 'CoTAN [C]',
     onclick: (event) => toggleCotan(state, true, event),
   });
   cancelButton.after(cotanButton);
