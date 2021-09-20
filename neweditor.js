@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'CoTAN ver. R.1 / 2021.08.10 22:28 GMT+9; Orekh, Rainbow-Spike' );
+console.log ( 'CoTAN ver. R.1.2 / 2021.09.20 22:28 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -109,6 +109,7 @@ function renderText(text) {
   result = result
     .replaceAll('...', '…')
     .replaceAll('(pipe)', '&#124;')
+    .replaceAll('[-.]', '<span class = "hyph">')
     .replaceAll('-.', '&shy;')
     .replaceAll('--', '–')
     .replaceAll('---', '—')
@@ -860,6 +861,11 @@ class ComicArea {
             langWork = +(langNum < 498);
             fileExt = '.gif';
             break;
+          case 'es':
+            langWork = +(langNum < 2794);
+            fileExt = '.png';
+			if ( ( langNum >= 217 && langNum <= 275 && langNum ==! 246 ) || ( langNum >= 311 && langNum <= 315 ) || ( langNum >= 351 && langNum <= 354 ) ) fileExt = '.jpg';
+            break;
           case 'hu':
             langWork = +(langNum <= 2513);
             fileExt = '.gif';
@@ -867,6 +873,7 @@ class ComicArea {
           case 'it':
             langWork = +(langNum <= 3172);
             fileExt = '.png';
+			if ( langNum == 1100 ) fileExt = '.gif';
             break;
           case 'pl':
             langWork = +(
