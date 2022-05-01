@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'CoTAN ver. R.1.4a / 2022.05.01 14:15 GMT+9; Orekh, Rainbow-Spike' );
+console.log ( 'CoTAN ver. R.1.5 / 2022.05.01 15:05 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -1050,92 +1050,99 @@ function toggleCotan(state, withSave, stopMe) {
 }
 
 /**
+ * Котанизатор наклеек
+ * заменяет aimg-наклейку на две cotan-наклейки, фоновую и текстовую
+ */
+function aimgaction ( state ) {
+	cotanize . style . display = 'none';
+	return document . getElementById ( 'wiki__text' ) . value =
+		state . wikitextTextarea . value
+		. replace ( /(\{\{\<?)aimg(\>|\}\})/g, '$1cotan$2' )
+		. replace ( /@(.+)\n([^~]*)\n~/g, '@$1\n#\n~\n@$1\n$2\n~' );
+}
+
+/**
  * Сортировщик наклеек
  * каждая фоновая проверяется на расположение её центра внутри области каждой текстовой
  * и переставляется перед ней при корректности проверки
  */
-function sortaction ( ) {
-	var wtext = document.getElementById('wiki__text').value;
-	if (
-		!wtext . match ( 'Не_сортировать' )
-		&&
-		( wtext . match ( 'cotan' ) != null )
-	) {
-		var cotanblock = wtext . split ( '{{cotan' );
-		for ( var e = 1; e < cotanblock . length; e++ ) {
-			if ( cotanblock [ e ] . match ( '}}\n{{<' ) == null ) {
-				var parts = cotanblock [ e ] . split ( '\n{{<' ),
-					end = parts . pop ( ),
-					notes = parts [ 0 ] . split ( '\n@' ), // разделение и зачистка
-					begin = notes . shift ( ),
-					num = notes . length - 1,
-					centers = [ ],
-					borders = [ ],
-					new_notes = [ ];
-				for ( var i = 0; i <= num; i++ ) { // создание списков
-					var nparts = notes [ i ] . split ( '\n' ),
-						nontext = nparts . shift ( ) . split ( ';' ),
-						coords = nontext . shift ( ) . split ( ',' ),
-						mark = nparts . toString ( ) . charAt ( 0 );
-					if ( mark == '#' ) { // для фонов
-						var center = [ ];
-						center . push ( i ); // изначальный notes-номер
-						center . push ( i ); // сортировочный номер
-						center . push ( Math.round ( coords [ 1 ] * 1 + coords [ 2 ] / 2 ) ); // центр фона по x
-						center . push ( Math.round ( coords [ 0 ] * 1 + coords [ 3 ] / 2 ) ); // центр фона по y
-						centers . push ( center );
-					} else { // для текстов
-						var border = [ ];
-						border . push ( i ); // аналогично
-						border . push ( ( i + 1 ) * 100 );
-						border . push ( coords [ 1 ] * 1 ); // левая граница
-						border . push ( coords [ 1 ] * 1 + coords [ 2 ] * 1 ); // правая
-						border . push ( coords [ 0 ] * 1 ); // верхняя
-						border . push ( coords [ 0 ] * 1 + coords [ 3 ] * 1 ); // нижняя
-						borders . push ( border );
-					}
+function sortaction ( state ) {
+	var cotanblock = state . wikitextTextarea . value . split ( '{{cotan' );
+	for ( var e = 1; e < cotanblock . length; e++ ) {
+		if ( cotanblock [ e ] . match ( '}}\n{{<' ) == null ) {
+			var parts = cotanblock [ e ] . split ( '\n{{<' ),
+				end = parts . pop ( ),
+				notes = parts [ 0 ] . split ( '\n@' ), // разделение и зачистка
+				begin = notes . shift ( ),
+				num = notes . length - 1,
+				centers = [ ],
+				borders = [ ],
+				new_notes = [ ];
+			for ( var i = 0; i <= num; i++ ) { // создание списков
+				var nparts = notes [ i ] . split ( '\n' ),
+					nontext = nparts . shift ( ) . split ( ';' ),
+					coords = nontext . shift ( ) . split ( ',' ),
+					mark = nparts . toString ( ) . charAt ( 0 );
+				if ( mark == '#' ) { // для фонов
+					var center = [ ];
+					center . push ( i ); // изначальный notes-номер
+					center . push ( i ); // сортировочный номер
+					center . push ( Math.round ( coords [ 1 ] * 1 + coords [ 2 ] / 2 ) ); // центр фона по x
+					center . push ( Math.round ( coords [ 0 ] * 1 + coords [ 3 ] / 2 ) ); // центр фона по y
+					centers . push ( center );
+				} else { // для текстов
+					var border = [ ];
+					border . push ( i ); // аналогично
+					border . push ( ( i + 1 ) * 100 );
+					border . push ( coords [ 1 ] * 1 ); // левая граница
+					border . push ( coords [ 1 ] * 1 + coords [ 2 ] * 1 ); // правая
+					border . push ( coords [ 0 ] * 1 ); // верхняя
+					border . push ( coords [ 0 ] * 1 + coords [ 3 ] * 1 ); // нижняя
+					borders . push ( border );
 				}
-				for ( i = 0; i < borders . length; i++ ) { // проверка на вхождение центра фона в область действия текста
-					for ( var j = 0; j < centers . length; j++ ) {
-						if (
-							(
-								( centers [ j ] [ 2 ] > borders [ i ] [ 2 ] ) // центр фона правее левой границы текста
-								&&
-								( centers [ j ] [ 2 ] < borders [ i ] [ 3 ] ) // левее правой
-							)
-							&&
-							(
-								( centers [ j ] [ 3 ] > borders [ i ] [ 4 ] ) // ниже верхней
-								&&
-								( centers [ j ] [ 3 ] < borders [ i ] [ 5 ] ) // выше нижней
-							)
-						) {
-							centers [ j ] [ 1 ] = borders [ i ] [ 1 ] - 1; // сортировка фона за текст
-							borders [ i ] [ 1 ] = borders [ i ] [ 1 ] + 1; // сдвиг текста
-						}
-					}
-				}
-				var end_array = [ ] . concat ( centers, borders ); // слияние массивов фонов и текстов, пересортировка по индексам
-				end_array . sort ( ( a, b ) => a [ 1 ] - b [ 1 ] );
-				for ( var k = 0; k < end_array . length; k++ ) { // сборка конечного массива
-					new_notes [ k ] = notes [ end_array [ k ] [ 0 ] ];
-				}
-				cotanblock [ e ] = ( begin + '\n@' + new_notes . join ( '\n@' ) + '\n{{<' + end ) . replace ( /~\n\n@/g, '~\n@');
 			}
+			for ( i = 0; i < borders . length; i++ ) { // проверка на вхождение центра фона в область действия текста
+				for ( var j = 0; j < centers . length; j++ ) {
+					if (
+						(
+							( centers [ j ] [ 2 ] > borders [ i ] [ 2 ] ) // центр фона правее левой границы текста
+							&&
+							( centers [ j ] [ 2 ] < borders [ i ] [ 3 ] ) // левее правой
+						)
+						&&
+						(
+							( centers [ j ] [ 3 ] > borders [ i ] [ 4 ] ) // ниже верхней
+							&&
+							( centers [ j ] [ 3 ] < borders [ i ] [ 5 ] ) // выше нижней
+						)
+					) {
+						centers [ j ] [ 1 ] = borders [ i ] [ 1 ] - 1; // сортировка фона за текст
+						borders [ i ] [ 1 ] = borders [ i ] [ 1 ] + 1; // сдвиг текста
+					}
+				}
+			}
+			var end_array = [ ] . concat ( centers, borders ); // слияние массивов фонов и текстов, пересортировка по индексам
+			end_array . sort ( ( a, b ) => a [ 1 ] - b [ 1 ] );
+			for ( var k = 0; k < end_array . length; k++ ) { // сборка конечного массива
+				new_notes [ k ] = notes [ end_array [ k ] [ 0 ] ];
+			}
+			cotanblock [ e ] = ( begin + '\n@' + new_notes . join ( '\n@' ) + '\n{{<' + end ) . replace ( /~\n\n@/g, '~\n@');
 		}
-		return document.getElementById('wiki__text') . value = cotanblock . join ( '{{cotan' );
-		/*return wtext = cotanblock . join ( '{{cotan' );*/
 	}
+	sortnotes . style . display = 'none';
+	return document . getElementById ( 'wiki__text' ) . value = cotanblock . join ( '{{cotan' );
 }
 
 /**
  * Вставит котан-редактор и кнопку его запуска, а также кнопки сортировщика и котанизатора
  */
-function cotanedit() {
+function cotanedit ( ) {
 	const wikitextTextarea = document . getElementById ( 'wiki__text' );
 	const cancelButton = document . getElementById ( 'edbtn__cancel' );
 	// ленты имеют url вида /d0000 или h0000 и на них редактор не должен быть запущен
 	if ( window . location . href . match ( /\/(d|h)\d+/i ) || !wikitextTextarea || !cancelButton ) return;
+
+/* кнопки тулбара */
 
 	const cotanContainer = h ( 'div', {
 		className: 'cotan',
@@ -1150,30 +1157,11 @@ function cotanedit() {
 		form: document . getElementById ( 'dw__editform' )
 	};
 
-	const sortButton = h ( 'input', {
-		type: 'button',
-		value: 'Sort!',
-		id: 'sortnotes',
-		title: 'Sort!',
-		onclick: ( event ) => sortaction ( )
-	} );
-	cancelButton . after ( sortButton );
-
-	const cotanButton = h ( 'input', {
-		type: 'button',
-		accessKey: 'C',
-		value: 'CoTAN',
-		id: 'newcotan-editor',
-		title: 'CoTAN [C]',
-		onclick: ( event ) => toggleCotan ( state, true, event ),
-	} );
-	cancelButton . after ( cotanButton );
-
 	const cotanSaveButton = h ( 'button', {
 		className: 'button green toolbutton',
 		accessKey: 'A',
 		title: `${LOCALIZED.APPLY} [A}]`,
-		onclick: ( event ) => toggleCotan ( state, true, event ),
+		onclick: ( event ) => toggleCotan ( state, true, event )
 	}, [
 		h ( 'img', {
 			src: `${cotanPath}accept.png`
@@ -1184,7 +1172,7 @@ function cotanedit() {
 		className: 'button toolbutton',
 		accessKey: 'Q',
 		title: `${LOCALIZED.CANCEL} [Q]`,
-		onclick: ( event ) => toggleCotan ( state, false, event ),
+		onclick: ( event ) => toggleCotan ( state, false, event )
 	}, [
 		h ( 'img', {
 			src: `${cotanPath}cancel.png`
@@ -1214,6 +1202,42 @@ function cotanedit() {
 
 	cotanContainer . append ( cotanToolbar );
 	wikitextTextarea . after ( cotanContainer );
+
+/* главные кнопки, в порядке справа налево */
+
+	const cotanButton = h ( 'input', {
+		type: 'button',
+		accessKey: 'C',
+		value: 'CoTAN',
+		id: 'newcotan-editor',
+		title: 'CoTAN [C]',
+		onclick: ( event ) => toggleCotan ( state, true, event )
+	} );
+	cancelButton . after ( cotanButton );
+
+	const sortButton = h ( 'input', {
+		type: 'button',
+		value: 'Sort!',
+		id: 'sortnotes',
+		title: 'Sort!',
+		onclick: ( event ) => sortaction ( state )
+	} );
+	if (
+		/* после отработки котанизатора и появления тега cotan сортировщик не появляется без перезахода, пусть будет виден всегда */
+		/*wikitextTextarea . value . match ( 'cotan' ) != null
+		&&*/
+		!wikitextTextarea . value . match ( 'Не_сортировать' )
+	) cancelButton . after ( sortButton );
+
+	const aimgButton = h ( 'input', {
+		type: 'button',
+		value: 'CoTANize!',
+		id: 'cotanize',
+		title: 'CoTANize!',
+		onclick: ( event ) => aimgaction ( state )
+	} );
+	if ( wikitextTextarea . value . match ( 'aimg' ) != null ) cancelButton . after ( aimgButton );
+
 }
 
 // запуск функции cotanedit ( ) при загрузке страницы
