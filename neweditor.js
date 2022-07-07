@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'CoTAN ver. R.1.5 / 2022.05.01 15:05 GMT+9; Orekh, Rainbow-Spike' );
+console.log ( 'CoTAN ver. R.1.6a / 2022.05.03 04:05 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -13,6 +13,7 @@ const ctTexts = {
 	be: ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
 	bg: ['Приложи', 'Отмени', 'Помощ', 'Текст', 'Добави балон', 'Оригинал', 'Маски', 'Текстове', 'Преглед'],
 	br: ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Adicionar balão', 'Original', 'Máscara', 'Textos', 'Verificar'],
+	cs: ['Použít', 'Storno', 'Nápověda', 'Text', 'Přidat balón', 'Původní', 'Masky', 'Texty', 'Kontrola'],
 	da: ['Anvende', 'Annuller', 'Hjælp', 'Tekst', 'Tilføj ballon', 'Original', 'Maske', 'Tekster', 'Eftersyn'],
 	de: ['Anwenden', 'Abbrechen', 'Hilfe', 'Text', 'Neuer Aufkleber', 'Originalzeichnung', 'Masken', 'Texte', 'Vorschau'],
 	el: ['Ισχύουν', 'Ακύρωση', 'Βοήθεια', 'Κείμενο', 'Προσθέστε μπαλόνι', 'Αρχική', 'Μάσκες', 'Κείμενα', 'Τσεκ-απ'],
@@ -858,6 +859,14 @@ class ComicArea {
 			if ( urlNum != null ) {
 				const langNum = Number ( urlNum [ 1 ] );
 				switch ( pageLang ) {
+					case 'cs':
+						langWork = +(
+							langNum <= 3737
+							&&
+							langNum !== 3574
+						);
+						fileExt = '.png';
+						break;
 					case 'da':
 						langWork = +( langNum < 498 );
 						fileExt = '.gif';
@@ -883,7 +892,13 @@ class ComicArea {
 						if ( langNum == 1100 ) fileExt = '.gif';
 						break;
 					case 'pl':
-						langWork = +( langNum <= 760 && langNum !== 554 && langNum !== 670 );
+						langWork = +(
+							langNum <= 760
+							&&
+							langNum !== 554
+							&&
+							langNum !== 670
+						);
 						fileExt = '.gif';
 						break;
 					default:
@@ -891,10 +906,13 @@ class ComicArea {
 				}
 			}
 			if ( langWork ) {
-				const newImg = document . createElement ( 'img' );
-				newImg . src = `/_media/sci-fi/freefall/${pageLang}/${urlNum[1]}${fileExt}`;
-				newImg . style = 'width: 982px; margin-top: 15px;';
-				this . domContainer . append ( newImg );
+				const alienDiv = document . createElement ( 'div' );
+				alienDiv. style = 'margin: 15px auto 0 auto; width: min-content';
+				const alienImg = document . createElement ( 'img' );
+				alienImg . src = `/_media/sci-fi/freefall/${pageLang}/${urlNum[1]}${fileExt}`;
+				alienImg . style = 'width: 982px';
+				alienDiv . append ( alienImg );
+				this . domContainer . append ( alienDiv );
 			}
 		}
 
