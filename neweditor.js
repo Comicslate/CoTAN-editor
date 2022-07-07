@@ -2,7 +2,7 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'CoTAN ver. R.1.6a / 2022.05.03 04:05 GMT+9; Orekh, Rainbow-Spike' );
+console.log ( 'CoTAN ver. R.1.7 / 2022.07.07 23:43 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
 const ctId = JSINFO.id.replace(/:/g, '/');
@@ -34,6 +34,7 @@ const ctTexts = {
 	ru: ['Применить', 'Отменить', 'Помощь', 'Текст', 'Добавить баллон', 'Оригинал', 'Маски', 'Тексты', 'Осмотр'],
 	sib: [],
 	sjn: [],
+	tr: ['Uygula', 'İptal', 'Yardım', 'Metin', 'Balon ekle', 'Orijinal', 'Maskeler', 'Metinler', 'Kontrol'],
 	uk: ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Додати балон', 'Оригінал', 'Маски', 'Тексти', 'Огляд'],
 	zh: ['申请', '取消', '救命', '文本', '添加气球', '原创', '面具', '短信', '检查'],
 	default: ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup'],
