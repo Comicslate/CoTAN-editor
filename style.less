@@ -4,14 +4,14 @@
 	display: table;
 	margin: 5px 0 0 4px;
 	position: absolute;
-	&:not(.ct_bg) {
-		z-index: 1;
-	}
 	&.ct_bg {
 		z-index: 0;
 		.ct-note {
 			border-radius: 5px;
 		}
+	}
+	&.ct_text {
+		z-index: 1;
 	}
 	.ct-note {
 		cursor: default;
@@ -35,7 +35,7 @@
 	display: table;
 	margin: 0 auto;
 	position: relative;
-/*	.ct-area:not(.ct_bg) {
+/*	.ct-area.ct_text {
 		-moz-transform: translate(0, -1px);
 	}*/
 	img {
