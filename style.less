@@ -294,7 +294,7 @@
 				.ct-colorpick-input {
 					box-sizing: border-box;
 					font-size: 16px;
-					width: 100%;
+					display: inline-block;
 				}
 				.ct-textarea {
 					box-sizing: border-box;
@@ -366,6 +366,16 @@
 							hsl(0, 100%, 50%)
 						);
 						content: '';
+					}
+					div {
+						width: fit-content;
+					}
+					input {
+						translate: 0 2px;
+						width: 50px;
+					}
+					.ct-textarea {
+						min-height: 50px;
 					}
 				}
 			}
