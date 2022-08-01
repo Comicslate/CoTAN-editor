@@ -303,14 +303,6 @@
 		&.ct-area_removed { /* hide removed areas */
 			display: none;
 		}
-/*		&:not(.fix_css_priority) {
-			&.ct-area_patch {
-				z-index: 0;
-			}
-			.ct-area_text {
-				z-index: 1;
-			}
-		}*/
 		&:focus-within {
 			z-index: 3 !important;
 		}
@@ -330,6 +322,7 @@
 	}
 	.cotan_whitewash { /* WHITEWASH MODE */
 		.ct-area_patch {
+			z-index: 0;
 			&:hover {
 				z-index: 2; /* avoid overlapping area in use */
 				.ct-ui {
@@ -395,11 +388,13 @@
 			transition: opacity 0.15s ease-out;
 		}
 		.ct-area_patch {
+			z-index: 0;
 			.ct-ui {
 				display: none;
 			}
 		}
 		.ct-area_text {
+			z-index: 1;
 			&:hover {
 				outline: 1px dashed #999;
 				z-index: 2; /* avoid overlapping area in use */
