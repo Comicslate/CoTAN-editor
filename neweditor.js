@@ -2,12 +2,12 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console.log ( 'CoTAN ver. R.1.7 / 2022.07.07 23:43 GMT+9; Orekh, Rainbow-Spike' );
+console . log ( 'CoTAN ver. R.1.8 / 2022.09.10 22:08 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
-const ctId = JSINFO.id.replace(/:/g, '/');
-const ctNs = JSINFO.namespace.replace(/:/g, '/');
-const ctText = [];
+const ctId = JSINFO . id . replace ( /:/g, '/' );
+const ctNs = JSINFO . namespace . replace ( /:/g, '/' );
+const ctText = [ ];
 const ctTexts = {
 	ady: ['Къэгъэсэбэпын', 'Iэтыжын', 'ДэІэпыкъуныгъэ', 'Тхыгъэ', 'ЩIыгъун баллон', 'Оригинал', 'Маскэ', 'Тхыгъэ', 'Къеплъыныгъэ'],
 	be: ['Ўжываць', 'Ануляваць', 'Дапамагаць', 'Тэкст', 'Дадаць балон', 'Арыгінал', 'Маскі', 'Тэксты', 'Агляд'],
@@ -32,24 +32,20 @@ const ctTexts = {
 	pl: ['Stosować', 'Anulować', 'Pomagać', 'Tekst', 'Dodaj balon', 'Oryginał', 'Maski', 'Teksty', 'Przegląd'],
 	pt: ['Aplicar', 'Cancelar', 'Ajuda', 'Texto', 'Adicionar balão', 'Original', 'Máscara', 'Textos', 'Exame'],
 	ru: ['Применить', 'Отменить', 'Помощь', 'Текст', 'Добавить баллон', 'Оригинал', 'Маски', 'Тексты', 'Осмотр'],
-	sib: [],
-	sjn: [],
 	tr: ['Uygula', 'İptal', 'Yardım', 'Metin', 'Balon ekle', 'Orijinal', 'Maskeler', 'Metinler', 'Kontrol'],
 	uk: ['Застосовувати', 'Анулювати', 'Допомагати', 'Текст', 'Додати балон', 'Оригінал', 'Маски', 'Тексти', 'Огляд'],
 	zh: ['申请', '取消', '救命', '文本', '添加气球', '原创', '面具', '短信', '检查'],
 	default: ['Apply', 'Cancel', 'Help', 'Text', 'Add balloon', 'Original', 'Masks', 'Texts', 'Checkup'],
 };
+ctTexts . sib = ctTexts . ru;
+ctTexts . sjn = ctTexts . en;
+if ( ctTexts [ pageLang ] == undefined ) ctTexts [ pageLang ] = ctTexts . en;
+for ( let i = 0; i < ctTexts . default . length; i += 1 ) {
+	ctText [ i ] = ctTexts [ pageLang ] [ i ] || ctTexts . default [ i ];
+}
 
 const cotanPath = '/lib/plugins/cotan/img/';
 const cotanMediaUrl = `${document.location.origin}/_media/`; // адрес до первого слеша
-
-ctTexts.default = ctTexts.en;
-ctTexts.sib = ctTexts.ru;
-ctTexts.sjn = ctTexts.en;
-for (let i = 0; i < ctTexts.default.length; i += 1) {
-	ctText[i] = ctTexts[pageLang][i] || ctTexts.default[i];
-}
-
 const LOCALIZED = {
 	APPLY: '0',
 	CANCEL: '1',
@@ -633,15 +629,6 @@ class Bubble {
 
 		const auto = h('div', {
 			className: 'ct-colorpick-input',
-			style: `
-				background: #eee;
-				border: 1px solid #333;
-				border-radius: 4px;
-				padding: 4px;
-				box-sizing: border-box;
-				text-align: center;
-				cursor: pointer;
-			`,
 			onclick: () => {
 				const [x, y, width, height] = this.coords();
 				const canvas = h('canvas', { width, height });
@@ -693,9 +680,7 @@ class Bubble {
 		]);
 
 		this.element = h('div', { bubble: this, className: mainClassName }, [
-			this.note = h('div', { className: 'ct-note' }, [
-				// this.text_element = h('span', { className: 'ct-note-content' }),
-			]),
+			this.note = h('div', { className: 'ct-note' }),
 			h('div', { className: 'ct-ui' }, [
 				setTitle('Click to move, Alt+Click to rotate', rotation(handle('ct-dragArea', 1, 1, 1, 1))),
 
@@ -1079,6 +1064,16 @@ function aimgaction ( state ) {
 		. replace ( /(\{\{\<?)aimg(\>|\}\})/g, '$1cotan$2' )
 		. replace ( /@(.+)\n([^~]*)\n~/g, '@$1\n#\n~\n@$1\n$2\n~' );
 }
+/**
+ * Котанизатор наклеек
+ * заменяет aimg-наклейку на две cotan-наклейки, фоновую и текстовую
+ */
+function m2taction ( state ) {
+	m2t . style . display = 'none';
+	return document . getElementById ( 'wiki__text' ) . value =
+		state . wikitextTextarea . value
+		. replace ( /@([^;\n]+)(;[^\n]+)?\n#\n~/g, '@$1$2\n#\n~\n@$1\n[oth]Text\n~' );
+}
 
 /**
  * Сортировщик наклеек
@@ -1241,12 +1236,7 @@ function cotanedit ( ) {
 		title: 'Sort!',
 		onclick: ( event ) => sortaction ( state )
 	} );
-	if (
-		/* после отработки котанизатора и появления тега cotan сортировщик не появляется без перезахода, пусть будет виден всегда */
-		/*wikitextTextarea . value . match ( 'cotan' ) != null
-		&&*/
-		!wikitextTextarea . value . match ( 'Не_сортировать' )
-	) cancelButton . after ( sortButton );
+	if ( !wikitextTextarea . value . match ( 'Не_сортировать' ) ) cancelButton . after ( sortButton );
 
 	const aimgButton = h ( 'input', {
 		type: 'button',
@@ -1256,6 +1246,15 @@ function cotanedit ( ) {
 		onclick: ( event ) => aimgaction ( state )
 	} );
 	if ( wikitextTextarea . value . match ( 'aimg' ) != null ) cancelButton . after ( aimgButton );
+
+	const m2tButton = h ( 'input', {
+		type: 'button',
+		value: 'Mask2Text!',
+		id: 'm2t',
+		title: 'Mask2Text!',
+		onclick: ( event ) => m2taction ( state )
+	} );
+	if ( wikitextTextarea . value . match ( 'cotan' ) != null ) cancelButton . after ( m2tButton );
 
 }
 
