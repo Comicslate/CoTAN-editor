@@ -69,6 +69,13 @@
 	}
 }
 
+#m2t {
+	background-image: linear-gradient(to bottom,#FBC,#D9A);
+	margin-left: 4px;
+	&:hover {
+		background-image: linear-gradient(to bottom,#FBC,#B78)
+	}
+}
 
 .cotan {
 	font-size: 125%;
@@ -368,11 +375,18 @@
 						content: '';
 					}
 					div {
-						width: fit-content;
+						background: #eee;
+						border: 1px solid #333;
+						border-radius: 4px;
+						box-sizing: border-box;
+						cursor: pointer;
+						padding: 5.5px;
+						text-align: center;
+						width: 50%;
 					}
 					input {
-						translate: 0 2px;
-						width: 50px;
+						translate: -1px 3.5px;
+						width: 50%;
 					}
 					.ct-textarea {
 						min-height: 50px;
@@ -459,7 +473,7 @@
 }
 
 .editButtons:hover::after {
-	animation: op01 1.4s;
+	animation: ani_op_top 1.4s;
 	margin-left: 3px;
 	.lang-be & { content: "🡐 Мышеуправляемый рэдактар налепак"; }
 	.lang-bg & { content: "🡐 Мишката-управляван редактор на стикери"; }
