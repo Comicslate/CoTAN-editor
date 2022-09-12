@@ -2,9 +2,10 @@
 
 // ВВОДНЫЕ
 // eslint-disable-next-line no-console
-console . log ( 'CoTAN ver. R.1.8 / 2022.09.10 22:08 GMT+9; Orekh, Rainbow-Spike' );
+console . log ( 'CoTAN ver. R.1.9 / 2022.09.12 20:28 GMT+9; Orekh, Rainbow-Spike' );
 /* global JSINFO, fontChanger */
 const { lang: pageLang } = JSINFO;
+const lohref = window . location . href;
 const ctId = JSINFO . id . replace ( /:/g, '/' );
 const ctNs = JSINFO . namespace . replace ( /:/g, '/' );
 const ctText = [ ];
@@ -299,22 +300,22 @@ function makeDraggable(element, grab, drag, drop, button, altKey = false) {
 	};
 	// remove move listener on drop
 	const onmouseup = (mouseEvent) => {
-		window.removeEventListener('mousemove', onmousemove);
-		window.removeEventListener('mouseup', onmouseup);
-		drop();
-		mouseEvent.preventDefault();
+		window . removeEventListener ( 'mousemove', onmousemove );
+		window . removeEventListener ( 'mouseup', onmouseup );
+		drop ( );
+		mouseEvent . preventDefault ( );
 	};
 	// add mousemove event listener on start dragging
-	element.addEventListener('mousedown', (mouseEvent) => {
-		if (mouseEvent.button !== button) return;
-		if (mouseEvent.altKey !== altKey) return;
-		window.addEventListener('mousemove', onmousemove);
-		window.addEventListener('mouseup', onmouseup);
-		grab();
-		mouseEvent.preventDefault();
-	});
-	if (button === 2) {
-		element.addEventListener('contextmenu', (mouseEvent) => mouseEvent.preventDefault());
+	element . addEventListener ( 'mousedown', ( mouseEvent ) => {
+		if ( mouseEvent . button !== button ) return;
+		if ( mouseEvent . altKey !== altKey ) return;
+		window . addEventListener ( 'mousemove', onmousemove );
+		window . addEventListener ( 'mouseup', onmouseup );
+		grab ( );
+		mouseEvent . preventDefault ( );
+	} );
+	if ( button === 2 ) {
+		element . addEventListener ( 'contextmenu', ( mouseEvent ) => mouseEvent . preventDefault ( ) );
 	}
 	return element;
 }
@@ -832,7 +833,7 @@ class ComicArea {
 				]),
 			]),
 			this.imgarea = h('div', { className: 'cotanimgarea', ondblclick: addBubble }, [
-				this.image = h('img', { className: 'cotanimg', src: this.file }),
+				this.image = h('img', { className: 'cotanimg media', src: this.file }),
 			]),
 		]);
 
@@ -841,7 +842,7 @@ class ComicArea {
 		if ( ctId . match ( 'sci-fi/freefall' ) != null ) {
 			let langWork;
 			let fileExt;
-			const urlNum = window . location . href . match ( /[:/](\d\d\d\d)/i );
+			const urlNum = lohref . match ( /[:/](\d\d\d\d)/i );
 			if ( urlNum != null ) {
 				const langNum = Number ( urlNum [ 1 ] );
 				switch ( pageLang ) {
@@ -1148,13 +1149,92 @@ function sortaction ( state ) {
 }
 
 /**
- * Вставит котан-редактор и кнопку его запуска, а также кнопки сортировщика и котанизатора
+ * Вставит котан-редактор и кнопку его запуска, и прочие кнопки
  */
 function cotanedit ( ) {
 	const wikitextTextarea = document . getElementById ( 'wiki__text' );
 	const cancelButton = document . getElementById ( 'edbtn__cancel' );
+	// AutoReplacer uzerscript
+	if ( lohref . match ( /\/(d|h)\d+/i ) ) {
+		let ar_txt = wikitextTextarea . value,
+			ar_text = ar_txt,
+			ar_insert = '<Not registered name yet, ask the admin>',
+			ar_sum = document . querySelector ( "#edit__summary" );
+		if ( lohref . match ( /\/commander-kitty\// ) ) ar_insert = "Commander Kitty";
+		if ( lohref . match ( /\/my-life-with\-fel\// ) ) ar_insert = "My Life with Fel (new)";
+		if ( lohref . match ( /\/living-with-hipstergirl-and-gamergirl\// ) ) ar_insert = "Living with hipstergirl and gamergirl";
+		const ar_repl = [
+			[ "New", ar_insert ],
+		/* Sci-fi */
+			[ "Sequential-art", "Sequential Art" ],
+			//[ " Fur ", " Sequential Art (Версия Зверь *TranslayerЪ* Внутри) " ],
+		/* TLK */
+			[ "Missing-pieces", "Missing Pieces" ],
+			[ "The-first-king", "The First King" ],
+			[ "Maishas-story", "Maisha's story"],
+			[ "Taka-alternative-theory", "Taka alternative Theory"],
+			[ "Kings-and-vagabonds", "Kings and Vagabonds"],
+			[ "Scars-reign", "Scar's Reign" ],
+			[ "The-east-land-chronicles", "The East Land Chronicles" ],
+			[ "Short-stories", "Истории от Savu" ],
+			[ "The-lost-days", "The Lost Days" ],
+			[ "The-lion-queen", "The Lion Queen"],
+			[ "Heir-to-pride-rock", "Heir to Pride Rock" ],
+		/* MLP */
+			[ "Ask-princess-molestia", "Ask Princess Molestia" ],
+		/* Wolves */
+			[ "Wolfs-rain-next-generation", "Wolf's Rain – Next Generation" ],
+			[ "Be-reflected-in-my-eyes", "Be reflected in my eyes" ],
+			[ "Behind-the-woods", "Behind the woods" ],
+		/* Furry */
+			[ "Ozy-and-millie", "Ozy and Millie" ],
+			[ "Dan-and-mabs-furry-adventures", "Dan and Mab's Furry Adventures" ],
+			[ "Heavenly-nostrils", "Heavenly Nostrils" ],
+			[ "Tales-of-the-questor", "Tales of the Questor" ],
+			[ "Theri-there", "Theri There" ],
+			[ "Sandra-and-woo", "Sandra and Woo" ],
+			[ "Tofauti-sawa", "Tofauti Sawa" ],
+			[ "Ichabod-the-optimistic-canine", "Ichabod the Optimistic Canine" ],
+			[ "Beyond-the-western-deep", "Beyond the Western Deep" ],
+			[ "Tangent-valley", "Tangent Valley" ],
+			[ "Ambers-no-brainers", "Amber's No-Brainers" ],
+			[ "Peanut-berry-sundae", "Peanut Berry Sundae" ],
+			[ "Furry-guys", "Furry Guys" ],
+			[ "College-catastrophe", "College Catastrophe" ],
+			[ "Nine-to-nine", "Nine to Nine" ],
+			[ "Swords-and-sausages", "Swords and Sausages" ],
+			[ "Bunny-mischief", "Bunny Mischief" ],
+			[ "Goblin-hollow", "Goblin Hollow" ],
+			[ "Legend-of-zhathar", "Legend of Zhathar" ],
+			[ "Conejo-frustrado", "Conejo Frustrado" ],
+			[ "Off-white", "Off-White" ],
+			[ "The-roomies", "The Roomies" ],
+		/* Gamer */
+			[ "Yet-another-fantasy-gamer-comic", "Yet Another Fantasy Gamer Comic" ],
+			[ "Nerf-now", "Nerf Now!!" ],
+			[ "Gamercat", "GaMERCaT" ],
+			[ "Nerd-rage", "Nerd Rage" ],
+			[ "Diario-magico", "Diario Magico" ],
+			[ "Awkward-zombie", "AWKWARD ZOMBIE" ],
+			[ "It-sucks-to-be-weegie", "It sucks to be Weegie!" ],
+		/* Other */
+			[ "Vida-de-programador", "Vida de Programador" ],
+			[ "Sluggy-freelance", "Sluggy Freelance" ],
+			[ "Dinosaur-comics", "Dinosaur Comics" ],
+			[ "Little-bobby", "Little Bobby" ],
+			[ "Zomcom", "ZomCom" ],
+			[ "Jesus-and-mo", "Jesus and Mo" ],
+		];
+		for ( var i = 0; i < ar_repl . length; i++ ) ar_txt = ar_txt . replace ( "== " + ar_repl [ i ] [ 0 ], "== " + ar_repl [ i ] [ 1 ] );
+		wikitextTextarea . value = ar_txt;
+		if ( ar_sum && ar_sum . value != null && ar_text != ar_txt ) {
+			if ( ar_sum . value != '' ) ar_sum . value += ' / ';
+			ar_sum . value += 'AR 2022.09.12';
+		};
+	};
+
 	// ленты имеют url вида /d0000 или h0000 и на них редактор не должен быть запущен
-	if ( window . location . href . match ( /\/(d|h)\d+/i ) || !wikitextTextarea || !cancelButton ) return;
+	if ( lohref . match ( /\/(d|h)\d+/i ) || !wikitextTextarea || !cancelButton ) return;
 
 /* кнопки тулбара */
 
